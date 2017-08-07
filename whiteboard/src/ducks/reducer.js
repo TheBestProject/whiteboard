@@ -1,8 +1,14 @@
-const initialState = {
-  something: 3
-}
+import dummyState from './dummyState';
 
-export default function reducer(state = initialState, action) {
+// const initialState = {
+//   loggedStatus: false,
+//   userInfo: {},
+//   groups: [],
+//   projects: [],
+//   boards: []
+// }
+
+export default function reducer(state = dummyState, action) {
   switch (action.type) {
     case "something":
       return 'something'
