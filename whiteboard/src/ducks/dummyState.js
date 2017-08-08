@@ -1,4 +1,4 @@
-export default dummyState = {
+const dummyState = {
   loggedStatus: true,
   userInfo: {
     ID: 2,
@@ -89,3 +89,4 @@ export default dummyState = {
     }
   ]
 }
+export default dummyState;
