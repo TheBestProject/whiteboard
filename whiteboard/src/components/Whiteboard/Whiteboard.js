@@ -16,24 +16,36 @@ class Whiteboard extends Component {
       color: '#000000',
       fill: false,
       fillColor: '#444444',
-      items: []
+      items: [],
+      data: '',
+      URL: ''
     }
 
       this.save = this.save.bind(this);
       this.erase = this.erase.bind(this);
+      this.displayThumb = this.displayThumb.bind(this);
   }
 
   // componentDidMount() {
   //   wsClient.on('addItem', item => this.setState({items: this.state.items.concat([item])}));
   // }
 
+  displayThumb(){
+        // let canvas = document.getElementById('thumb');
+        // let ctx = canvas.getContext("2d"); 
+        //console.log(this.state.URL);
+        //ctx.drawImage(this.state.URL,0,0,0,0,150,150);
+        //ctx.putImageData(this.state.data,0,0,0,0,150,150)
+        document.getElementById("thumb").style.border = "1px solid";        
+        document.getElementById("thumb").src = this.state.URL;
+        document.getElementById("thumb").style.display = "inline";
+        
+  }
+
   save() {
         let canvas = document.getElementById('canvas');
-        console.log(canvas.toDataURL());
-        // document.getElementById("canvasimg").style.border = "2px solid";
-        // var dataURL = canvas.toDataURL();
-        // document.getElementById("canvasimg").src = dataURL;
-        // document.getElementById("canvasimg").style.display = "inline";
+        let ctx = canvas.getContext("2d"); 
+        this.setState({URL:canvas.toDataURL(), data:ctx.getImageData(0,0,500,500)})
     }
 
     erase() {
@@ -46,10 +58,14 @@ class Whiteboard extends Component {
             ctx.clearRect(0, 0, w, h);
         }
     }
+    
+    componentDidUpdate(){
+      this.displayThumb();
+    }
 
 render() {
   const { tool, size, color, fill, fillColor, items } = this.state;
-
+  console.log("data", this.state.data);
     return (
       <div>
         <h1>React SketchPad</h1>
@@ -97,10 +113,7 @@ render() {
             <label htmlFor="">color: </label>
             <input type="color" value={color} onChange={(e) => this.setState({color: e.target.value})} />
           </div>
-            <button onClick={()=>this.save()}>Save</button>
-            <button onClick={()=>this.erase()}>Erase</button>
             
-
           {(this.state.tool == TOOL_ELLIPSE || this.state.tool == TOOL_RECTANGLE) ?
             <div>
               <label htmlFor="">fill in:</label>
@@ -111,7 +124,10 @@ render() {
                   <input type="color" value={fillColor} onChange={(e) => this.setState({fillColor: e.target.value})} />
                 </span> : ''}
             </div> : ''}
+            <button onClick={()=>this.save()}>Save</button>
+            <button onClick={()=>this.erase()}>Erase</button>
         </div>
+        <img id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>
       </div>
     );
   }
