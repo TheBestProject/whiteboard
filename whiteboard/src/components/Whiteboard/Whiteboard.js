@@ -19,11 +19,33 @@ class Whiteboard extends Component {
       items: []
     }
 
+      this.save = this.save.bind(this);
+      this.erase = this.erase.bind(this);
   }
 
   // componentDidMount() {
   //   wsClient.on('addItem', item => this.setState({items: this.state.items.concat([item])}));
   // }
+
+  save() {
+        let canvas = document.getElementById('canvas');
+        console.log(canvas.toDataURL());
+        // document.getElementById("canvasimg").style.border = "2px solid";
+        // var dataURL = canvas.toDataURL();
+        // document.getElementById("canvasimg").src = dataURL;
+        // document.getElementById("canvasimg").style.display = "inline";
+    }
+
+    erase() {
+        let canvas = document.getElementById('canvas');
+        let ctx = canvas.getContext("2d");
+        var m = window.confirm("Want to clear");
+        var w = canvas.width;
+        var h = canvas.height;
+        if (m) {
+            ctx.clearRect(0, 0, w, h);
+        }
+    }
 
 render() {
   const { tool, size, color, fill, fillColor, items } = this.state;
@@ -32,7 +54,7 @@ render() {
       <div>
         <h1>React SketchPad</h1>
         <div style={{float:'left', marginRight:20}}>
-          <SketchPad style={{border:'1px solid black'}}
+          <SketchPad 
             width={500}
             height={500}
             animate={true}
@@ -75,6 +97,10 @@ render() {
             <label htmlFor="">color: </label>
             <input type="color" value={color} onChange={(e) => this.setState({color: e.target.value})} />
           </div>
+            <button onClick={()=>this.save()}>Save</button>
+            <button onClick={()=>this.erase()}>Erase</button>
+            
+
           {(this.state.tool == TOOL_ELLIPSE || this.state.tool == TOOL_RECTANGLE) ?
             <div>
               <label htmlFor="">fill in:</label>
