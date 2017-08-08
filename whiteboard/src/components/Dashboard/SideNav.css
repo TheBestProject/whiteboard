@@ -1,0 +1,154 @@
+@import url("https://fonts.googleapis.com/css?family=Knewave");
+@import url("https://fonts.googleapis.com/css?family=Nunito:300,600");
+#SideNav > * {
+  margin: 0 20px 0 0; }
+
+#SideNav {
+  width: 20vw;
+  min-height: 100vh;
+  background-color: #447B5F;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  color: #B7DCB5; }
+  #SideNav .sideNav_title {
+    font-family: "Knewave", cursive;
+    font-size: 2.2rem;
+    margin: 0;
+    padding: 10px 5px;
+    display: flex;
+    justify-content: center;
+    border-bottom: solid 1px #AAC0AA; }
+  #SideNav .sideNav_userDisplay {
+    height: 20vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; }
+    #SideNav .sideNav_userDisplay .sideNav_username {
+      height: 60px;
+      padding: 5px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end; }
+      #SideNav .sideNav_userDisplay .sideNav_username h2 {
+        font-size: 1.5rem; }
+      #SideNav .sideNav_userDisplay .sideNav_username p:hover {
+        cursor: pointer; }
+    #SideNav .sideNav_userDisplay .sideNav_profilePic {
+      width: 60px;
+      height: 60px;
+      background-position: center;
+      background-repeat: cover;
+      border-radius: 7px;
+      border: solid 1px #AAC0AA; }
+  #SideNav .sideNav_groupsList {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; }
+    #SideNav .sideNav_groupsList .sideNav_groupHeader {
+      height: 2.5rem;
+      display: flex;
+      align-items: center; }
+      #SideNav .sideNav_groupsList .sideNav_groupHeader h2 {
+        margin: 0 0 10px 0;
+        font-family: "Knewave", cursive;
+        font-size: 1.7rem; }
+      #SideNav .sideNav_groupsList .sideNav_groupHeader .sideNav_groupButton:hover {
+        cursor: pointer; }
+      #SideNav .sideNav_groupsList .sideNav_groupHeader .sideNav_groupButton {
+        width: 1.7rem;
+        height: 1.7rem;
+        margin: 0 0 0 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #B7DCB5;
+        border-radius: 7px; }
+        #SideNav .sideNav_groupsList .sideNav_groupHeader .sideNav_groupButton svg {
+          width: 1rem;
+          height: 1rem;
+          fill: #447B5F; }
+    #SideNav .sideNav_groupsList .sideNav_groupsContainer > *:hover {
+      cursor: pointer; }
+    #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end; }
+      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        position: relative; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_hoverMenu {
+          z-index: 1;
+          display: none;
+          width: 6.5rem;
+          top: calc(1.3rem + 10px + 3px);
+          background: #DCEED1;
+          position: absolute;
+          border-radius: 7px;
+          text-align: right; }
+          #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_hoverMenu p {
+            margin: 10px;
+            color: #447B5F; }
+          #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_hoverMenu p:hover {
+            cursor: pointer;
+            color: #AAC0AA; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_hoverMenu:hover {
+          cursor: default; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_hoverMenu:before {
+          content: "";
+          position: absolute;
+          bottom: 100%;
+          right: 7px;
+          width: 0;
+          height: 0;
+          border-left: 13px solid transparent;
+          border-bottom: 5px solid #DCEED1;
+          border-right: 13px solid transparent; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_h3Link {
+          text-decoration: none;
+          color: #B7DCB5;
+          margin: 10px 0;
+          font-size: 1.3rem;
+          border-bottom: solid 1px #AAC0AA; }
+      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox:hover .sideNav_hoverMenu {
+        display: block; }
+      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        position: relative; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 .sideNav_hoverMenu2 {
+          z-index: 1;
+          display: none;
+          width: 6.5rem;
+          top: calc(1.3rem);
+          background: #DCEED1;
+          position: absolute;
+          border-radius: 7px;
+          text-align: right; }
+          #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 .sideNav_hoverMenu2 p {
+            margin: 10px;
+            color: #447B5F; }
+          #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 .sideNav_hoverMenu2 p:hover {
+            cursor: pointer;
+            color: #AAC0AA; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 .sideNav_hoverMenu2:hover {
+          cursor: default; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 .sideNav_hoverMenu2:before {
+          content: "";
+          position: absolute;
+          bottom: 100%;
+          right: 7px;
+          width: 0;
+          height: 0;
+          border-left: 13px solid transparent;
+          border-bottom: 5px solid #DCEED1;
+          border-right: 13px solid transparent; }
+      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_h4Link {
+        text-decoration: none;
+        color: #B7DCB5;
+        margin: 0 0 10px 0; }
+      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2:hover .sideNav_hoverMenu2 {
+        display: block; }

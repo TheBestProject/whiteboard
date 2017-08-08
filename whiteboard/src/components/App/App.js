@@ -5,6 +5,8 @@ import Welcome from './../Welcome-Login/Welcome';
 import Dashboard from './../Dashboard/Dashboard';
 import Whiteboard from './../Whiteboard/Whiteboard';
 
+import './base.css';
+
 class App extends Component {
   render() {
     return (

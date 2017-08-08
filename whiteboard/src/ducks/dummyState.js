@@ -2,7 +2,7 @@ const dummyState = {
   loggedStatus: true,
   userInfo: {
     ID: 2,
-    username: 'Billy',
+    username: 'Billy Bob Joe',
     email: 'something@something.com',
     profilePic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg'
   },
