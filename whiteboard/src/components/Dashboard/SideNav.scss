@@ -1,0 +1,108 @@
+@import './../../sassVars.scss';
+
+#SideNav > * {
+  margin: 0 20px 0 0;
+}
+#SideNav {
+  width: 20vw;
+  min-height: 100vh;
+  background-color: $mediumColor;
+  border-top-right-radius: $borderRadius;
+  border-bottom-right-radius: $borderRadius;
+  color: $brightColor;
+  .sideNav_title {
+    font-family: $displayFontFamily;
+    font-size: 2.2rem;
+    margin: 0;
+    padding: 10px 5px;
+    display: flex;
+    justify-content: center;
+    border-bottom: solid 1px $dullColor;
+  }
+  .sideNav_userDisplay {
+    // width: 100%;
+    height: 20vh;
+    // padding: 0 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .sideNav_username {
+      height: 60px;
+      padding: 5px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      h2 {
+        font-size: 1.5rem;
+      }
+      p:hover {
+        cursor: pointer;
+      }
+    }
+    .sideNav_profilePic {
+      width: 60px;
+      height: 60px;
+      background-position: center;
+      background-repeat: cover;
+      border-radius: $borderRadius;
+      border: solid 1px $dullColor;
+    }
+  }
+  .sideNav_groupsList {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    .sideNav_groupHeader {
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      h2 {
+        margin: 0 0 10px 0;
+        font-family: $displayFontFamily;
+        font-size: 1.7rem;
+      }
+      .sideNav_groupButton:hover {
+        cursor: pointer;
+      }
+      .sideNav_groupButton {
+        width: 1.7rem;
+        height: 1.7rem;
+        margin: 0 0 0 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $brightColor;
+        border-radius: $borderRadius;
+        // color: $mediumColor;
+        svg {
+          width: 1rem;
+          height: 1rem;
+          fill: $mediumColor;
+        }
+      }
+    }
+    .sideNav_groupsContainer > *:hover {
+      cursor: pointer;
+    }
+    .sideNav_groupsContainer {
+      .sideNav_groupBox {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        .h3Link {
+          text-decoration: none;
+          color: $brightColor;
+          margin: 10px 0;
+          font-size: 1.3rem;
+          border-bottom: solid 1px $dullColor;
+        }
+        .h4Link {
+          text-decoration: none;
+          color: $brightColor;
+          margin: 0 0 5px 0;
+        }
+      }
+    }
+  }
+}

@@ -5,9 +5,18 @@ $displayFontFamily: 'Knewave', cursive;
 $straightFontFamily: 'Nunito', sans-serif;
 $straightFontLightWeight: 300;
 $straightFontHeavyWeight: 600;
+// $displayBaseSize: 16;
+// $straightBaseSize: 16;
 
 $lightColor: #DCEED1;
 $brightColor: #B7DCB5;
 $dullColor: #AAC0AA;
 $mediumColor: #447B5F;
 $darkColor: #1F2421;
+
+$borderRadius: 7px;
+
+// html > * {
+//   // font-family: $straightFontFamily;
+//   font-size: 16px;
+// }
