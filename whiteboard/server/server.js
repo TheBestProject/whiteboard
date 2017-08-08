@@ -10,7 +10,7 @@ const path = require('path');
 
 // REQUIRE LOCAL FILES
 const config = require('./../config');
-var mainCtrl = require('./mainCtrl');
+const mainCtrl = require('./mainCtrl');
 
 // INVOKE EXPRESS AND SET UP MIDDLEWARE
 const app = express();
@@ -65,15 +65,21 @@ app.get('/auth0/logout', function(req, res) {
 
 // ENDPOINTS
 // app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/api/user/:id', mainCtrl.getUser)
+app.get('/api/user/:id', mainCtrl.getUser) //working id param targets user id
+app.get('/api/group/:id', mainCtrl.getGroup) //working id param targets group id
+app.get('/api/project/:id', mainCtrl.getProject) //working id param targets project id
+app.get('/api/group/members/:id', mainCtrl.getGroupMembers) //working id param targets group id
+app.get('/api/project/members/:id', mainCtrl.getProjectMembers)
 
+app.post('/api/new/user', mainCtrl.addUser) //need auth0 formatted data to finish
+app.post('/api/new/group', mainCtrl.addGroup) //working provide "name"
+app.post('/api/new/project/:id', mainCtrl.addProject) //working id param targets the group id to place the project in to
 
-app.get('/api/group/:id', mainCtrl.getGroup)
-app.get('/api/project/:id', mainCtrl.getProject)
+// app.put('/api/update/user/:id', mainCtrl.updateUser) //PLACEHOLDER
+app.put('/api/update/group/:id', mainCtrl.updateGroup) //working id param targets group id to update -- provide "name"
+app.put('/api/update/project/:id', mainCtrl.updateProject) //working id param targets project id to update provide "name"
 
-app.post('/api/newuser', mainCtrl.addUser)
-app.post('/api/newgroup', mainCtrl.addGroup)
-app.post('/api/newproject/:groupid', mainCtrl.addProject)
+app.delete('/api/delete/project/:id', mainCtrl.deleteProject) //working id param targets project id to delete
 
 // LISTEN
 const io = socket(app.listen(config.port, () => console.log(`Server listening on port ${config.port}`)))
