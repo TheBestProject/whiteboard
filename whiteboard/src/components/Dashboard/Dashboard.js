@@ -4,6 +4,8 @@ import { Switch, Route } from 'react-router-dom';
 import SideNav from './SideNav';
 import BoardGrid from './BoardGrid';
 
+import './Dashboard.css';
+
 class Dashboard extends Component {
   render() {
     return (
