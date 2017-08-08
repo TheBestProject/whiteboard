@@ -13,7 +13,7 @@ class Whiteboard extends Component {
     this.state = {
       tool:TOOL_PENCIL,
       size: 2,
-      color: '#000000',
+      color: '#444444',
       fill: false,
       fillColor: '#444444',
       items: [],
@@ -70,6 +70,7 @@ class Whiteboard extends Component {
 render() {
   const { tool, size, color, fill, fillColor, items } = this.state;
   console.log("data", this.state.data);
+  console.log('url',this.state.URL)
     return (
       <div>
         <h1>React SketchPad</h1>
