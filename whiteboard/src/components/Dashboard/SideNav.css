@@ -74,13 +74,81 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end; }
-      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .h3Link {
+      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        position: relative; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_hoverMenu {
+          z-index: 1;
+          display: none;
+          width: 6.5rem;
+          top: calc(1.3rem + 10px + 3px);
+          background: #DCEED1;
+          position: absolute;
+          border-radius: 7px;
+          text-align: right; }
+          #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_hoverMenu p {
+            margin: 10px;
+            color: #447B5F; }
+          #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_hoverMenu p:hover {
+            cursor: pointer;
+            color: #AAC0AA; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_hoverMenu:hover {
+          cursor: default; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_hoverMenu:before {
+          content: "";
+          position: absolute;
+          bottom: 100%;
+          right: 7px;
+          width: 0;
+          height: 0;
+          border-left: 13px solid transparent;
+          border-bottom: 5px solid #DCEED1;
+          border-right: 13px solid transparent; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox .sideNav_h3Link {
+          text-decoration: none;
+          color: #B7DCB5;
+          margin: 10px 0;
+          font-size: 1.3rem;
+          border-bottom: solid 1px #AAC0AA; }
+      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox:hover .sideNav_hoverMenu {
+        display: block; }
+      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        position: relative; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 .sideNav_hoverMenu2 {
+          z-index: 1;
+          display: none;
+          width: 6.5rem;
+          top: calc(1.3rem);
+          background: #DCEED1;
+          position: absolute;
+          border-radius: 7px;
+          text-align: right; }
+          #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 .sideNav_hoverMenu2 p {
+            margin: 10px;
+            color: #447B5F; }
+          #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 .sideNav_hoverMenu2 p:hover {
+            cursor: pointer;
+            color: #AAC0AA; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 .sideNav_hoverMenu2:hover {
+          cursor: default; }
+        #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2 .sideNav_hoverMenu2:before {
+          content: "";
+          position: absolute;
+          bottom: 100%;
+          right: 7px;
+          width: 0;
+          height: 0;
+          border-left: 13px solid transparent;
+          border-bottom: 5px solid #DCEED1;
+          border-right: 13px solid transparent; }
+      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_h4Link {
         text-decoration: none;
         color: #B7DCB5;
-        margin: 10px 0;
-        font-size: 1.3rem;
-        border-bottom: solid 1px #AAC0AA; }
-      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .h4Link {
-        text-decoration: none;
-        color: #B7DCB5;
-        margin: 0 0 5px 0; }
+        margin: 0 0 10px 0; }
+      #SideNav .sideNav_groupsList .sideNav_groupsContainer .sideNav_groupBox .sideNav_hoverBox2:hover .sideNav_hoverMenu2 {
+        display: block; }

@@ -5,6 +5,10 @@ import { Link } from 'react-router-dom';
 import './SideNav.css';
 
 class SideNav extends Component {
+  hover(boolean, id) {
+    // let menu = document.getElementById(id);
+    // boolean ? menu.classList.add('display') : menu.classList.remove('display')
+  }
   render() {
     const { username, profilePic } = this.props.userInfo;
     const picStyle = {
@@ -36,13 +40,25 @@ class SideNav extends Component {
           <div className='sideNav_groupsContainer'>
             {
               this.props.groups.map((group, i) => {
-                return <div key={i} className='sideNav_groupBox'>
-                  <Link to={`/dashboard/${group.ID}`} className='h3Link'>{group.name}</Link>
+                let id = `grouphover${i}`
+                return <div key={i} className='sideNav_groupBox' onMouseOut={() => this.hover(false, id)}>
+                  <div className='sideNav_hoverBox'>
+                    <Link to={`/dashboard/${group.ID}`} className='sideNav_h3Link' onMouseOver={() => this.hover(true, id)}>{group.name}</Link>
+                    <div className='sideNav_hoverMenu' id={id}>
+                      <p>Add Project</p>
+                      <p>Edit Group</p>
+                    </div>
+                  </div>
                   {
                     this.props.projects.map((project, j) => {
                       if (project.groupID === group.ID) {
                       return <div key={j}>
-                        <Link to={`/dashboard/${group.ID}/${project.ID}`} className='h4Link'>{project.name}</Link>
+                        <div className='sideNav_hoverBox2'>
+                          <Link to={`/dashboard/${group.ID}/${project.ID}`} className='sideNav_h4Link'>{project.name}</Link>
+                          <div className='sideNav_hoverMenu2' id={id}>
+                            <p>Edit Project</p>
+                          </div>
+                        </div> 
                       </div>
                       }
                     })

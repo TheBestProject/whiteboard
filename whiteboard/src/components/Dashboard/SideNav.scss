@@ -90,17 +90,102 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        .h3Link {
-          text-decoration: none;
-          color: $brightColor;
-          margin: 10px 0;
-          font-size: 1.3rem;
-          border-bottom: solid 1px $dullColor;
+        // position: relative;
+        .sideNav_hoverBox{
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          position: relative;
+          .sideNav_hoverMenu {
+            z-index: 1;
+            display: none;
+            width: 6.5rem;
+            // height: 80px;
+            top: calc(1.3rem + 10px + 3px);
+            background: $lightColor;
+            position: absolute;
+            border-radius: $borderRadius;
+            text-align: right;
+            p {
+              margin: 10px;
+              color: $mediumColor;
+            }
+            p:hover {
+              cursor: pointer;
+              color: $dullColor;
+            }
+          }
+          .sideNav_hoverMenu:hover {
+            cursor: default;
+          }
+          .sideNav_hoverMenu:before {
+            content:"";
+            position: absolute;
+            bottom: 100%;
+            right: 7px;
+            width: 0;
+            height: 0;
+            border-left: 13px solid transparent;
+            border-bottom: 5px solid $lightColor;
+            border-right: 13px solid transparent;
+          }
+          .sideNav_h3Link {
+            text-decoration: none;
+            color: $brightColor;
+            margin: 10px 0;
+            font-size: 1.3rem;
+            border-bottom: solid 1px $dullColor;
+          }
         }
-        .h4Link {
+        .sideNav_hoverBox:hover .sideNav_hoverMenu {
+          display: block;
+        }
+        .sideNav_hoverBox2 {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            position: relative;
+            .sideNav_hoverMenu2 {
+              z-index: 1;
+              display: none;
+              width: 6.5rem;
+              // height: 80px;
+              top: calc(1.3rem);
+              background: $lightColor;
+              position: absolute;
+              border-radius: $borderRadius;
+              text-align: right;
+              p {
+                margin: 10px;
+                color: $mediumColor;
+              }
+              p:hover {
+                cursor: pointer;
+                color: $dullColor;
+              }
+            }
+            .sideNav_hoverMenu2:hover {
+            cursor: default;
+          }
+          .sideNav_hoverMenu2:before {
+            content:"";
+            position: absolute;
+            bottom: 100%;
+            right: 7px;
+            width: 0;
+            height: 0;
+            border-left: 13px solid transparent;
+            border-bottom: 5px solid $lightColor;
+            border-right: 13px solid transparent;
+          }
+        }
+        .sideNav_h4Link {
           text-decoration: none;
           color: $brightColor;
-          margin: 0 0 5px 0;
+          margin: 0 0 10px 0;
+        }
+        .sideNav_hoverBox2:hover .sideNav_hoverMenu2 {
+          display: block;
         }
       }
     }
