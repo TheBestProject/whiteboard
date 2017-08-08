@@ -10,6 +10,7 @@ const path = require('path');
 
 // REQUIRE LOCAL FILES
 const config = require('./../config');
+var mainCtrl = require('./mainCtrl');
 
 // INVOKE EXPRESS AND SET UP MIDDLEWARE
 const app = express();
@@ -64,6 +65,15 @@ app.get('/auth0/logout', function(req, res) {
 
 // ENDPOINTS
 // app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/api/user/:id', mainCtrl.getUser)
+
+
+app.get('/api/group/:id', mainCtrl.getGroup)
+app.get('/api/project/:id', mainCtrl.getProject)
+
+app.post('/api/newuser', mainCtrl.addUser)
+app.post('/api/newgroup', mainCtrl.addGroup)
+app.post('/api/newproject/:groupid', mainCtrl.addProject)
 
 // LISTEN
 const io = socket(app.listen(config.port, () => console.log(`Server listening on port ${config.port}`)))
