@@ -64,6 +64,7 @@ export default class SketchPad extends Component {
     items
       .filter(item => this.props.items.indexOf(item) === -1)
       .forEach(item => {
+        console.log(item);
         this.initTool(item.tool);
         this.tool.draw(item, this.props.animate);
       });

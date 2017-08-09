@@ -18,7 +18,7 @@ class Whiteboard extends Component {
       fill: false,
       fillColor: '#444444',
       items: [],
-      data: '',
+      data: [],
       URL: ''
     }
 
@@ -38,12 +38,13 @@ class Whiteboard extends Component {
   retrieve(data){
       let canvas = document.getElementById('canvas');
       let ctx = canvas.getContext("2d"); 
-      ctx.putImageData(data,0,0);
+      var img = new Image();
+      img.src = this.state.URL;
+      ctx.drawImage(img,0,0,500,500,0,0,500,500)
   }
 
   displayThumb(){
         document.getElementById("thumb").style.border = "1px solid";  
-        //replace this.state.URL with data from database      
         document.getElementById("thumb").src = this.state.URL;
         document.getElementById("thumb").style.display = "inline";
   }
@@ -52,7 +53,7 @@ class Whiteboard extends Component {
         let canvas = document.getElementById('canvas');
         let ctx = canvas.getContext("2d"); 
         // action creator or axios call here instead of setting state
-        this.setState({URL:canvas.toDataURL(), data:ctx.getImageData(0,0,500,500)});
+        this.setState({URL:canvas.toDataURL()});
         this.clear();
     }
 
@@ -67,9 +68,6 @@ class Whiteboard extends Component {
         }
     }
 
-    //on click erase - 1. set current state previousCol to currCol 2.line size to 20  3.display color white
-   // on click of pencil - 2. set current state currCol to prevCol line size to 2, display current col
-
     erase(){
       this.setState({previousCol: this.state.color, color: 'white', tool:TOOL_PENCIL, size:20});          
     }
@@ -80,8 +78,6 @@ class Whiteboard extends Component {
 
 render() {
   const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
-  console.log("data", this.state.data);
-  console.log('url',this.state.URL)
     return (
       <div>
         <h1>React SketchPad</h1>
@@ -144,6 +140,8 @@ render() {
             <button onClick={()=>this.save()}>Save</button>
             <button onClick={()=>this.clear()}>Clear</button>
             <button>Undo</button>
+            <button>Redo</button>
+            
         </div>
         <img onClick={()=>this.retrieve(this.state.data)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>
       </div>
