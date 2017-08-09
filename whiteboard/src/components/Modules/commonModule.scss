@@ -1,0 +1,107 @@
+@import './../../sassVars.scss';
+
+.module_mask {
+  width: 100%;
+  height: 100vh;
+  // overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  // display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba($darkColor, .7);
+  .module_box {
+    width: 30vw;
+    min-height: 30vh;
+    padding-bottom: 3.5rem;
+    position: relative;
+    border-radius: $borderRadius;
+    background-color: $brightColor;
+    color: $darkColor;
+    .module_exitButton {
+      width: 1.7rem;
+      height: 1.7rem;
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0 0 0 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $mediumColor;
+      border-radius: $borderRadius;
+      svg {
+        width: 1rem;
+        height: 1rem;
+        fill: $lightColor;
+        transform: rotate(45deg);
+      }
+    }
+    .module_exitButton:hover {
+      cursor: pointer;
+    }
+    h1 {
+      font-family: $displayFontFamily;
+      font-size: 1.8rem;
+    }
+    .module_userInputBox {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input {
+      // z-index: 2;
+      width: 25vw;
+      height: 2.3rem;
+      padding: 5px;
+      border: solid .5px $darkColor;
+      border-radius: $borderRadius;
+      font-family: $straightFontFamily;
+      font-size: 1rem;
+      color: $darkColor;
+    }
+    input:focus {
+      outline: none;
+    }
+    .module_userList {
+      z-index: 1;
+      position: absolute;
+      opacity: 0;
+      top: 1.9rem;
+      width: calc(25vw);
+      height: 20vh;
+      padding: 10px 5px;
+      border-bottom-right-radius: $borderRadius;
+      border-bottom-left-radius: $borderRadius;
+      border-top: solid .5px $dullColor;
+      border-left: solid .5px $darkColor;
+      border-bottom: solid .5px $darkColor;
+      border-right: solid .5px $darkColor;
+      background-color: white;
+      color: $darkColor;
+      transition: all .1s ease-in-out;
+    }
+    .module_userListDisplay {
+      opacity: 1;
+    }
+    button {
+      height: 2.5rem;
+      padding: 10px;
+      border: none;
+      border-radius: $borderRadius;
+      background-color: $mediumColor;
+      color: $lightColor;
+      font-family: $straightFontFamily;
+      font-size: 1rem;
+    }
+    button:hover {
+      cursor: pointer;
+    }
+    button:focus {
+      outline: none;
+    }
+  }
+}
