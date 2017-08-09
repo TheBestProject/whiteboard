@@ -47,6 +47,7 @@ export default class SketchPad extends Component {
 
   constructor(props) {
     super(props);
+
     this.initTool = this.initTool.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
@@ -59,11 +60,12 @@ export default class SketchPad extends Component {
     this.ctx = this.canvas.getContext('2d');
     this.initTool(this.props.tool);
   }
-
+  
   componentWillReceiveProps({tool, items}) {
     items
       .filter(item => this.props.items.indexOf(item) === -1)
       .forEach(item => {
+        console.log(item);
         this.initTool(item.tool);
         this.tool.draw(item, this.props.animate);
       });
@@ -96,6 +98,7 @@ export default class SketchPad extends Component {
   onMouseUp(e) {
     const data = this.tool.onMouseUp(...this.getCursorPosition(e));
     data && data[0] && this.props.onCompleteItem && this.props.onCompleteItem.apply(null, data);
+    this.props.autoSave();
     if (this.props.onDebouncedItemChange) {
       clearInterval(this.interval);
       this.interval = null;
