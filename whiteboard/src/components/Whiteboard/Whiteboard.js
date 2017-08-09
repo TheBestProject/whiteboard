@@ -18,28 +18,30 @@ class Whiteboard extends Component {
       fill: false,
       fillColor: '#444444',
       items: [],
-      data: [],
-      URL: ''
+      URL: '',
+      undo : [],
+      redo : []
     }
 
       this.save = this.save.bind(this);
       this.clear = this.clear.bind(this);
       this.displayThumb = this.displayThumb.bind(this);
-      this.retrieve = this.retrieve.bind(this);
+      this.showImg = this.showImg.bind(this);
       this.erase = this.erase.bind(this);
-  }
+      this.autoSave = this.autoSave.bind(this);
+      this.undo = this.undo.bind(this);
 
-  
+  }
 
   // componentDidMount() {
   //   wsClient.on('addItem', item => this.setState({items: this.state.items.concat([item])}));
   // }
 
-  retrieve(data){
+showImg(URL){
       let canvas = document.getElementById('canvas');
       let ctx = canvas.getContext("2d"); 
       var img = new Image();
-      img.src = this.state.URL;
+      img.src = URL;
       ctx.drawImage(img,0,0,500,500,0,0,500,500)
   }
 
@@ -52,31 +54,60 @@ class Whiteboard extends Component {
   save() {
         let canvas = document.getElementById('canvas');
         let ctx = canvas.getContext("2d"); 
-        // action creator or axios call here instead of setting state
         this.setState({URL:canvas.toDataURL()});
         this.clear();
     }
 
-    clear() {
-        let canvas = document.getElementById('canvas');
-        let ctx = canvas.getContext("2d");
-        var m = window.confirm("Want to clear");
-        var w = canvas.width;
-        var h = canvas.height;
-        if (m) {
-            ctx.clearRect(0, 0, w, h);
-        }
-    }
+  clear() {
+      let canvas = document.getElementById('canvas');
+      let ctx = canvas.getContext("2d");
+      var m = window.confirm("Want to clear");
+      var w = canvas.width;
+      var h = canvas.height;
+      if (m) {
+          ctx.clearRect(0, 0, w, h);
+      }
+  }
 
-    erase(){
-      this.setState({previousCol: this.state.color, color: 'white', tool:TOOL_PENCIL, size:20});          
+  erase(){
+    this.setState({previousCol: this.state.color, color: 'white', tool:TOOL_PENCIL, size:20});          
+  }
+  
+  componentDidUpdate(){
+    this.displayThumb();
+    this.showImg(this.state.URL);
+  }
+
+  autoSave(){
+    let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext("2d");
+    let URL = canvas.toDataURL();
+    this.setState({URL:URL, undo:[...this.state.undo, this.state.URL]});
+  }
+
+  undo(){
+    if (this.state.undo[1]){
+      //push current URL into redo
+      //pop last undo URL and make it new current URL
+      let undoList = Object.assign(this.state.undo);
+      let lastEl = undoList.pop();
+      this.setState({redo:[...this.state.redo, this.state.URL], URL:lastEl, undo:undoList});
+      //show new currentURL
+      //this.showImg(lastEl);
     }
-    
-    componentDidUpdate(){
-      this.displayThumb();
+  }
+
+  redo(){
+    if (this.state.redo[0]){ 
+      let redoList = Object.assign(this.state.redo);
+      let lastEl = redoList.pop();
+      console.log('last',lastEl)
+      this.setState({undo:[...this.state.undo,this.state.URL], URL: lastEl, redo:redoList});
     }
+  }
 
 render() {
+  console.log(this.state.undo);
   const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
       <div>
@@ -91,6 +122,7 @@ render() {
             fillColor={fill ? fillColor : ''}
             items={items}
             tool={tool}
+            autoSave={this.autoSave}
             //onCompleteItem={(i) => wsClient.emit('addItem', i)}
           />
         </div>
@@ -139,11 +171,11 @@ render() {
             <button onClick={() => this.erase()} className="eraser">Eraser</button>
             <button onClick={()=>this.save()}>Save</button>
             <button onClick={()=>this.clear()}>Clear</button>
-            <button>Undo</button>
-            <button>Redo</button>
+            <button onClick={()=>this.undo()}>Undo</button>
+            <button onClick={()=>this.redo()}>Redo</button>
             
         </div>
-        <img onClick={()=>this.retrieve(this.state.data)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>
+        <img onClick={()=>this.showImg(this.state.URL)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>
       </div>
     );
   }
