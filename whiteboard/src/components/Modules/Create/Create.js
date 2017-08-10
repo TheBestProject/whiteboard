@@ -136,7 +136,17 @@ class Create extends Component {
             <div className='module_userInputBox'>
               <input value={this.state.member} onChange={(e) => this.handleChange('member', e.target.value)}/>
                 <div className={`${this.state.member ? 'module_userListDisplay' : ''} module_userList`}>
-                  hi
+                  {this.state.users.map(user => {
+                    let littlePicStyle = {
+                      backgroundImage: `url(${user.profilepic})`
+                    }
+                    if (user.username.includes(`${this.state.member}`)){
+                    return <div className='module_userListItem'>
+                      <div className='module_userListItemPic' style={littlePicStyle}></div>
+                      <p>{user.username}</p>
+                    </div>
+                    }
+                  })}
                 </div>
             </div>
             <button>Save Group</button>

@@ -72,8 +72,10 @@
       opacity: 0;
       top: 1.9rem;
       width: calc(25vw);
-      height: 20vh;
-      padding: 10px 5px;
+      max-height: 20vh;
+      overflow-y: hidden;
+      scrollbar-track-color: transparent;
+      // padding: 10px 0px;
       border-bottom-right-radius: $borderRadius;
       border-bottom-left-radius: $borderRadius;
       border-top: solid .5px $dullColor;
@@ -83,6 +85,14 @@
       background-color: white;
       color: $darkColor;
       transition: all .1s ease-in-out;
+      .module_userListItem{
+        // margin: 5px 0;
+        padding: 10px;
+        border-bottom: solid .5px $dullColor;
+      }
+      .module_userListItem:last-child {
+        border-bottom: solid .5px transparent;
+      }
     }
     .module_userListDisplay {
       opacity: 1;
