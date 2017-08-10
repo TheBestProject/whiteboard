@@ -12,16 +12,16 @@ module.exports = {
     getUser: ( req, res, next ) => {
         const db = req.app.get('db')
         db.getUserInfo( req.params.id ).then(( response )=>{
-            res.status( 200 ).send( response )
+            res.status( 200 ).send( response[0] )
         })
     },
 
     getAllUser: ( req, res, next ) => {
         const db = req.app.get('db')
         db.getAllUserInfo( req.params.id ).then(( response ) => {
-            res.status.( 200 ).send( response )
+            res.status( 200 ).send( response )
         })
-    }
+    },
 
     getGroup: ( req, res, next ) => {
         const db = req.app.get('db')

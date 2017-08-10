@@ -5,7 +5,7 @@ const ROOT_URL = 'http://localhost:4000/api'
 export const FETCH_USER = 'FETCH_USER'
 export function fetchUser(userid){
 
-const URL = `${ROOT_URL}/user/${userid}`
+const URL = `/api/user/${userid}`
 const request = axios.get(URL)
 
 console.log('requestuser:', request)

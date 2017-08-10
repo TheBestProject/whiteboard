@@ -1,10 +1,12 @@
-// import { combineReducers } from 'redux';
-// import { ReducerUser } from ''
+import { combineReducers } from 'redux';
+import  ReducerUser  from './reducer_user.js'
+import ReducerData from './reducer_data.js'
 
-// const rootReducer = combineReducers({
+const rootReducer = combineReducers({
 
-    // store
+    userInfo: ReducerUser,
+    userData: ReducerData
 
-// })
+})
 
-// export default rootReducer;
+export default rootReducer;

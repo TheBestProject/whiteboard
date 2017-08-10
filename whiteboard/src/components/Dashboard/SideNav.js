@@ -41,11 +41,11 @@ class SideNav extends Component {
     })
   }
   render() {
-    const { username, profilePic } = this.props.userInfo;
+  
+    const { username, profilepic } = this.props.userInfo;
     const picStyle = {
-      backgroundImage: `url(${profilePic})`
+      backgroundImage: `url(${profilepic})`
     }
-    console.log(this.props);
     return (
       <div id='SideNav'>
         <div className='sideNav_title'>
@@ -69,7 +69,7 @@ class SideNav extends Component {
           </div>
           <div className='sideNav_groupsContainer'>
             {
-              this.props.groups.map((group, i) => {
+              this.props.userData.groups.map((group, i) => {
                 let id = `grouphover${i}`
                 return <div key={i} className='sideNav_groupBox'>
                   <div className='sideNav_hoverBox'>
@@ -80,7 +80,7 @@ class SideNav extends Component {
                     </div>
                   </div>
                   {
-                    this.props.projects.map((project, j) => {
+                    this.props.userData.projects.map((project, j) => {
                       if (project.groupID === group.ID && this.props.history.location.pathname.includes(`/dashboard/${group.ID}`)) {
                         return <div key={j}>
                           <div className='sideNav_hoverBox2'>
@@ -113,8 +113,8 @@ class SideNav extends Component {
 function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
-    groups: state.groups,
-    projects: state.projects
+    userData: state.userData
+    
   }
 }
 export default withRouter(connect(mapStateToProps)(SideNav));
