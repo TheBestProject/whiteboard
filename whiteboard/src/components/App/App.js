@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-
+import { connect } from 'react-redux'
 import Welcome from './../Welcome-Login/Welcome';
 import Dashboard from './../Dashboard/Dashboard';
 import Whiteboard from './../Whiteboard/Whiteboard';
 
+import { fetchUser } from '../../ducks/actions/index'
+
 import './base.css';
 
 class App extends Component {
+
+  componentDidMount(){
+    this.props.fetchUser(1)
+
+  }
   render() {
     return (
       <div id='App'>
@@ -20,4 +27,4 @@ class App extends Component {
     )
   }
 }
-export default App;
+export default connect(null, {fetchUser})(App);
