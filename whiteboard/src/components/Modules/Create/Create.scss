@@ -1,0 +1,31 @@
+@import './../../../sassVars.scss';
+// @import './../commonModule.scss';
+
+#Create {
+  width: 100px;
+  height: 100px;
+  .module_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h2 {
+      min-width: 25vw;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      font-family: $straightFontFamily;
+      font-size: 2rem;
+      border-bottom: solid 1px $dullColor;
+    }
+    button {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  }
+  .module_box > * {
+    margin: 15px;
+  }
+}
+
