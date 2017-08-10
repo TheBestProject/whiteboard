@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { SketchPad, TOOL_PENCIL, TOOL_LINE, TOOL_RECTANGLE, TOOL_ELLIPSE } from './sketch'; 
+import './Whiteboard.css';
 // import IO from 'socket.io-client';
 
 // const wsClient = IO(`ws://127.0.0.1:12346`);
@@ -55,7 +56,6 @@ showImg(URL){
         let canvas = document.getElementById('canvas');
         let ctx = canvas.getContext("2d"); 
         this.setState({URL:canvas.toDataURL()});
-        this.clear();
     }
 
   clear() {
@@ -126,28 +126,28 @@ render() {
             //onCompleteItem={(i) => wsClient.emit('addItem', i)}
           />
         </div>
-        <div style={{float:'left'}}>
-          <div className="tools" style={{marginBottom:20}}>
+        <div className='tools' style={{float:'left'}}>
+          <div style={{marginBottom:20}}>
             <button
               style={tool == TOOL_PENCIL ? {fontWeight:'bold'} : undefined}
               className={tool == TOOL_PENCIL  ? 'item-active' : 'item'}
               onClick={() => this.setState({tool:TOOL_PENCIL, color:previousCol, size: 2})}
-            >Pencil</button>
+            ><img src={require('./../../assets/pen.svg')} alt='pen'/></button>
             <button
               style={tool == TOOL_LINE ? {fontWeight:'bold'} : undefined}
               className={tool == TOOL_LINE  ? 'item-active' : 'item'}
-              onClick={() => this.setState({tool:TOOL_LINE})}
-            >Line</button>
+              onClick={() => this.setState({tool:TOOL_LINE, color:previousCol, size: 2})}
+            ><img src={require('./../../assets/diagonal-line.svg')} alt='line'/></button>
             <button
               style={tool == TOOL_ELLIPSE ? {fontWeight:'bold'} : undefined}
               className={tool == TOOL_ELLIPSE  ? 'item-active' : 'item'}
-              onClick={() => this.setState({tool:TOOL_ELLIPSE})}
-            >Ellipse</button>
+              onClick={() => this.setState({tool:TOOL_ELLIPSE,color:previousCol, size: 2})}
+            ><img src={require('./../../assets/oval.svg')} alt='oval'/></button>
             <button
               style={tool == TOOL_RECTANGLE ? {fontWeight:'bold'} : undefined}
               className={tool == TOOL_RECTANGLE  ? 'item-active' : 'item'}
               onClick={() => this.setState({tool:TOOL_RECTANGLE})}
-            >Rectangle</button>
+            ><img src={require('./../../assets/square.svg')} alt='rectangle'/></button>
           </div>
           <div className="options" style={{marginBottom:20}}>
             <label htmlFor="">size: </label>
@@ -168,11 +168,11 @@ render() {
                   <input id='color2' type="color" value={fillColor} onChange={(e) => this.setState({fillColor: e.target.value})} />
                 </span> : ''}
             </div> : ''}
-            <button onClick={() => this.erase()} className="eraser">Eraser</button>
-            <button onClick={()=>this.save()}>Save</button>
-            <button onClick={()=>this.clear()}>Clear</button>
-            <button onClick={()=>this.undo()}>Undo</button>
-            <button onClick={()=>this.redo()}>Redo</button>
+            <button onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>
+            <button onClick={()=>this.save()}><img src={require('./../../assets/diskette.svg')} alt='save'/></button>
+            <button onClick={()=>this.clear()}><img src={require('./../../assets/wiper.svg')} alt='clear'/></button>
+            <button onClick={()=>this.undo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
+            <button onClick={()=>this.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
             
         </div>
         <img onClick={()=>this.showImg(this.state.URL)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>
@@ -182,3 +182,5 @@ render() {
 }
 
 export default Whiteboard;
+
+//<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
