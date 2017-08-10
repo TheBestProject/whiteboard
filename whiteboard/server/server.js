@@ -88,6 +88,17 @@ const io = socket(app.listen(config.port, () => console.log(`Server listening on
 // SOCKETS
 io.on('connection', socket => {
   console.log('a user connected');
+  socket.on('join', data => {
+    socket.join(data.boardId);
+    console.log('joined a room', data.boardId);
+    io.to(data.boardId).emit('something', {data: 'test'});
+  })
+  socket.on('test autoupdate', data => {
+    io.to(data.boardId).emit('we are talking to each other', {test: data.boardId})
+  })
+  socket.on('leave', data => {
+    socket.leave(data.boardId);
+  })
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
