@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { SketchPad, TOOL_PENCIL, TOOL_LINE, TOOL_RECTANGLE, TOOL_ELLIPSE } from './sketch'; 
 import './Whiteboard.css';
-// import IO from 'socket.io-client';
+import io from 'socket.io-client';
 
+const socket = io();
 // const wsClient = IO(`ws://127.0.0.1:12346`);
 
 class Whiteboard extends Component {
@@ -10,7 +11,12 @@ class Whiteboard extends Component {
   // socket = null;
   constructor(props){
     super(props);
-
+    socket.on('something', (data) =>{
+      this.test(data);
+    })
+    socket.on('we are talking to each other', (data) => {
+      this.test2(data);
+    })
     this.state = {
       tool:TOOL_PENCIL,
       size: 2,
@@ -31,13 +37,23 @@ class Whiteboard extends Component {
       this.erase = this.erase.bind(this);
       this.autoSave = this.autoSave.bind(this);
       this.undo = this.undo.bind(this);
-
+      this.test = this.test.bind(this);
+      this.test2 = this.test2.bind(this);
   }
 
-  // componentDidMount() {
-  //   wsClient.on('addItem', item => this.setState({items: this.state.items.concat([item])}));
-  // }
-
+  componentDidMount() {
+    // wsClient.on('addItem', item => this.setState({items: this.state.items.concat([item])}));
+    socket.emit(`join`, {boardId: this.props.match.params.boardid});
+  }
+  componentWillUnmount() {
+    socket.emit('leave', {boardId: this.props.match.params.boardid})
+  }
+  test(data) {
+    console.log('we got something from the room!', data);
+  }
+  test2(data) {
+    console.log('hey we are talking here', data);
+  }
 showImg(URL){
       let canvas = document.getElementById('canvas');
       let ctx = canvas.getContext("2d"); 
@@ -79,6 +95,7 @@ showImg(URL){
   }
 
   autoSave(){
+    socket.emit('test autoupdate', {boardId: this.props.match.params.boardid});
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext("2d");
     let URL = canvas.toDataURL();
@@ -107,7 +124,7 @@ showImg(URL){
   }
 
 render() {
-  console.log(this.state.undo);
+  // console.log(this.state.undo);
   const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
       <div>
