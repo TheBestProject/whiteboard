@@ -15,6 +15,7 @@
   .module_box {
     width: 30vw;
     min-height: 30vh;
+    padding: 10px;
     padding-bottom: 3.5rem;
     position: relative;
     border-radius: $borderRadius;
@@ -26,7 +27,7 @@
       position: absolute;
       top: 0;
       right: 0;
-      margin: 0 0 0 5px;
+      margin: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -196,5 +197,8 @@
     button:focus {
       outline: none;
     }
+  }
+  .module_box > * {
+    margin: 10px;
   }
 }
