@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import './../commonModule.css';
-import './Edit.css';
+import './commonModule.css';
 
 class Edit extends Component {
   constructor(props) {
@@ -146,7 +145,7 @@ class Edit extends Component {
               </svg>
             </div>
             <h1>Edit {this.state.purpose}</h1>
-            <h3>Name</h3>
+            <h3>{this.state.purpose} Name</h3>
             <input value={this.state.name} onChange={(e) => this.handleChange('name', e.target.value)}/>
             <h3>Current Members</h3>
             {this.state.members.length
