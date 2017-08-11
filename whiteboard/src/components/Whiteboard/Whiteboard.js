@@ -12,7 +12,12 @@ class Whiteboard extends Component {
     super(props);
 
     socket.on('receiveCanvas', (data) =>{
-      this.setInitialImage(data);
+      console.log('data',data);
+      //var URL = data.URL.canvas ? data.URL.canvas : data.URL;
+      //var URL = data.URL;
+      var URL;
+      if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
+      this.setImage(URL);
     })
     
     this.state = {
@@ -28,7 +33,7 @@ class Whiteboard extends Component {
       redo : []
     }
 
-      this.setInitialImage = this.setInitialImage.bind(this);  
+      this.setImage = this.setImage.bind(this);  
       // this.save = this.save.bind(this);
       // this.clear = this.clear.bind(this);
       this.showImg = this.showImg.bind(this);
@@ -48,10 +53,10 @@ class Whiteboard extends Component {
   //   this.showImg(this.state.URL);
   // }
 
-  setInitialImage(data){
-    //console.log('dataReceived',data)
-    this.setState({URL:data.URL.canvas})
-    this.showImg(data.URL.canvas);
+  setImage(URL){
+    //console.log('dataReceived',URL)
+    this.setState({URL:URL})
+    this.showImg(URL);
   }
 
   showImg(URL){
@@ -94,6 +99,7 @@ class Whiteboard extends Component {
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext("2d");
     let URL = canvas.toDataURL();
+    console.log('id',this.props.match.params.boardid);
     socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:URL});
     if(this.state.URL!=URL){
       this.setState({URL:URL, undo:[...this.state.undo, this.state.URL]});
