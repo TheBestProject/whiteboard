@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 
-import './../commonModule.css';
-import './Create.css';
+import './commonModule.css';
 
 class Create extends Component {
   constructor(props) {
@@ -133,8 +132,6 @@ class Create extends Component {
     return (
       <div id='Create'>
         <div className='module_mask'>
-        {this.state.flag
-        ?
           <div className='module_box'>
             <div className='module_exitButton' onClick={() => {
               this.props.createFlag();
@@ -144,22 +141,9 @@ class Create extends Component {
                 <polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22 "/>
               </svg>
             </div>
-            <h1>Enter a {this.state.purpose} Name</h1>
+            <h1>Create {this.state.purpose}</h1>
+            <h3>{this.state.purpose} Name</h3>
             <input value={this.state.name} onChange={(e) => this.handleChange('name', e.target.value)}/>
-            <button onClick={() => this.setState({flag: false})}>Next</button>
-          </div>
-        :
-          <div className='module_box'>
-            <div className='module_exitButton' onClick={() => {
-              this.props.createFlag();
-              this.unlock();
-              }}>
-              <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 42 42" xmlSpace="preserve">
-                <polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22 "/>
-              </svg>
-            </div>
-            <h2>{this.state.name}</h2>
-            <h1>Add Other Members</h1>
             {this.state.members.length
             ?
             <div className={`${this.state.members.length > 3 ? 'module_memberListMaskOverflow' : null} module_memberListMask`}>
@@ -181,6 +165,7 @@ class Create extends Component {
             :
               null
             }
+            <h3>Add Members</h3>
             <div className='module_userInputBox'>
               <input value={this.state.member} onChange={(e) => this.handleChange('member', e.target.value)}/>
               <div className={`${this.state.member ? 'module_userListDisplay' : ''} module_userListMask`}>
@@ -199,9 +184,8 @@ class Create extends Component {
                 </div>
               </div>
             </div>
-            <button onClick={this.save}>Save {this.state.purpose}</button>
+            <button onClick={this.save}>Create {this.state.purpose}</button>
           </div>
-        }
         </div>
       </div>
     )

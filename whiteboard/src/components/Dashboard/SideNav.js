@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
-import Create from './../Modules/Create/Create';
-import Edit from './../Modules/Edit/Edit';
+import Create from './../Modules/Create';
+import Edit from './../Modules/Edit';
 import Profile from './../Modules/Profile/Profile';
 
 import './SideNav.css';
@@ -15,6 +15,7 @@ class SideNav extends Component {
       rerenderFlag: false,
       createFlag: false,
       editFlag: false,
+      profileFlag: false,
       purpose: '',
       groupID: null,
       projectID: null,
@@ -26,6 +27,7 @@ class SideNav extends Component {
     this.projectEdit = this.projectEdit.bind(this);
     this.createFlag = this.createFlag.bind(this);
     this.editFlag = this.editFlag.bind(this);
+    this.prfileFlag = this.profileFlag.bind(this);
   }
   groupCreate() {
     this.setState({
@@ -72,6 +74,11 @@ class SideNav extends Component {
       name: ''
     })
   }
+  profileFlag() {
+    this.setState({
+      profileFlag: false
+    })
+  }
   render() {
     console.log('url', this.props.history.location.pathname);
   
@@ -87,7 +94,7 @@ class SideNav extends Component {
         <div className='sideNav_userDisplay'>
           <div className='sideNav_username'>
             <h2>{username}</h2>
-            <p>edit</p>
+            <p onClick={() => this.setState({profileFlag: true})}>edit</p>
           </div>
           <div className='sideNav_profilePic' style={picStyle}></div>
         </div>
@@ -144,7 +151,12 @@ class SideNav extends Component {
         :
           null
         }
-        <Profile />
+        {this.state.profileFlag
+        ?
+          <Profile profileFlag={this.prfileFlag} />
+        :
+          null
+        }
       </div>
     )
   }

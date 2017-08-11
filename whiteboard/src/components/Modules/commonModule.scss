@@ -14,13 +14,17 @@
   background-color: rgba($darkColor, .7);
   .module_box {
     width: 30vw;
-    min-height: 30vh;
-    padding: 10px;
-    padding-bottom: 3.5rem;
+    min-height: 20vh;
+    padding: 3rem 10px 3.5rem;
+    // padding-bottom: 3.5rem;
     position: relative;
     border-radius: $borderRadius;
     background-color: $brightColor;
     color: $darkColor;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     .module_exitButton {
       width: 1.7rem;
       height: 1.7rem;
@@ -44,8 +48,25 @@
       cursor: pointer;
     }
     h1 {
+      position: absolute;
+      top: 5px;
+      left: 5px;
       font-family: $displayFontFamily;
       font-size: 1.8rem;
+    }
+    h2 {
+      min-width: 25vw;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      font-family: $straightFontFamily;
+      font-size: 2rem;
+      border-bottom: solid 1px $dullColor;
+    }
+    h3 {
+      font-family: $displayFontFamily;
+      font-size: 1.2rem;
+      width: 25vw;
     }
     input {
       // z-index: 2;
@@ -125,7 +146,7 @@
       .module_userListMask {
         width: 25vw;
         // min-height: 5vh;
-        height: 203px;
+        height: 150px;
         overflow: hidden;
         display: none;
         z-index: 1;
@@ -190,6 +211,9 @@
       color: $lightColor;
       font-family: $straightFontFamily;
       font-size: 1rem;
+      position: absolute;
+      bottom: 0;
+      right: 0;
     }
     button:hover {
       cursor: pointer;
