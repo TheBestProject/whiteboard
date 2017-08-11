@@ -12,6 +12,7 @@ class SideNav extends Component {
   constructor() {
     super();
     this.state = {
+      rerenderFlag: false,
       createFlag: false,
       purpose: '',
       groupID: null
@@ -41,6 +42,7 @@ class SideNav extends Component {
     })
   }
   render() {
+    console.log('url', this.props.history.location.pathname);
   
     const { username, profilepic } = this.props.userInfo;
     const picStyle = {
@@ -70,24 +72,25 @@ class SideNav extends Component {
           <div className='sideNav_groupsContainer'>
             {
               this.props.userData.groups.map((group, i) => {
-                let id = `grouphover${i}`
+                
                 return <div key={i} className='sideNav_groupBox'>
                   <div className='sideNav_hoverBox'>
-                    <Link to={`/dashboard/${group.ID}`} className='sideNav_h3Link'>{group.name}</Link>
-                    <div className='sideNav_hoverMenu' id={id}>
+                    <Link to={`/dashboard/${group.ID}`} className='sideNav_h3Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{group.name}</Link>
+                    <div className='sideNav_hoverMenu' >
                       <p onClick={() => this.projectCreate(group.ID)}>Add Project</p>
                       <p>Edit Group</p>
                     </div>
                   </div>
                   {
                     this.props.userData.projects.map((project, j) => {
+                      {/* console.log('project', project); */}
                       if (project.groupID === group.ID && this.props.history.location.pathname.includes(`/dashboard/${group.ID}`)) {
                         return <div key={j}>
                           <div className='sideNav_hoverBox2'>
-                            <Link to={`/dashboard/${group.ID}/${project.ID}`} className='sideNav_h4Link'>{project.name}</Link>
-                            <div className='sideNav_hoverMenu2' id={id}>
+                            <Link to={`/dashboard/${group.ID}/${project.ID}`} className='sideNav_h4Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{project.name}</Link>
+                            <div className='sideNav_hoverMenu2'>
                               <p>Edit Project</p>
-                            </div>
+                            </div> 
                           </div> 
                         </div>
                       }
@@ -114,7 +117,6 @@ function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
     userData: state.userData
-    
   }
 }
 export default withRouter(connect(mapStateToProps)(SideNav));

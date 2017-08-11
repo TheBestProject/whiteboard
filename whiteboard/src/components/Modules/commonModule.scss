@@ -46,12 +46,6 @@
       font-family: $displayFontFamily;
       font-size: 1.8rem;
     }
-    .module_userInputBox {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
     input {
       // z-index: 2;
       width: 25vw;
@@ -66,26 +60,125 @@
     input:focus {
       outline: none;
     }
-    .module_userList {
-      z-index: 1;
-      position: absolute;
-      opacity: 0;
-      top: 1.9rem;
-      width: calc(25vw);
-      height: 20vh;
-      padding: 10px 5px;
-      border-bottom-right-radius: $borderRadius;
-      border-bottom-left-radius: $borderRadius;
-      border-top: solid .5px $dullColor;
-      border-left: solid .5px $darkColor;
-      border-bottom: solid .5px $darkColor;
-      border-right: solid .5px $darkColor;
-      background-color: white;
-      color: $darkColor;
-      transition: all .1s ease-in-out;
+    .module_memberListMask {
+      width: 25vw;
+      min-height: 45px;
+      position: relative;
+      // overflow: hidden;
+      border: solid .5px $dullColor;
+      border-radius: $borderRadius;
+      .module_memberList {
+        margin: 5px 0 5px 5px;
+        .module_member {
+          margin: 0 0 7px 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .module_memberUserInfo {
+            display: flex;
+            align-items: center;
+          }
+          .module_memberPic {
+            width: 40px;
+            height: 40px;
+            margin: 0 15px 0 0;
+            border-radius: $borderRadius;
+            border: solid .5px $dullColor;
+            background-position: center;
+            background-repeat: cover;
+          }
+          h6 {
+            font-size: 1.2rem;
+          }
+          p {
+            float: right;
+            margin: 0 10px 0 0;
+          }
+          p:hover {
+            cursor: pointer;
+          }
+        }
+        .module_member:last-child {
+          margin: 0;
+        }
+      }
+      .module_memberListOverflow {
+        position: absolute;
+        top: 5px;
+        bottom: 5px;
+        left: 5px;
+        right: -17px;
+        overflow-y: scroll;
+        margin: 0
+      }
     }
-    .module_userListDisplay {
-      opacity: 1;
+    .module_memberListMaskOverflow{
+      overflow: hidden;
+      height: 145px;
+    }
+    .module_userInputBox {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .module_userListMask {
+        width: 25vw;
+        // min-height: 5vh;
+        height: 203px;
+        overflow: hidden;
+        display: none;
+        z-index: 1;
+        position: absolute;
+        // opacity: 0;
+        top: 1.9rem;
+        left: 0;
+        border-bottom-right-radius: $borderRadius;
+        border-bottom-left-radius: $borderRadius;
+        border-top: solid .5px $dullColor;
+        border-left: solid .5px $darkColor;
+        border-bottom: solid .5px $darkColor;
+        border-right: solid .5px $darkColor;
+      }
+      .module_userList {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: - 20px;
+        width: calc(25vw + 20px);
+        // min-height: 5vh;
+        // max-height: 40vh;
+        overflow-y: scroll;
+        background-color: white;
+        color: $darkColor;
+        // transition: all 7s ease-in-out;
+        .module_userListItem{
+          // margin: 5px 0;
+          display: flex;
+          align-items: center;
+          padding: 10px 5px;
+          border-bottom: solid .5px $dullColor;
+          .module_userListItemPic {
+            width: 30px;
+            height: 30px;
+            margin: 0 5px 0 0;
+            border-radius: $borderRadius;
+            border: solid .5px $dullColor;
+            background-position: center;
+            background-repeat: cover;
+          }
+        }
+        .module_userListItem:last-child {
+          border-bottom: solid .5px transparent;
+        }
+        .module_userListItem:hover {
+          cursor: pointer;
+        }
+      }
+      .module_userListDisplay {
+        // opacity: 1;
+        display: block;
+      }
     }
     button {
       height: 2.5rem;
