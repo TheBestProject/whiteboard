@@ -13,6 +13,9 @@ class Create extends Component {
       name: '',
       member: '',
       members: [],
+      position: null,
+      purpose: this.props.purpose,
+      groupID: this.props.groupID,
       users: [
         {
           id: 3, 
@@ -62,10 +65,7 @@ class Create extends Component {
           profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
           groupID: 9
         }
-      ],
-      position: null,
-      purpose: this.props.purpose,
-      groupID: this.props.groupID
+      ]
     }
     this.handleChange = this.handleChange.bind(this);
     this.lock = this.lock.bind(this);
@@ -131,7 +131,7 @@ class Create extends Component {
   }
   render() {
     return (
-      <div id='Create' ref='myref' >
+      <div id='Create'>
         <div className='module_mask'>
         {this.state.flag
         ?

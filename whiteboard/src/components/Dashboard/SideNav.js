@@ -14,12 +14,18 @@ class SideNav extends Component {
     this.state = {
       rerenderFlag: false,
       createFlag: false,
+      editFlag: false,
       purpose: '',
-      groupID: null
+      groupID: null,
+      projectID: null,
+      name: ''
     }
     this.groupCreate = this.groupCreate.bind(this);
     this.projectCreate = this.projectCreate.bind(this);
+    this.groupEdit = this.groupEdit.bind(this);
+    this.projectEdit = this.projectEdit.bind(this);
     this.createFlag = this.createFlag.bind(this);
+    this.editFlag = this.editFlag.bind(this);
   }
   groupCreate() {
     this.setState({
@@ -34,11 +40,36 @@ class SideNav extends Component {
       groupID
     })
   }
+  groupEdit(groupID, name) {
+    this.setState({
+      editFlag: true,
+      purpose: 'Group',
+      groupID,
+      name
+    })
+  }
+  projectEdit(projectID, name) {
+    this.setState({
+      editFlag: true,
+      purpose: 'Project',
+      projectID,
+      name
+    })
+  }
   createFlag() {
     this.setState({
       createFlag: false,
       purpose: '',
       groupID: null
+    })
+  }
+  editFlag() {
+    this.setState({
+      editFlag: false,
+      purpose: '',
+      groupID: null,
+      projectID: null,
+      name: ''
     })
   }
   render() {
@@ -78,7 +109,7 @@ class SideNav extends Component {
                     <Link to={`/dashboard/${group.ID}`} className='sideNav_h3Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{group.name}</Link>
                     <div className='sideNav_hoverMenu' >
                       <p onClick={() => this.projectCreate(group.ID)}>Add Project</p>
-                      <p>Edit Group</p>
+                      <p onClick={() => this.groupEdit(group.ID, group.name)}>Edit Group</p>
                     </div>
                   </div>
                   {
@@ -89,7 +120,7 @@ class SideNav extends Component {
                           <div className='sideNav_hoverBox2'>
                             <Link to={`/dashboard/${group.ID}/${project.ID}`} className='sideNav_h4Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{project.name}</Link>
                             <div className='sideNav_hoverMenu2'>
-                              <p>Edit Project</p>
+                              <p onClick={() => this.projectEdit(project.ID, project.name)}>Edit Project</p>
                             </div> 
                           </div> 
                         </div>
@@ -103,11 +134,16 @@ class SideNav extends Component {
         </div>
         {this.state.createFlag
         ?
-          <Create purpose={this.state.purpose} groupID={this.state.groupID} createFlag={this.createFlag}/>
+          <Create purpose={this.state.purpose} groupID={this.state.groupID} createFlag={this.createFlag} />
         :
           null
         }
-        <Edit />
+        {this.state.editFlag
+        ?
+          <Edit purpose={this.state.purpose} name= {this.state.name} groupID={this.state.groupID} projectID={this.state.projectID} editFlag={this.editFlag} />
+        :
+          null
+        }
         <Profile />
       </div>
     )
