@@ -91,10 +91,14 @@ io.on('connection', socket => {
   socket.on('join', data => {
     socket.join(data.boardId);
     console.log('joined a room', data.boardId);
-    io.to(data.boardId).emit('something', {data: 'test'});
+    const db = app.get('db');
+    db.getBoard([data.boardId]).then(dbData => {
+      io.to(data.boardId).emit('receiveCanvas', {URL: dbData[0]});
+    })
+    
   })
-  socket.on('test autoupdate', data => {
-    io.to(data.boardId).emit('we are talking to each other', {test: data.boardId})
+  socket.on('new canvas data', data => {
+    io.to(data.boardId).emit('receiveCanvas', {URL: data.URL})
   })
   socket.on('leave', data => {
     socket.leave(data.boardId);

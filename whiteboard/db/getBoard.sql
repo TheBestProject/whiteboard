@@ -1,0 +1,1 @@
+select canvas from whiteboards where id = $1;

@@ -2,21 +2,23 @@ import React, { Component } from 'react';
 import { SketchPad, TOOL_PENCIL, TOOL_LINE, TOOL_RECTANGLE, TOOL_ELLIPSE } from './sketch'; 
 import './Whiteboard.css';
 import io from 'socket.io-client';
+import testImg from './test-img';
 
 const socket = io();
-// const wsClient = IO(`ws://127.0.0.1:12346`);
 
 class Whiteboard extends Component {
 
-  // socket = null;
   constructor(props){
     super(props);
-    socket.on('something', (data) =>{
-      this.test(data);
+
+    socket.on('receiveCanvas', (data) =>{
+      //console.log('data',data);
+      //var URL = data.URL.canvas ? data.URL.canvas : data.URL;
+      var URL;
+      if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
+      this.setImage(URL);
     })
-    socket.on('we are talking to each other', (data) => {
-      this.test2(data);
-    })
+    
     this.state = {
       tool:TOOL_PENCIL,
       size: 2,
@@ -30,15 +32,14 @@ class Whiteboard extends Component {
       redo : []
     }
 
+      this.setImage = this.setImage.bind(this);  
       this.save = this.save.bind(this);
       this.clear = this.clear.bind(this);
-      this.displayThumb = this.displayThumb.bind(this);
       this.showImg = this.showImg.bind(this);
       this.erase = this.erase.bind(this);
       this.autoSave = this.autoSave.bind(this);
       this.undo = this.undo.bind(this);
-      this.test = this.test.bind(this);
-      this.test2 = this.test2.bind(this);
+      this.redo = this.redo.bind(this);
   }
 
   componentDidMount() {
@@ -48,25 +49,30 @@ class Whiteboard extends Component {
   componentWillUnmount() {
     socket.emit('leave', {boardId: this.props.match.params.boardid})
   }
-  test(data) {
-    console.log('we got something from the room!', data);
+  // componentDidUpdate(){
+  //   this.showImg(this.state.URL);
+  // }
+
+  setImage(URL){
+    //console.log('dataReceived',URL)
+    this.setState({URL:URL})
+    this.showImg(URL);
   }
-  test2(data) {
-    console.log('hey we are talking here', data);
-  }
-showImg(URL){
+
+  showImg(URL){
       let canvas = document.getElementById('canvas');
       let ctx = canvas.getContext("2d"); 
       var img = new Image();
+      console.log('URL',URL);
       img.src = URL;
       ctx.drawImage(img,0,0,500,500,0,0,500,500)
   }
 
-  displayThumb(){
-        document.getElementById("thumb").style.border = "1px solid";  
-        document.getElementById("thumb").src = this.state.URL;
-        document.getElementById("thumb").style.display = "inline";
-  }
+  // displayThumb(){
+  //       document.getElementById("thumb").style.border = "1px solid";  
+  //       document.getElementById("thumb").src = this.state.URL;
+  //       document.getElementById("thumb").style.display = "inline";
+  // }
 
   save() {
         let canvas = document.getElementById('canvas');
@@ -77,7 +83,7 @@ showImg(URL){
   clear() {
       let canvas = document.getElementById('canvas');
       let ctx = canvas.getContext("2d");
-      var m = window.confirm("Want to clear");
+      var m = window.confirm("Clear the Board?");
       var w = canvas.width;
       var h = canvas.height;
       if (m) {
@@ -89,17 +95,15 @@ showImg(URL){
     this.setState({previousCol: this.state.color, color: 'white', tool:TOOL_PENCIL, size:20});          
   }
   
-  componentDidUpdate(){
-    this.displayThumb();
-    this.showImg(this.state.URL);
-  }
-
   autoSave(){
-    socket.emit('test autoupdate', {boardId: this.props.match.params.boardid});
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext("2d");
     let URL = canvas.toDataURL();
-    this.setState({URL:URL, undo:[...this.state.undo, this.state.URL]});
+    //console.log('id',this.props.match.params.boardid);
+    socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:URL});
+    if(this.state.URL!=URL){
+      this.setState({URL:URL, undo:[...this.state.undo, this.state.URL]});
+    }
   }
 
   undo(){
@@ -107,10 +111,12 @@ showImg(URL){
       //push current URL into redo
       //pop last undo URL and make it new current URL
       let undoList = Object.assign(this.state.undo);
+      console.log('length undo list', undoList.length);
       let lastEl = undoList.pop();
+      //console.log(lastEl);
       this.setState({redo:[...this.state.redo, this.state.URL], URL:lastEl, undo:undoList});
       //show new currentURL
-      //this.showImg(lastEl);
+      //
     }
   }
 
@@ -124,7 +130,7 @@ showImg(URL){
   }
 
 render() {
-  // console.log(this.state.undo);
+  //console.log('URL', this.state.URL);
   const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
       <div>
@@ -185,14 +191,14 @@ render() {
                   <input id='color2' type="color" value={fillColor} onChange={(e) => this.setState({fillColor: e.target.value})} />
                 </span> : ''}
             </div> : ''}
+            
             <button onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>
             <button onClick={()=>this.save()}><img src={require('./../../assets/diskette.svg')} alt='save'/></button>
-            <button onClick={()=>this.clear()}><img src={require('./../../assets/wiper.svg')} alt='clear'/></button>
+            <button onClick={()=>this.clear()}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
             <button onClick={()=>this.undo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
             <button onClick={()=>this.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
-            
         </div>
-        <img onClick={()=>this.showImg(this.state.URL)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>
+        
       </div>
     );
   }
@@ -201,3 +207,4 @@ render() {
 export default Whiteboard;
 
 //<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+//<img onClick={()=>this.showImg(this.state.URL)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>
