@@ -99,6 +99,7 @@ export default class SketchPad extends Component {
     const data = this.tool.onMouseUp(...this.getCursorPosition(e));
     data && data[0] && this.props.onCompleteItem && this.props.onCompleteItem.apply(null, data);
     this.props.autoSave();
+    console.log('triggered');
     if (this.props.onDebouncedItemChange) {
       clearInterval(this.interval);
       this.interval = null;
@@ -116,7 +117,7 @@ export default class SketchPad extends Component {
   render() {
     const {width, height, canvasClassName} = this.props;
     return (
-      <canvas id='canvas' style={{border:'1px solid black'}}
+      <canvas id='canvas'
         ref={(canvas) => { this.canvasRef = canvas; }}
         className={canvasClassName}
         onMouseDown={this.onMouseDown}
