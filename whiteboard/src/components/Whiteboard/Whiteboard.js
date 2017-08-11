@@ -3,8 +3,11 @@ import { SketchPad, TOOL_PENCIL, TOOL_LINE, TOOL_RECTANGLE, TOOL_ELLIPSE } from 
 import './Whiteboard.css';
 import io from 'socket.io-client';
 import testImg from './test-img';
+import {Link} from 'react-router-dom';
 
 const socket = io();
+const height = window.innerHeight-60;
+const width = window.innerWidth;
 
 class Whiteboard extends Component {
 
@@ -38,7 +41,7 @@ class Whiteboard extends Component {
       this.showImg = this.showImg.bind(this);
       this.erase = this.erase.bind(this);
       this.autoSave = this.autoSave.bind(this);
-      this.undo = this.undo.bind(this);
+      //this.undo = this.undo.bind(this);
       this.redo = this.redo.bind(this);
   }
 
@@ -49,6 +52,7 @@ class Whiteboard extends Component {
   componentWillUnmount() {
     socket.emit('leave', {boardId: this.props.match.params.boardid})
   }
+
   // componentDidUpdate(){
   //   this.showImg(this.state.URL);
   // }
@@ -63,9 +67,9 @@ class Whiteboard extends Component {
       let canvas = document.getElementById('canvas');
       let ctx = canvas.getContext("2d"); 
       var img = new Image();
-      console.log('URL',URL);
+      //console.log('URL',URL);
       img.src = URL;
-      ctx.drawImage(img,0,0,500,500,0,0,500,500)
+      ctx.drawImage(img,0,0,width,height,0,0,width,height)
   }
 
   // displayThumb(){
@@ -99,7 +103,7 @@ class Whiteboard extends Component {
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext("2d");
     let URL = canvas.toDataURL();
-    //console.log('id',this.props.match.params.boardid);
+    console.log('id',this.props.match.params.boardid);
     socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:URL});
     if(this.state.URL!=URL){
       this.setState({URL:URL, undo:[...this.state.undo, this.state.URL]});
@@ -107,7 +111,7 @@ class Whiteboard extends Component {
   }
 
   undo(){
-    if (this.state.undo[1]){
+    if (this.state.undo[0]){
       //push current URL into redo
       //pop last undo URL and make it new current URL
       let undoList = Object.assign(this.state.undo);
@@ -116,7 +120,7 @@ class Whiteboard extends Component {
       //console.log(lastEl);
       this.setState({redo:[...this.state.redo, this.state.URL], URL:lastEl, undo:undoList});
       //show new currentURL
-      //
+      socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:lastEl});
     }
   }
 
@@ -124,21 +128,35 @@ class Whiteboard extends Component {
     if (this.state.redo[0]){ 
       let redoList = Object.assign(this.state.redo);
       let lastEl = redoList.pop();
-      console.log('last',lastEl)
+      //console.log('last',lastEl)
       this.setState({undo:[...this.state.undo,this.state.URL], URL: lastEl, redo:redoList});
     }
   }
 
 render() {
-  //console.log('URL', this.state.URL);
+  console.log('window',window);
+  console.log('URL length', this.state.URL.length);
+  console.log('URL',this.state.URL);
   const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
-      <div>
-        <h1>React SketchPad</h1>
-        <div style={{float:'left', marginRight:20}}>
+      <div className='whiteboard'>
+        <div className="Nav">
+          <Link className="link" to={'/dashboard'}>
+              <img src={require('./../../assets/ic_keyboard_arrow_left_black_24px.svg')} alt='left'/>
+              <h1>Back to Dashboard</h1>
+            </Link>
+          <p>Our First Project</p>
+        </div>
+        <div className="main-tools tools">
+            <button onClick={()=>this.save()}><img src={require('./../../assets/diskette.svg')} alt='save'/></button>
+            <button onClick={()=>this.clear()}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
+            <button onClick={()=>this.undo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
+            <button onClick={()=>this.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
+        </div>
+        <div className="Sketchpad">
           <SketchPad 
-            width={500}
-            height={500}
+            width={width}
+            height={height}
             animate={true}
             size={size}
             color={color}
@@ -149,7 +167,7 @@ render() {
             //onCompleteItem={(i) => wsClient.emit('addItem', i)}
           />
         </div>
-        <div className='tools' style={{float:'left'}}>
+        <div className='tools'>
           <div style={{marginBottom:20}}>
             <button
               style={tool == TOOL_PENCIL ? {fontWeight:'bold'} : undefined}
@@ -171,6 +189,7 @@ render() {
               className={tool == TOOL_RECTANGLE  ? 'item-active' : 'item'}
               onClick={() => this.setState({tool:TOOL_RECTANGLE})}
             ><img src={require('./../../assets/square.svg')} alt='rectangle'/></button>
+            <button onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>          
           </div>
           <div className="options" style={{marginBottom:20}}>
             <label htmlFor="">size: </label>
@@ -181,22 +200,17 @@ render() {
             <input type="color" value={color} onChange={(e) => this.setState({color: e.target.value})} />
           </div>
             
-          {(this.state.tool == TOOL_ELLIPSE || this.state.tool == TOOL_RECTANGLE) ?
             <div>
               <label htmlFor="">fill in:</label>
               <input type="checkbox" value={fill} style={{margin:'0 8'}}
                      onChange={(e) => this.setState({fill: e.target.checked})} />
-              {fill ? <span>
+              <span>
                   <label htmlFor="">with color:</label>
                   <input id='color2' type="color" value={fillColor} onChange={(e) => this.setState({fillColor: e.target.value})} />
-                </span> : ''}
-            </div> : ''}
+              </span> 
+            </div>
             
-            <button onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>
-            <button onClick={()=>this.save()}><img src={require('./../../assets/diskette.svg')} alt='save'/></button>
-            <button onClick={()=>this.clear()}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
-            <button onClick={()=>this.undo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
-            <button onClick={()=>this.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
+            
         </div>
         
       </div>

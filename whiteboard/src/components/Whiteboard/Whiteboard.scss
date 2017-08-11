@@ -1,16 +1,77 @@
-.tools{
-    border: 1px solid black;
-    border-radius: 50%;
+@import './../../sassVars.scss';
+
+.whiteboard{
+    .Nav{
+        position: fixed;
+        top: 0;
+        height: 50px;
+        width: 100vw;
+        display: flex;
+        justify-content: space-between;
+        background-color: $darkColor;
+        font-family: $displayFontFamily;
+        color: $brightColor;
+        align-items: center;
+
+        p{
+            margin-right: 50px;
+        }
+        
+        .link{
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    a{
+        color: $brightColor;
+        text-decoration: none;
+    }
 
     button{
-        background-color: white;
+        background-color: transparent;
         border: none;
         width: 25px;
         height: 15px;
         outline: none;
     }
+}
 
-    
+.Sketchpad{
+    margin-top: 50px;
+}
 
+.main-tools{
+    // background-color: $lightColor;
+    width: 100vw;
+    height: 30px;
+    position: fixed;
+    top: 50px;
+    display: flex;
+    align-items: center;   
+}
+
+input[type="color"]{
+    background-color: white;
+    border: none;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    outline: none;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}
+
+input[type="range"] {
+    -webkit-appearance: slider-horizontal;
+    color: red;
+    padding: initial;
+    border: initial;
+    margin: 2px;
 }
 
