@@ -23,6 +23,13 @@ module.exports = {
         })
     },
 
+    getInitialData: ( req, res, next ) => {
+        const db = req.app.get('db')
+        db.getInitialData( req.params.id ).then(( response ) => {
+            res.status( 200 ).send( response )
+        })
+    },
+
     getGroup: ( req, res, next ) => {
         const db = req.app.get('db')
         db.getGroupInfo(req.params.id).then((response) => {
@@ -86,6 +93,17 @@ module.exports = {
             res.status(200).send(response)
         })
     },
+
+    addWhiteboard: ( req, res, next ) => {
+        const db = req.app.get('db')
+        const whiteboardData = [
+            req.body.name,
+            req.params.id,
+        ]
+        db.addNewWhiteboard(whiteboardData).then((response) => {
+            res.status(200).send(response)
+        })
+    },
     // PLACEHOLDER
     // updateUser: ( req, res, next ) => {
     //     const userData = [
@@ -124,6 +142,30 @@ module.exports = {
         })
     },
 
+    updateWhiteboard: ( req, res, next ) => {
+        const db = req.app.get('db')
+        const whiteboardUpdateData = [
+            req.body.name,
+            req.params.id
+        ]
+        db.updateWhiteboard(whiteboardUpdateData).then((response) => {
+            res.status(200).send(response)
+        })
+    },
+
+    updateWhiteboardData: ( req, res, next ) => {
+        const db = req.app.get('db')
+        
+        const canvasData = [
+            req.body.canvas,
+            req.params.id
+            ]
+
+        db.updateWhiteboardData(canvasData).then((response) => {
+              res.status(200).send(response)
+        })
+    },
+
         //##D       DELETES
      
      deleteProject: ( req, res, next ) => {
@@ -132,5 +174,22 @@ module.exports = {
          db.deleteProject(req.params.id).then((response) => {
              res.status(200).send(response)
          })
+     },
+     
+     deleteGroup: ( req, res, next ) => {
+         const db = req.app.get('db')
+
+         db.deleteGroup(req.params.id).then((response) => {
+             res.status(200).send(response)
+         })
+     },
+
+     deleteWhiteboard: ( req, res, next ) => {
+         const db = req.app.get('db')
+
+         db.deleteWhiteboard(req.params.id).then((response) => {
+             res.status(200).send(response)
+         })
      }
+
 }
