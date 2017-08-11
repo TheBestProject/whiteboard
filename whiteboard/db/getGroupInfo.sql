@@ -1,5 +1,5 @@
 select 
-id as ID,
+id,
 name from groups
 where id = $1
 
