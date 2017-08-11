@@ -12,9 +12,8 @@ class Whiteboard extends Component {
     super(props);
 
     socket.on('receiveCanvas', (data) =>{
-      console.log('data',data);
+      //console.log('data',data);
       //var URL = data.URL.canvas ? data.URL.canvas : data.URL;
-      //var URL = data.URL;
       var URL;
       if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
       this.setImage(URL);
@@ -34,12 +33,13 @@ class Whiteboard extends Component {
     }
 
       this.setImage = this.setImage.bind(this);  
-      // this.save = this.save.bind(this);
-      // this.clear = this.clear.bind(this);
+      this.save = this.save.bind(this);
+      this.clear = this.clear.bind(this);
       this.showImg = this.showImg.bind(this);
-      // this.erase = this.erase.bind(this);
+      this.erase = this.erase.bind(this);
       this.autoSave = this.autoSave.bind(this);
-      // this.undo = this.undo.bind(this);
+      this.undo = this.undo.bind(this);
+      this.redo = this.redo.bind(this);
   }
 
   componentDidMount() {
@@ -63,7 +63,7 @@ class Whiteboard extends Component {
       let canvas = document.getElementById('canvas');
       let ctx = canvas.getContext("2d"); 
       var img = new Image();
-      //console.log('URL',URL);
+      console.log('URL',URL);
       img.src = URL;
       ctx.drawImage(img,0,0,500,500,0,0,500,500)
   }
@@ -74,58 +74,60 @@ class Whiteboard extends Component {
   //       document.getElementById("thumb").style.display = "inline";
   // }
 
-  // save() {
-  //       let canvas = document.getElementById('canvas');
-  //       let ctx = canvas.getContext("2d"); 
-  //       this.setState({URL:canvas.toDataURL()});
-  //   }
+  save() {
+        let canvas = document.getElementById('canvas');
+        let ctx = canvas.getContext("2d"); 
+        this.setState({URL:canvas.toDataURL()});
+    }
 
-  // clear() {
-  //     let canvas = document.getElementById('canvas');
-  //     let ctx = canvas.getContext("2d");
-  //     var m = window.confirm("Want to clear");
-  //     var w = canvas.width;
-  //     var h = canvas.height;
-  //     if (m) {
-  //         ctx.clearRect(0, 0, w, h);
-  //     }
-  // }
+  clear() {
+      let canvas = document.getElementById('canvas');
+      let ctx = canvas.getContext("2d");
+      var m = window.confirm("Clear the Board?");
+      var w = canvas.width;
+      var h = canvas.height;
+      if (m) {
+          ctx.clearRect(0, 0, w, h);
+      }
+  }
 
-  // erase(){
-  //   this.setState({previousCol: this.state.color, color: 'white', tool:TOOL_PENCIL, size:20});          
-  // }
+  erase(){
+    this.setState({previousCol: this.state.color, color: 'white', tool:TOOL_PENCIL, size:20});          
+  }
   
   autoSave(){
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext("2d");
     let URL = canvas.toDataURL();
-    console.log('id',this.props.match.params.boardid);
+    //console.log('id',this.props.match.params.boardid);
     socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:URL});
     if(this.state.URL!=URL){
       this.setState({URL:URL, undo:[...this.state.undo, this.state.URL]});
     }
   }
 
-  // undo(){
-  //   if (this.state.undo[1]){
-  //     //push current URL into redo
-  //     //pop last undo URL and make it new current URL
-  //     let undoList = Object.assign(this.state.undo);
-  //     let lastEl = undoList.pop();
-  //     this.setState({redo:[...this.state.redo, this.state.URL], URL:lastEl, undo:undoList});
-  //     //show new currentURL
-  //     //this.showImg(lastEl);
-  //   }
-  // }
+  undo(){
+    if (this.state.undo[1]){
+      //push current URL into redo
+      //pop last undo URL and make it new current URL
+      let undoList = Object.assign(this.state.undo);
+      console.log('length undo list', undoList.length);
+      let lastEl = undoList.pop();
+      //console.log(lastEl);
+      this.setState({redo:[...this.state.redo, this.state.URL], URL:lastEl, undo:undoList});
+      //show new currentURL
+      //
+    }
+  }
 
-  // redo(){
-  //   if (this.state.redo[0]){ 
-  //     let redoList = Object.assign(this.state.redo);
-  //     let lastEl = redoList.pop();
-  //     console.log('last',lastEl)
-  //     this.setState({undo:[...this.state.undo,this.state.URL], URL: lastEl, redo:redoList});
-  //   }
-  // }
+  redo(){
+    if (this.state.redo[0]){ 
+      let redoList = Object.assign(this.state.redo);
+      let lastEl = redoList.pop();
+      console.log('last',lastEl)
+      this.setState({undo:[...this.state.undo,this.state.URL], URL: lastEl, redo:redoList});
+    }
+  }
 
 render() {
   //console.log('URL', this.state.URL);
@@ -190,6 +192,11 @@ render() {
                 </span> : ''}
             </div> : ''}
             
+            <button onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>
+            <button onClick={()=>this.save()}><img src={require('./../../assets/diskette.svg')} alt='save'/></button>
+            <button onClick={()=>this.clear()}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
+            <button onClick={()=>this.undo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
+            <button onClick={()=>this.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
         </div>
         
       </div>
@@ -201,9 +208,3 @@ export default Whiteboard;
 
 //<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 //<img onClick={()=>this.showImg(this.state.URL)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>
-
-            // <button onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>
-            // <button onClick={()=>this.save()}><img src={require('./../../assets/diskette.svg')} alt='save'/></button>
-            // <button onClick={()=>this.clear()}><img src={require('./../../assets/wiper.svg')} alt='clear'/></button>
-            // <button onClick={()=>this.undo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
-            // <button onClick={()=>this.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
