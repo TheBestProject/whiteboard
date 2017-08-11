@@ -15,51 +15,51 @@ class Create extends Component {
       members: [],
       users: [
         {
-          ID: 3, 
-          username: 'HEy',
-          profilePic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
+          id: 3, 
+          username: 'Aaron',
+          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
           groupID: 4
         },
         {
-          ID: 3, 
-          username: 'HEy',
-          profilePic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
+          id: 3, 
+          username: 'Angela',
+          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
           groupID: 9
         },
         {
-          ID: 3, 
-          username: 'HEy',
-          profilePic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
+          id: 3, 
+          username: 'Aaron2',
+          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
           groupID: 4
         },
         {
-          ID: 3, 
-          username: 'HEy',
-          profilePic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
+          id: 3, 
+          username: 'Angela2',
+          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
           groupID: 9
         },
         {
-          ID: 3, 
-          username: 'HEy',
-          profilePic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
+          id: 3, 
+          username: 'Aaron3',
+          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
           groupID: 3
         },
         {
-          ID: 3, 
-          username: 'HEy',
-          profilePic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
+          id: 3, 
+          username: 'Angela3',
+          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
           groupID: 9
         },
         {
-          ID: 3, 
-          username: 'HEy',
-          profilePic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
+          id: 3, 
+          username: 'Aaron4',
+          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
           groupID: 8
         },
         {
-          ID: 3, 
-          username: 'HEy',
-          profilePic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
+          id: 3, 
+          username: 'Angela4',
+          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
           groupID: 9
         }
       ],
@@ -67,8 +67,12 @@ class Create extends Component {
       purpose: this.props.purpose,
       groupID: this.props.groupID
     }
+    this.handleChange = this.handleChange.bind(this);
     this.lock = this.lock.bind(this);
     this.unlock = this.unlock.bind(this);
+    this.addMember = this.addMember.bind(this);
+    this.removeMember = this.removeMember.bind(this);
+    this.save = this.save.bind(this);
   }
   handleChange(statePiece, value) {
     this.setState({
@@ -89,6 +93,29 @@ class Create extends Component {
     dash.style.position = 'static';
     dash.style.top = `0px`;
     window.scrollTo(0, this.state.position);
+  }
+  addMember(index) {
+    let members = [...this.state.members];
+    members.push(this.state.users[index]);
+    this.setState({
+      member: '',
+      members
+    })
+  }
+  removeMember(index) {
+    let members = [...this.state.members];
+    members.splice(index, 1);
+    this.setState({
+      members
+    })
+  }
+  save() {
+    console.log(this.state.name);
+    this.state.members.map(member => {
+      console.log(member);
+    })
+    this.unlock();
+    this.props.createFlag();
   }
   componentDidMount() {
     this.lock();
@@ -133,23 +160,46 @@ class Create extends Component {
             </div>
             <h2>{this.state.name}</h2>
             <h1>Add Other Members</h1>
+            {this.state.members.length
+            ?
+            <div className={`${this.state.members.length > 3 ? 'module_memberListMaskOverflow' : null} module_memberListMask`}>
+              <div className={`${this.state.members.length > 3 ? 'module_memberListOverflow' : null} module_memberList`}>
+                {this.state.members.map((member, i) => {
+                  let littlePicStyle = {
+                    backgroundImage: `url(${member.profilepic})`
+                  } 
+                  return <div key={i} className='module_member'>
+                    <div className='module_memberUserInfo'>
+                      <div className='module_memberPic' style={littlePicStyle}></div>
+                      <h6>{member.username}</h6>
+                    </div>
+                    <p onClick={() => this.removeMember(i)}>remove</p>
+                  </div>
+                })}
+              </div>
+            </div>
+            :
+              null
+            }
             <div className='module_userInputBox'>
               <input value={this.state.member} onChange={(e) => this.handleChange('member', e.target.value)}/>
-                <div className={`${this.state.member ? 'module_userListDisplay' : ''} module_userList`}>
-                  {this.state.users.map(user => {
+              <div className={`${this.state.member ? 'module_userListDisplay' : ''} module_userListMask`}>
+                <div className={`module_userList`}>
+                  {this.state.users.map((user, i) => {
                     let littlePicStyle = {
                       backgroundImage: `url(${user.profilepic})`
                     }
                     if (user.username.includes(`${this.state.member}`)){
-                    return <div className='module_userListItem'>
-                      <div className='module_userListItemPic' style={littlePicStyle}></div>
-                      <p>{user.username}</p>
-                    </div>
+                      return <div key={i} className='module_userListItem' onClick={() => this.addMember(i)}>
+                        <div className='module_userListItemPic' style={littlePicStyle}></div>
+                        <p>{user.username}</p>
+                      </div>
                     }
                   })}
                 </div>
+              </div>
             </div>
-            <button>Save Group</button>
+            <button onClick={this.save}>Save {this.state.purpose}</button>
           </div>
         }
         </div>

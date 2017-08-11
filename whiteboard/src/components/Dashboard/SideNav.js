@@ -12,7 +12,7 @@ class SideNav extends Component {
   constructor() {
     super();
     this.state = {
-      fakeFlag: false,
+      rerenderFlag: false,
       createFlag: false,
       purpose: '',
       groupID: null
@@ -40,11 +40,6 @@ class SideNav extends Component {
       purpose: '',
       groupID: null
     })
-  }
-  componentWillReceiveProps(newProps) {
-    // if (newProps.history.location.pathname !== this.props.history.location.pathname) {
-      console.log('change')
-    
   }
   render() {
     console.log('url', this.props.history.location.pathname);
@@ -80,7 +75,7 @@ class SideNav extends Component {
                 
                 return <div key={i} className='sideNav_groupBox'>
                   <div className='sideNav_hoverBox'>
-                    <Link to={`/dashboard/${group.ID}`} className='sideNav_h3Link' onClick={() => this.setState({fakeFlag: !this.state.fakeFlag})}>{group.name}</Link>
+                    <Link to={`/dashboard/${group.ID}`} className='sideNav_h3Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{group.name}</Link>
                     <div className='sideNav_hoverMenu' >
                       <p onClick={() => this.projectCreate(group.ID)}>Add Project</p>
                       <p>Edit Group</p>
@@ -92,7 +87,7 @@ class SideNav extends Component {
                       if (project.groupID === group.ID && this.props.history.location.pathname.includes(`/dashboard/${group.ID}`)) {
                         return <div key={j}>
                           <div className='sideNav_hoverBox2'>
-                            <Link to={`/dashboard/${group.ID}/${project.ID}`} className='sideNav_h4Link' onClick={() => this.setState({fakeFlag: !this.state.fakeFlag})}>{project.name}</Link>
+                            <Link to={`/dashboard/${group.ID}/${project.ID}`} className='sideNav_h4Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{project.name}</Link>
                             <div className='sideNav_hoverMenu2'>
                               <p>Edit Project</p>
                             </div> 
