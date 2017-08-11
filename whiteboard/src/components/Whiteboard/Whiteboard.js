@@ -104,7 +104,6 @@ class Whiteboard extends Component {
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext("2d");
     let URL = canvas.toDataURL();
-    console.log('id',this.props.match.params.boardid);
     socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:URL});
     if(this.state.URL!=URL){
       this.setState({URL:URL, undo:[...this.state.undo, this.state.URL]});
@@ -135,9 +134,7 @@ class Whiteboard extends Component {
   }
 
 render() {
-  console.log('window',window);
   console.log('URL length', this.state.URL.length);
-  console.log('URL',this.state.URL);
   const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
       <div className='whiteboard'>
