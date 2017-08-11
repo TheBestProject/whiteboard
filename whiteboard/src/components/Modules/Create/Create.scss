@@ -2,8 +2,6 @@
 // @import './../commonModule.scss';
 
 #Create {
-  width: 100px;
-  height: 100px;
   .module_box {
     display: flex;
     flex-direction: column;
@@ -23,9 +21,6 @@
       bottom: 0;
       right: 0;
     }
-  }
-  .module_box > * {
-    margin: 15px;
   }
 }
 
