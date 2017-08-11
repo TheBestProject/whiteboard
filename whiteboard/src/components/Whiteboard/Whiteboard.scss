@@ -1,16 +1,86 @@
-.tools{
-    border: 1px solid black;
-    border-radius: 50%;
+@import './../../sassVars.scss';
+
+.whiteboard{
+
+    display: flex;
+    flex-direction: column;
+
+    .Nav{
+        height: 50px;
+        width: 100vw;
+        display: flex;
+        justify-content: space-between;
+        background-color: $darkColor;
+        font-family: $displayFontFamily;
+        color: $brightColor;
+        align-items: center;
+
+        p{
+            margin-right: 50px;
+        }
+        
+        .link{
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    a{
+        color: $brightColor;
+        text-decoration: none;
+    }
 
     button{
-        background-color: white;
+        background-color: transparent;
         border: none;
         width: 25px;
         height: 15px;
         outline: none;
     }
-
-    
-
 }
+
+.all-tools{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.main-tools{
+    // background-color: $lightColor;
+    margin-left: 10px;
+    height: 30px;
+    display: flex;
+    align-items: center;   
+}
+
+.tools{
+    margin-right: 20px;
+    display: flex;
+    height: 30px;
+    align-items: baseline
+}
+
+.tools>*{
+    margin: 0 5px;
+}
+
+
+input[type="color"]{
+    background-color: white;
+    border: none;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    outline: none;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 1;
+}
+
+input[type="color"]::-webkit-color-swatch {
+	border: 1px solid #aaa;
+}
+
+
 

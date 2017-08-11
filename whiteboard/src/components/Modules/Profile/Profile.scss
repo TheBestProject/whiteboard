@@ -1,0 +1,51 @@
+@import './../../../sassVars.scss';
+
+#Profile {
+  .module_box {
+    padding-top: 3rem;
+    h1 {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+    }
+    .profile_avatarBox {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      border-radius: $borderRadius;
+      border: solide .5px $dullColor;
+      overflow: hidden;
+      .profile_avatar {
+        width: 25vw;
+        height: 25vw;
+        background-position: center;
+        background-repeat: cover;
+      }
+      .profile_inputMask {
+        width: 20vw;
+        height: 2.3rem;
+        position: absolute;
+        bottom: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: $displayFontFamily;
+        font-size: 1.2rem;
+        // color: $mediumColor;
+        background-color: $lightColor;
+        border-radius: $borderRadius;
+        border: solid .5px $dullColor;
+      }
+      input {
+        width: 20vw;
+        position: absolute;
+        bottom: 15px;
+        opacity: 0;
+        // background-color: $lightColor;
+      }
+      input:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
