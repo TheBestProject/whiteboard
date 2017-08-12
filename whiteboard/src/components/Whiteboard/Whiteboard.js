@@ -16,8 +16,8 @@ class Whiteboard extends Component {
     super(props);
 
     socket.on('receiveCanvas', (data) =>{
-      //console.log('data',data);
       //var URL = data.URL.canvas ? data.URL.canvas : data.URL;
+      //console.log(data);
       var URL;
       if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
       this.setImage(URL);
@@ -42,33 +42,34 @@ class Whiteboard extends Component {
       this.showImg = this.showImg.bind(this);
       this.erase = this.erase.bind(this);
       this.autoSave = this.autoSave.bind(this);
-      //this.undo = this.undo.bind(this);
+      this.undo = this.undo.bind(this);
       this.redo = this.redo.bind(this);
   }
 
   componentDidMount() {
     // wsClient.on('addItem', item => this.setState({items: this.state.items.concat([item])}));
     socket.emit(`join`, {boardId: this.props.match.params.boardid});
+    this.showImg(this.state.URL);
   }
   componentWillUnmount() {
     socket.emit('leave', {boardId: this.props.match.params.boardid})
   }
 
-  // componentDidUpdate(){
-  //   this.showImg(this.state.URL);
-  // }
+  componentDidUpdate(){
+    this.showImg(this.state.URL);
+  }
 
   setImage(URL){
     //console.log('dataReceived',URL)
-    this.setState({URL:URL})
     this.showImg(URL);
+    this.setState({URL:URL})
   }
 
   showImg(URL){
       let canvas = document.getElementById('canvas');
       let ctx = canvas.getContext("2d"); 
       var img = new Image();
-      //console.log('URL',URL);
+      //console.log('URL Rendering',URL);
       img.src = URL;
       ctx.drawImage(img,0,0,width,height,0,0,width,height)
   }
@@ -94,6 +95,7 @@ class Whiteboard extends Component {
       if (m) {
           ctx.clearRect(0, 0, w, h);
       }
+        
   }
 
   erase(){
@@ -117,10 +119,10 @@ class Whiteboard extends Component {
       let undoList = Object.assign(this.state.undo);
       console.log('length undo list', undoList.length);
       let lastEl = undoList.pop();
-      //console.log(lastEl);
+      console.log('data Send', lastEl.length);
+      socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:lastEl});
       this.setState({redo:[...this.state.redo, this.state.URL], URL:lastEl, undo:undoList});
       //show new currentURL
-      socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:lastEl});
     }
   }
 
@@ -134,7 +136,7 @@ class Whiteboard extends Component {
   }
 
 render() {
-  console.log('URL length', this.state.URL.length);
+  console.log('State URL length', this.state.URL.length);
   const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
       <div className='whiteboard'>
