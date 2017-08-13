@@ -1,0 +1,51 @@
+@import './../../../sassVars.scss';
+
+#BoardGrid {
+  width: 80vw;
+  // display: flex;
+  // flex-wrap: wrap;
+  .grid_tile {
+    float: left;
+    position: relative;
+    width: 16vw;
+    height: 27vh;
+    margin: 5vh 0 0 3vw;
+    border: solid 1px $dullColor;
+    border-radius: $borderRadius;
+    overflow: hidden;
+    transition: border .2s ease-in-out;
+    .grid_pic {
+      width: 16vw;
+      height: 27vh;
+      background-color: white;
+      background-position: center;
+      background-size: cover;
+    }
+    .grid_picTransparent {
+      width: 16vw;
+      height: 27vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: rgba(white, .6);
+      transition: all .2s ease-in-out;
+    }
+    p {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      color: $mediumColor;
+      transition: all .2s ease-in-out;
+    }
+  }
+  .grid_tile:hover .grid_picTransparent {
+    background-color: rgba(white, .9);
+  }
+  .grid_tile:hover p {
+    color: $darkColor;
+  }
+  .grid_tile:hover {
+    cursor: pointer;
+    border: solid 1.5px $dullColor;
+  }
+}
