@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactDOM from 'react-dom';
+import axios from 'axios';
 
 import './commonModule.css';
 
@@ -15,56 +15,7 @@ class Create extends Component {
       position: null,
       purpose: this.props.purpose,
       groupID: this.props.groupID,
-      users: [
-        {
-          id: 3, 
-          username: 'Aaron',
-          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
-          groupID: 4
-        },
-        {
-          id: 3, 
-          username: 'Angela',
-          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
-          groupID: 9
-        },
-        {
-          id: 3, 
-          username: 'Aaron2',
-          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
-          groupID: 4
-        },
-        {
-          id: 3, 
-          username: 'Angela2',
-          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
-          groupID: 9
-        },
-        {
-          id: 3, 
-          username: 'Aaron3',
-          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
-          groupID: 3
-        },
-        {
-          id: 3, 
-          username: 'Angela3',
-          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
-          groupID: 9
-        },
-        {
-          id: 3, 
-          username: 'Aaron4',
-          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
-          groupID: 8
-        },
-        {
-          id: 3, 
-          username: 'Angela4',
-          profilepic: 'http://im.rediff.com/getahead/2017/feb/10indiaphotos3.jpg',
-          groupID: 9
-        }
-      ]
+      users: []
     }
     this.handleChange = this.handleChange.bind(this);
     this.lock = this.lock.bind(this);
@@ -118,14 +69,16 @@ class Create extends Component {
   }
   componentDidMount() {
     this.lock();
-    // this.DO AN AXIOS
-    // .then(res => {
-    //   let users = res.data.filter(user => user.groupID === this.state.groupID)
-    //   this.setState({users})
-    // })
     if (this.state.groupID) {
-      let users = this.state.users.filter(user => user.groupID === this.state.groupID)
-      this.setState({users})
+      console.log('hi')
+      axios.get(`/api/group/members/${this.state.groupID}`).then(res => {
+        this.setState({users: res.data})
+      })
+    }
+     else {
+      axios.get('/api/allusers').then(res => {
+        this.setState({users: res.data})
+      })
     }
   }
   render() {

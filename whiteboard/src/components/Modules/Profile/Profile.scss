@@ -19,7 +19,8 @@
         width: 25vw;
         height: 25vw;
         background-position: center;
-        background-repeat: cover;
+        // background-cover: contain;
+        background-size: cover;
       }
       .profile_inputMask {
         width: 20vw;
