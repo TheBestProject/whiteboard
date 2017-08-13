@@ -65,6 +65,11 @@ app.get('/auth0/logout', function(req, res) {
 
 // ENDPOINTS
 // app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/api/groups/:userId', mainCtrl.bgetGroups);
+app.get('/api/projects/:userId', mainCtrl.bgetProjects);
+app.get('/api/boards/:userId', mainCtrl.bgetBoards);
+app.get('/api/allusers', mainCtrl.bgetAllUsers);
+
 app.get('/api/user/:id', mainCtrl.getUser) // working id param targets user id
 app.get('/api/inituser/:id', mainCtrl.getAllUser) //working id param targets user id
 app.get('/api/initdata/:id', mainCtrl.getInitialData) //working id param targets users.id

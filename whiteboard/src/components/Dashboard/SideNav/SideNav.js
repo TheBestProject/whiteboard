@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
-import Create from './../Modules/Create';
-import Edit from './../Modules/Edit';
-import Profile from './../Modules/Profile/Profile';
+import Create from './../../Modules/Create';
+import Edit from './../../Modules/Edit';
+import Profile from './../../Modules/Profile/Profile';
 
 import './SideNav.css';
 
@@ -43,6 +43,7 @@ class SideNav extends Component {
     })
   }
   groupEdit(groupID, name) {
+    console.log('groupid', groupID)
     this.setState({
       editFlag: true,
       purpose: 'Group',
@@ -50,10 +51,11 @@ class SideNav extends Component {
       name
     })
   }
-  projectEdit(projectID, name) {
+  projectEdit(groupID, projectID, name) {
     this.setState({
       editFlag: true,
       purpose: 'Project',
+      groupID,
       projectID,
       name
     })
@@ -80,8 +82,6 @@ class SideNav extends Component {
     })
   }
   render() {
-    console.log('url', this.props.history.location.pathname);
-  
     const { username, profilepic } = this.props.userInfo;
     const picStyle = {
       backgroundImage: `url(${profilepic})`
@@ -113,21 +113,21 @@ class SideNav extends Component {
                 
                 return <div key={i} className='sideNav_groupBox'>
                   <div className='sideNav_hoverBox'>
-                    <Link to={`/dashboard/${group.ID}`} className='sideNav_h3Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{group.name}</Link>
+                    <Link to={`/dashboard/${group.id}`} className='sideNav_h3Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{group.name}</Link>
                     <div className='sideNav_hoverMenu' >
-                      <p onClick={() => this.projectCreate(group.ID)}>Add Project</p>
-                      <p onClick={() => this.groupEdit(group.ID, group.name)}>Edit Group</p>
+                      <p onClick={() => this.projectCreate(group.id)}>Add Project</p>
+                      <p onClick={() => this.groupEdit(group.id, group.name)}>Edit Group</p>
                     </div>
                   </div>
                   {
                     this.props.userData.projects.map((project, j) => {
                       {/* console.log('project', project); */}
-                      if (project.groupID === group.ID && this.props.history.location.pathname.includes(`/dashboard/${group.ID}`)) {
+                      if (project.groupid === group.id && this.props.history.location.pathname.includes(`/dashboard/${group.id}`)) {
                         return <div key={j}>
                           <div className='sideNav_hoverBox2'>
-                            <Link to={`/dashboard/${group.ID}/${project.ID}`} className='sideNav_h4Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{project.name}</Link>
+                            <Link to={`/dashboard/${group.id}/${project.id}`} className='sideNav_h4Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{project.name}</Link>
                             <div className='sideNav_hoverMenu2'>
-                              <p onClick={() => this.projectEdit(project.ID, project.name)}>Edit Project</p>
+                              <p onClick={() => this.projectEdit(group.id, project.id, project.name)}>Edit Project</p>
                             </div> 
                           </div> 
                         </div>

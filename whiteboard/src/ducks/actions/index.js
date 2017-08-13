@@ -3,7 +3,7 @@ import axios from 'axios'
 // const ROOT_URL = 'http://localhost:4000/api'
 
 export const FETCH_USER = 'FETCH_USER'
-    export function fetchUser(userid){
+export function fetchUser(userid){
 
     const URL = `/api/user/${userid}`
     const request = axios.get(URL)
@@ -12,7 +12,42 @@ export const FETCH_USER = 'FETCH_USER'
     return{
         type: FETCH_USER,
         payload: request
-    }}
+    }
+}
+
+export const FETCH_GROUPS = 'FETCH_GROUPS'
+export function fetchGroups(userid){
+
+    const URL = `/api/groups/${userid}`
+    const promise = axios.get(URL).then(res => res.data)
+    return{
+        type: FETCH_GROUPS,
+        payload: promise
+    }
+}
+
+export const FETCH_PROJECTS = 'FETCH_PROJECTS'
+export function fetchProjects(userid){
+
+    const URL = `/api/projects/${userid}`
+    const promise = axios.get(URL).then(res => res.data)
+    return{
+        type: FETCH_PROJECTS,
+        payload: promise
+    }
+}
+
+export const FETCH_BOARDS = 'FETCH_BOARDS'
+export function fetchBoards(userid){
+
+    const URL = `/api/boards/${userid}`
+    const promise = axios.get(URL).then(res => res.data)
+    return{
+        type: FETCH_BOARDS,
+        payload: promise
+    }
+}
+
 
 export const FETCH_INITIAL_DATA = 'FETCH_INITIAL_DATA'
 export function fetchInitialData(userid){

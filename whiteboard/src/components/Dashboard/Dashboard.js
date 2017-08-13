@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import SideNav from './SideNav';
-import BoardGrid from './BoardGrid';
+import { fetchGroups, fetchProjects, fetchBoards } from './../../ducks/actions/index';
+
+import SideNav from './SideNav/SideNav';
+import BoardGrid from './BoardGrid/BoardGrid';
 
 import './Dashboard.css';
 
 class Dashboard extends Component {
+  componentDidUpdate() {
+    let id = this.props.userInfo.id;
+    this.props.fetchGroups(id);
+    this.props.fetchProjects(id);
+    this.props.fetchBoards(id);
+  }
   render() {
     return (
       <div id='Dashboard'>
@@ -24,7 +33,9 @@ class Dashboard extends Component {
     )
   }
 }
-
-
-export default Dashboard
-// export default connect(mapStateToProps)(Dashboard);
+function mapStateToProps(state) {
+  return {
+    userInfo: state.userInfo
+  }
+}
+export default connect(mapStateToProps, { fetchGroups, fetchProjects, fetchBoards })(Dashboard);

@@ -8,6 +8,32 @@ module.exports = {
 
 
     //##A       GETS
+    bgetGroups: (req, res) => {
+        const db = req.app.get('db');
+        console.log('userid groups', req.params.userId);
+        db.bgetGroups([req.params.userId]).then(data => {
+            res.status(200).send(data);
+        })
+    },
+    bgetProjects: (req, res) => {
+        const db = req.app.get('db');
+        db.bgetProjects([req.params.userId]).then(data => {
+            res.status(200).send(data);
+        })
+    },
+    bgetBoards: (req, res) => {
+        const db = req.app.get('db');
+        db.bgetBoards([req.params.userId]).then(data => {
+            res.status(200).send(data);
+        })
+    },
+    bgetAllUsers: (req, res) => {
+        const db = req.app.get('db');
+        db.bgetAllUsers().then(data => {
+            res.status(200).send(data);
+        })
+    },
+
 
     getUser: ( req, res, next ) => {
         const db = req.app.get('db')
