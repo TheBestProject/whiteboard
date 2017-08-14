@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import { fetchGroups, fetchProjects } from './../../ducks/actions/index';
+
 import './commonModule.css';
 
 class Edit extends Component {
@@ -60,32 +62,39 @@ class Edit extends Component {
     })
   }
   save() {
-    console.log(this.state.name);
-    this.state.members.map(member => {
-      console.log(member);
-    })
-    this.unlock();
-    this.props.editFlag();
+    if (this.state.projectID) {
+      console.log('save project');
+      axios.put(`/api/update/project/${this.state.projectID}`, {name: this.state.name, members: this.state.members}).then(res => {
+        this.unlock();
+        this.props.editFlag();
+        this.props.fetchProjects(this.props.userInfo.id);
+      })
+    } else {
+      console.log('save group');
+      axios.put(`/api/update/group/${this.state.groupID}`, {name: this.state.name, members: this.state.members}).then(res => {
+        this.unlock();
+        this.props.editFlag();
+        this.props.fetchGroups(this.props.userInfo.id);
+      })
+    }
   }
   componentDidMount() {
     this.lock();
     if (this.state.projectID) {
       axios.get(`/api/group/members/${this.state.groupID}`).then(res => {
-        let users = res.data;
-        axios.get(`/api/project/members/${this.state.projectID}`).then(res => {
+        axios.get(`/api/project/members/${this.state.projectID}`).then(res2 => {
           this.setState({
-            users,
-            members: res.data
+            users: res.data,
+            members: res2.data
           })
         })
       })
     } else {
       axios.get('/api/allusers').then(res => {
-        let users = res.data;
-        axios.get(`/api/group/members/${this.state.groupID}`).then(res => {
+        axios.get(`/api/group/members/${this.state.groupID}`).then(res2 => {
           this.setState({
-            users,
-            members: res.data
+            users: res.data,
+            members: res2.data
           })
         })
       })
@@ -155,4 +164,9 @@ class Edit extends Component {
     )
   }
 }
-export default connect(null, { something: 'something' })(Edit);
+function mapStateToProps(state) {
+  return {
+    userInfo: state.userInfo
+  }
+}
+export default connect(mapStateToProps, { fetchGroups, fetchProjects })(Edit);

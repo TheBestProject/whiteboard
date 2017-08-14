@@ -1,5 +1,6 @@
-select users.id as userid,
+select users.id as id,
 users.name as username,
+users.profilepic as profilepic,
 projects.id as projectid,
 projects.name as projectname,
 groups.id as groupid,

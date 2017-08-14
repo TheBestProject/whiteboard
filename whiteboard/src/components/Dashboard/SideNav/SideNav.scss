@@ -4,6 +4,7 @@
   margin: 0 20px 0 0;
 }
 #SideNav {
+  z-index: 1;
   width: 20vw;
   min-height: 100vh;
   background-color: $mediumColor;
@@ -131,6 +132,7 @@
           }
           .sideNav_h3Link {
             text-decoration: none;
+            text-align: right;
             color: $brightColor;
             margin: 10px 0;
             font-size: 1.3rem;
