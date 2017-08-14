@@ -12,7 +12,6 @@ class SideNav extends Component {
   constructor() {
     super();
     this.state = {
-      rerenderFlag: false,
       createFlag: false,
       editFlag: false,
       profileFlag: false,
@@ -115,7 +114,7 @@ class SideNav extends Component {
                 
                 return <div key={i} className='sideNav_groupBox'>
                   <div className='sideNav_hoverBox'>
-                    <Link to={`/dashboard/${group.id}`} className='sideNav_h3Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{group.name}</Link>
+                    <Link to={`/dashboard/${group.id}`} className='sideNav_h3Link'>{group.name}</Link>
                     <div className='sideNav_hoverMenu' >
                       <p onClick={() => this.projectCreate(group.id)}>Add Project</p>
                       <p onClick={() => this.groupEdit(group.id, group.name)}>Edit Group</p>
@@ -127,7 +126,7 @@ class SideNav extends Component {
                       if (project.groupid === group.id && this.props.history.location.pathname.includes(`/dashboard/${group.id}`)) {
                         return <div key={j}>
                           <div className='sideNav_hoverBox2'>
-                            <Link to={`/dashboard/${group.id}/${project.id}`} className='sideNav_h4Link' onClick={() => this.setState({rerenderFlag: !this.state.rerenderFlag})}>{project.name}</Link>
+                            <Link to={`/dashboard/${group.id}/${project.id}`} className='sideNav_h4Link'>{project.name}</Link>
                             <div className='sideNav_hoverMenu2'>
                               <p onClick={() => this.projectEdit(group.id, project.id, project.name)}>Edit Project</p>
                             </div> 
@@ -155,7 +154,7 @@ class SideNav extends Component {
         }
         {this.state.profileFlag
         ?
-          <Profile profileFlag={this.prfileFlag} />
+          <Profile profileFlag={this.profileFlag} />
         :
           null
         }
