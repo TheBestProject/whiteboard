@@ -168,7 +168,23 @@ module.exports = {
     //     ]
     // }
 
-
+    bupdateGroup: (req, res) => {
+        const db = req.app.get('db');
+        console.log('I am updating the group');
+        db.updateGroupData([req.body.name, req.params.groupid]).then(data => {
+            count = req.body.members.length - 1;
+            db.bdeleteGroupMembers([req.params.groupid]).then(data => {
+                req.body.members.map(member => {
+                    db.addGroupMember([req.params.groupid, member.id]).then(data2 => {
+                        if (count === 0) {
+                            res.status(200).send('success');
+                        }
+                        count--;
+                    })
+                });
+            });
+        })
+    },
     updateGroup: ( req, res, next ) => {
         const db = req.app.get('db')
         const groupUpdateData = [
@@ -180,6 +196,23 @@ module.exports = {
         })
     },
 
+    bupdateProject: (req, res) => {
+        const db = req.app.get('db');
+        console.log('I am updating the project');
+        db.updateProjectData([req.body.name, req.params.projectid]).then(data => {
+            count = req.body.members.length - 1;
+            db.bdeleteProjectMembers([req.params.projectid]).then(data => {
+                req.body.members.map(member => {
+                    db.addProjectMember([req.params.projectid, member.id]).then(data2 => {
+                        if (count === 0) {
+                            res.status(200).send('success');
+                        }
+                        count--;
+                    })
+                });
+            });
+        })
+    },
     updateProject: ( req, res, next ) => {
         const db = req.app.get('db')
         const projectUpdateData = [

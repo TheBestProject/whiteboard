@@ -87,9 +87,12 @@ app.post('/api/new/group', mainCtrl.addGroup) //working provide "name"
 app.post('/api/new/project/:id', mainCtrl.addProject) //working id param targets the group to connect project to
 app.post('/api/new/whiteboard/:id', mainCtrl.addWhiteboard) //working id params targets project id to connect whiteboard  to
 
+app.put('/api/update/group/:groupid', mainCtrl.bupdateGroup);
+app.put('/api/update/project/:projectid', mainCtrl.bupdateProject);
+
 // app.put('/api/update/user/:id', mainCtrl.updateUser) //PLACEHOLDER
-app.put('/api/update/group/:id', mainCtrl.updateGroup) //working id param targets group id to update -- provide "name"
-app.put('/api/update/project/:id', mainCtrl.updateProject) //working id param targets project id to update provide "name"
+// app.put('/api/update/group/:id', mainCtrl.updateGroup) //working id param targets group id to update -- provide "name"
+// app.put('/api/update/project/:id', mainCtrl.updateProject) //working id param targets project id to update provide "name"
 app.put('/api/update/whiteboard/:id', mainCtrl.updateWhiteboard) //working id param target whiteboard id to provide update to "name"
 app.put('/api/update/canvas/:id', mainCtrl.updateWhiteboardData) //working id param tagets whiteboard id to provide update to "canvas"
 
