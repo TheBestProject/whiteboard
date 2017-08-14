@@ -5,6 +5,7 @@ import axios from 'axios';
 import { fetchGroups, fetchProjects } from './../../ducks/actions/index';
 
 import './commonModule.css';
+import './Edit.css';
 
 class Edit extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class Edit extends Component {
     this.addMember = this.addMember.bind(this);
     this.removeMember = this.removeMember.bind(this);
     this.save = this.save.bind(this);
+    this.delete = this.delete.bind(this);
   }
   handleChange(statePiece, value) {
     this.setState({
@@ -76,6 +78,22 @@ class Edit extends Component {
         this.props.editFlag();
         this.props.fetchGroups(this.props.userInfo.id);
       })
+    }
+  }
+  delete() {
+    if (this.state.projectID) {
+      axios.delete(`/api/delete/project/${this.state.projectID}`).then(res => {
+        this.unlock();
+        this.props.editFlag();
+        this.props.fetchProjects(this.props.userInfo.id);
+      })
+    } else {
+      axios.delete(`/api/delete/group/${this.state.groupID}`).then(res => {
+        this.unlock();
+        this.props.editFlag();
+        this.props.fetchGroups(this.props.userInfo.id);
+      })
+
     }
   }
   componentDidMount() {
@@ -157,6 +175,7 @@ class Edit extends Component {
                 </div>
               </div>
             </div>
+            <button className='edit_delete' onClick={this.delete}>Delete {this.state.purpose}</button>
             <button onClick={this.save}>Save {this.state.purpose}</button>
           </div>
         </div>
