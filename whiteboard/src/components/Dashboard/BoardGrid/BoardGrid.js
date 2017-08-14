@@ -11,9 +11,15 @@ class BoardGrid extends Component {
   constructor() {
     super();
     this.addBoard = this.addBoard.bind(this);
+    this.deleteBoard = this.deleteBoard.bind(this);
   }
   addBoard() {
-    axios.post(`/api/new/whiteboard/${this.props.match.params.projectid}`, {name: 'Blank Board'}).then(res => {
+    axios.post(`/api/new/whiteboard/${this.props.match.params.projectid}`, {name: 'Untitled Board'}).then(res => {
+      this.props.fetchBoards(this.props.userInfo.id);
+    })
+  }
+  deleteBoard(id) {
+    axios.delete(`/api/delete/whiteboard/${id}`).then(res => {
       this.props.fetchBoards(this.props.userInfo.id);
     })
   }
@@ -22,18 +28,25 @@ class BoardGrid extends Component {
     return (
       <div id='BoardGrid'>
         {this.props.boards.map((board, i) => {
-          {/* console.log(this.props.boards) */}
+           console.log(this.props.boards) 
           let img = new Image();
-          img.src = board.canvas;
+          img.src = board.thumbnail;
           let gridPicStyle = {
             backgroundImage: `url(${img.src})`
           }
           if (board.projectid == this.props.match.params.projectid) {
-            return <Link to={`/board/${board.id}`} key={i} className='grid_tile'>
+            return <div className='grid_tileBox'>
+              <Link to={`/board/${board.id}`} key={i} className='grid_tile'>
               <div style={gridPicStyle} className='grid_pic'></div>
               <div className='grid_picTransparent'></div>
               <p>{board.name}</p>
-            </Link>
+              </Link>
+              <div className='grid_deleteButton' onClick={() => this.deleteBoard(board.id)}>
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 42 42" xmlSpace="preserve">
+                  <polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22 "/>
+                </svg>
+              </div>
+            </div>
           }
         })
         }

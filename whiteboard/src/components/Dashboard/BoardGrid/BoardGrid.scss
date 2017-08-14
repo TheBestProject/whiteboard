@@ -4,12 +4,18 @@
   width: 80vw;
   // display: flex;
   // flex-wrap: wrap;
+  .grid_tileBox {
+    position: relative;
+    width: 16vw;
+    height: 27vh;
+    float: left;
+    margin: 5vh 0 0 3vw;
+  }
   .grid_tile {
     float: left;
     position: relative;
     width: 16vw;
     height: 27vh;
-    margin: 5vh 0 0 3vw;
     border: solid 1px $dullColor;
     border-radius: $borderRadius;
     overflow: hidden;
@@ -38,6 +44,31 @@
       transition: all .2s ease-in-out;
     }
   }
+  .grid_deleteButton {
+      // z-index: 1;
+      width: 1.7rem;
+      height: 1.7rem;
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      margin: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $mediumColor;
+      border-radius: $borderRadius;
+      transition: all .2s ease-in-out;
+      svg {
+        width: 1rem;
+        height: 1rem;
+        fill: $lightColor;
+        transform: rotate(45deg);
+      }
+  }
+  .grid_deleteButton:hover {
+    background-color: $deleteColor;
+    cursor: pointer;
+  }
   .grid_tile:hover .grid_picTransparent {
     background-color: rgba(white, .9);
   }
@@ -49,6 +80,7 @@
   }
   .grid_addTile {
     border: dashed 1.5px $dullColor;
+    margin: 5vh 0 0 3vw;
     // transition: none;
     .grid_picTransparent {
       display: flex;
