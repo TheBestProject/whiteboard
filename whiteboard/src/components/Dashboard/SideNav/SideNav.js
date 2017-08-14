@@ -82,6 +82,8 @@ class SideNav extends Component {
     })
   }
   render() {
+    console.log('groups in store', this.props.userData.groups)
+    console.log('projects in store', this.props.userData.projects)
     const { username, profilepic } = this.props.userInfo;
     const picStyle = {
       backgroundImage: `url(${profilepic})`

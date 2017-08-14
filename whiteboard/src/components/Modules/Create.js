@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import { fetchGroups, fetchProjects } from './../../ducks/actions/index';
+
 import './commonModule.css';
 
 class Create extends Component {
@@ -61,11 +63,37 @@ class Create extends Component {
   }
   save() {
     console.log(this.state.name);
-    this.state.members.map(member => {
-      console.log(member);
-    })
-    this.unlock();
-    this.props.createFlag();
+    let count = this.state.members.length - 1;
+    if (!this.state.groupID) {
+      console.log('group axios')
+      axios.post('/api/new/group', {name: this.state.name}).then(res => {
+        this.state.members.map(member => {
+          axios.post(`/api/new/groupmember/${res.data.id}`, {member}).then(res => {
+            if (count === 0) {
+              this.props.fetchGroups(this.props.userInfo.id);
+              this.unlock();
+              this.props.createFlag();
+            }
+            count--;
+          })
+        })
+      })
+    } else {
+      console.log('project axios')
+      axios.post(`/api/new/project/${this.state.groupID}`, {name: this.state.name}).then(res => {
+        this.state.members.map(member => {
+          console.log(res.data);
+          axios.post(`/api/new/projectmember/${res.data.id}`, {member}).then(res => {
+            if (count === 0) {
+              this.props.fetchProjects(this.props.userInfo.id);
+              this.unlock();
+              this.props.createFlag();
+            }
+            count--;
+          })
+        })
+      })
+    }
   }
   componentDidMount() {
     this.lock();
@@ -146,7 +174,7 @@ class Create extends Component {
 }
 function mapStateToProps(state) {
   return {
-    users: state.users
+    userInfo: state.userInfo
   }
 }
-export default connect(mapStateToProps, { something: 'something' })(Create);
+export default connect(mapStateToProps, { fetchGroups, fetchProjects })(Create);

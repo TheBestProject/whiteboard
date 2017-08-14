@@ -45,7 +45,28 @@
     color: $darkColor;
   }
   .grid_tile:hover {
-    cursor: pointer;
     border: solid 1.5px $dullColor;
+  }
+  .grid_addTile {
+    border: dashed 1.5px $dullColor;
+    // transition: none;
+    .grid_picTransparent {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg {
+        width: 20vh;
+        height: 20vh;
+        fill: $mediumColor;
+        transition: all .2s ease-in-out;
+      }
+    }
+  }
+  .grid_addTile:hover svg {
+    fill: $darkColor;
+  }
+  .grid_addTile:hover {
+    cursor: pointer;
+    border: dashed 1.7px $dullColor;
   }
 }
