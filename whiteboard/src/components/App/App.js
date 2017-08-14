@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
+
+import { fetchUser } from '../../ducks/actions/index'
+
 import Welcome from './../Welcome-Login/Welcome';
 import Dashboard from './../Dashboard/Dashboard';
 import Whiteboard from './../Whiteboard/Whiteboard';
 
-import { fetchUser } from '../../ducks/actions/index'
 
 import './base.css';
 
@@ -27,4 +29,4 @@ class App extends Component {
     )
   }
 }
-export default connect(null, {fetchUser})(App);
+export default withRouter(connect(null, {fetchUser})(App));

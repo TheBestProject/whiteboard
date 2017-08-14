@@ -100,23 +100,39 @@ module.exports = {
     },
 
     addGroup: ( req, res, next ) => {
+        console.log('add a group');
         const groupData = [
             req.body.name
         ]
         const db = req.app.get('db')
         db.addNewGroup(groupData).then((response) => {
-            res.status(200).send(response)
+            res.status(200).send(response[0])
+        })
+    },
+    baddGroupMember: (req, res) => {
+        console.log('add a group member')
+        const db = req.app.get('db');
+        db.addGroupMember([req.params.groupid, req.body.member.id]).then(data => {
+            res.status(200).send('success')
         })
     },
 
     addProject: ( req, res, next ) => {
+        console.log('add a project')
         const projectData = [
             req.params.id,
             req.body.name
         ]
         const db = req.app.get('db')
         db.addNewProject(projectData).then((response) => {
-            res.status(200).send(response)
+            res.status(200).send(response[0])
+        })
+    },
+    baddProjectMember: (req, res) => {
+        console.log('add a project member');
+        const db = req.app.get('db');
+        db.addProjectMember([req.params.projectid, req.body.member.id]).then(data => {
+            res.status(200).send('success');
         })
     },
 
@@ -145,7 +161,14 @@ module.exports = {
     // },
     
     //##C      PUTS
-    
+    // bupdateUser: (req, res) => {
+    //     const db = req.app.get('db');
+    //     const userInfo = [
+    //         req.body.username
+    //     ]
+    // }
+
+
     updateGroup: ( req, res, next ) => {
         const db = req.app.get('db')
         const groupUpdateData = [

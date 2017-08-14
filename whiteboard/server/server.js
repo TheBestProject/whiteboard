@@ -79,6 +79,9 @@ app.get('/api/group/members/:id', mainCtrl.getGroupMembers) //working id param t
 app.get('/api/project/members/:id', mainCtrl.getProjectMembers) //working id param targets project id
 
 
+app.post('/api/new/groupmember/:groupid', mainCtrl.baddGroupMember);
+app.post('/api/new/projectmember/:projectid', mainCtrl.baddProjectMember);
+
 app.post('/api/new/user', mainCtrl.addUser) //need auth0 formatted data to finish
 app.post('/api/new/group', mainCtrl.addGroup) //working provide "name"
 app.post('/api/new/project/:id', mainCtrl.addProject) //working id param targets the group to connect project to
