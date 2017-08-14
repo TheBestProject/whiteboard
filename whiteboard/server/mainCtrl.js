@@ -58,6 +58,13 @@ module.exports = {
         })
     },
 
+    getBoard:(req,res,next) => {
+        const db = req.app.get('db');
+        db.getBoard(req.params.id).then((response)=>{
+            res.status(200).send(response);
+        })
+    },
+
     //##B        POSTS
 
     addUser: ( req, res, next ) => {

@@ -72,7 +72,7 @@ app.get('/api/group/:id', mainCtrl.getGroup) //working id param targets group id
 app.get('/api/project/:id', mainCtrl.getProject) //working id param targets project id
 app.get('/api/group/members/:id', mainCtrl.getGroupMembers) //working id param targets group id
 app.get('/api/project/members/:id', mainCtrl.getProjectMembers) //working id param targets project id
-
+app.get('/api/board/:id', mainCtrl.getBoard)
 
 app.post('/api/new/user', mainCtrl.addUser) //need auth0 formatted data to finish
 app.post('/api/new/group', mainCtrl.addGroup) //working provide "name"
@@ -109,6 +109,9 @@ io.on('connection', socket => {
   })
   socket.on('leave', data => {
     socket.leave(data.boardId);
+  })
+  socket.on('addItem', (data)=>{
+    socket.broadcast.emit('addItem',{data});
   })
   socket.on('disconnect', () => {
     console.log('user disconnected');

@@ -5,6 +5,9 @@ import './range.css';
 import io from 'socket.io-client';
 import testImg from './test-img';
 import {Link} from 'react-router-dom';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import {setImageData, undo} from './../../ducks/reducers/reducer_imageData';
 
 const socket = io();
 const height = window.innerHeight-60;
@@ -15,13 +18,14 @@ class Whiteboard extends Component {
   constructor(props){
     super(props);
 
-    socket.on('receiveCanvas', (data) =>{
-      //var URL = data.URL.canvas ? data.URL.canvas : data.URL;
-      //console.log(data);
-      var URL;
-      if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
-      this.setImage(URL);
-    })
+    // socket.on('receiveCanvas', (data) =>{
+    //   var URL = data.URL.canvas ? data.URL.canvas : data.URL;
+    //   //console.log(data);
+    //   var URL;
+    //   console.log("URL coming in", URL.length)
+    //   //if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
+    //   //this.setImage(URL);
+    // })
     
     this.state = {
       tool:TOOL_PENCIL,
@@ -30,49 +34,88 @@ class Whiteboard extends Component {
       color: '#444444',
       fill: false,
       fillColor: '#444444',
-      items: [],
-      URL: '',
-      undo : [],
-      redo : []
+      //items: []
     }
 
-      this.setImage = this.setImage.bind(this);  
+      //this.setImage = this.setImage.bind(this);  
       this.save = this.save.bind(this);
       this.clear = this.clear.bind(this);
-      this.showImg = this.showImg.bind(this);
+      //this.showImg = this.showImg.bind(this);
       this.erase = this.erase.bind(this);
-      this.autoSave = this.autoSave.bind(this);
-      this.undo = this.undo.bind(this);
-      this.redo = this.redo.bind(this);
+     // this.autoSave = this.autoSave.bind(this);
+      //this.undo = this.undo.bind(this);
+     // this.redo = this.redo.bind(this);
+      this.onComplete = this.onComplete.bind('this');
+      //this.addItem = this.addItem.bind('this');
+      this.handleUndo = this.handleUndo.bind(this);
   }
 
   componentDidMount() {
-    // wsClient.on('addItem', item => this.setState({items: this.state.items.concat([item])}));
-    socket.emit(`join`, {boardId: this.props.match.params.boardid});
-    this.showImg(this.state.URL);
+    //this.showImg(testImg);
+    // axios.get(`/api/board/${this.props.match.params.boardid}`)
+    //     .then((data)=>{
+    //       //console.log('data api incoming', data.data[0].canvas.length)
+    //       this.showImg(data.data[0].canvas)
+    //     })
+    socket.on('addItem', item => {
+      //console.log('item', item);
+      //console.log('items length',this.state.items)
+      this.props.setImageData(item);
+    });
+
+    // socket.emit(`join`, {boardId: this.props.match.params.boardid});
+    // console.log('component did mount', this.state.URL.length)
+    // this.showImg(this.state.URL);
   }
+
   componentWillUnmount() {
     socket.emit('leave', {boardId: this.props.match.params.boardid})
   }
 
-  componentDidUpdate(){
-    this.showImg(this.state.URL);
+  // componentWillReceiveProps(){
+
+  // }
+
+  // componentDidUpdate(){
+  //   this.showImg(this.state.URL);
+  //   console.log('component did update', this.state.URL.length)
+  // }
+
+  onComplete(addItem, item){
+    socket.emit(addItem, item);
   }
 
-  setImage(URL){
-    //console.log('dataReceived',URL)
-    this.showImg(URL);
-    this.setState({URL:URL})
+  handleUndo(){
+    this.props.undo();
+    //this.forceUpdate();
   }
 
-  showImg(URL){
-      let canvas = document.getElementById('canvas');
-      let ctx = canvas.getContext("2d"); 
-      var img = new Image();
-      //console.log('URL Rendering',URL);
-      img.src = URL;
-      ctx.drawImage(img,0,0,width,height,0,0,width,height)
-  }
+  // componentWillReceiveProps(nextProps){
+  //   if(this.props.items.length !== nextProps.items.length){
+  //   console.log('nextProps', nextProps);
+  //     this.setState(this.state)
+  //   }
+  // }
+
+  // addItem(item){
+  //   console.log('state',this.state);
+  //   this.setState({items: this.state.items.concat([item])})
+  // }
+
+  // setImage(URL){
+  //   console.log('set Image',URL.length)
+  //   this.showImg(URL);
+  //   this.setState({URL:URL})
+  // }
+
+  // showImg(URL){
+  //     let canvas = document.getElementById('canvas');
+  //     let ctx = canvas.getContext("2d"); 
+  //     var img = new Image();
+  //     console.log('show Image',URL.length);
+  //     img.src = URL;
+  //     ctx.drawImage(img,0,0,width,height,0,0,width,height)
+  // }
 
   // displayThumb(){
   //       document.getElementById("thumb").style.border = "1px solid";  
@@ -102,41 +145,42 @@ class Whiteboard extends Component {
     this.setState({previousCol: this.state.color, color: 'white', tool:TOOL_PENCIL, size:20});          
   }
   
-  autoSave(){
-    let canvas = document.getElementById('canvas');
-    let ctx = canvas.getContext("2d");
-    let URL = canvas.toDataURL();
-    socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:URL});
-    if(this.state.URL!=URL){
-      this.setState({URL:URL, undo:[...this.state.undo, this.state.URL]});
-    }
-  }
+  // autoSave(){
+  //   let canvas = document.getElementById('canvas');
+  //   let ctx = canvas.getContext("2d");
+  //   let URL = canvas.toDataURL();
+  //   socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:URL});
+  //   if(this.state.URL!=URL){
+  //     this.setState({URL:URL, undo:[...this.state.undo, this.state.URL]});
+  //   }
+  //   console.log('autoSave', URL.length)
+  // }
 
-  undo(){
-    if (this.state.undo[0]){
-      //push current URL into redo
-      //pop last undo URL and make it new current URL
-      let undoList = Object.assign(this.state.undo);
-      console.log('length undo list', undoList.length);
-      let lastEl = undoList.pop();
-      console.log('data Send', lastEl.length);
-      socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:lastEl});
-      this.setState({redo:[...this.state.redo, this.state.URL], URL:lastEl, undo:undoList});
-      //show new currentURL
-    }
-  }
+  // undo(){
+  //   if (this.state.undo[0]){
+  //     //push current URL into redo
+  //     //pop last undo URL and make it new current URL
+  //     let undoList = Object.assign(this.state.undo);
+  //     console.log('length undo list', undoList.length);
+  //     let lastEl = undoList.pop();
+  //     console.log('data Send', lastEl.length);
+  //     socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:lastEl});
+  //     this.setState({redo:[...this.state.redo, this.state.URL], URL:lastEl, undo:undoList});
+  //     //show new currentURL
+  //   }
+  // }
 
-  redo(){
-    if (this.state.redo[0]){ 
-      let redoList = Object.assign(this.state.redo);
-      let lastEl = redoList.pop();
-      //console.log('last',lastEl)
-      this.setState({undo:[...this.state.undo,this.state.URL], URL: lastEl, redo:redoList});
-    }
-  }
+  // redo(){
+  //   if (this.state.redo[0]){ 
+  //     let redoList = Object.assign(this.state.redo);
+  //     let lastEl = redoList.pop();
+  //     //console.log('last',lastEl)
+  //     this.setState({undo:[...this.state.undo,this.state.URL], URL: lastEl, redo:redoList});
+  //   }
+  // }
 
 render() {
-  console.log('State URL length', this.state.URL.length);
+  console.log('store', this.props.items);
   const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
       <div className='whiteboard'>
@@ -151,29 +195,29 @@ render() {
           <div className="main-tools">
               <button onClick={()=>this.save()}><img src={require('./../../assets/diskette.svg')} alt='save'/></button>
               <button onClick={()=>this.clear()}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
-              <button onClick={()=>this.undo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
+              <button onClick={()=>this.handleUndo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
               <button onClick={()=>this.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
           </div>
           <div className='tools'>
             <div style={{marginBottom:20}}>
               <button
-                style={tool == TOOL_PENCIL ? {fontWeight:'bold'} : undefined}
-                className={tool == TOOL_PENCIL  ? 'item-active' : 'item'}
+                style={tool === TOOL_PENCIL ? {fontWeight:'bold'} : undefined}
+                className={tool === TOOL_PENCIL  ? 'item-active' : 'item'}
                 onClick={() => this.setState({tool:TOOL_PENCIL, color:previousCol, size: 2})}
               ><img src={require('./../../assets/pen.svg')} alt='pen'/></button>
               <button
-                style={tool == TOOL_LINE ? {fontWeight:'bold'} : undefined}
-                className={tool == TOOL_LINE  ? 'item-active' : 'item'}
+                style={tool === TOOL_LINE ? {fontWeight:'bold'} : undefined}
+                className={tool === TOOL_LINE  ? 'item-active' : 'item'}
                 onClick={() => this.setState({tool:TOOL_LINE, color:previousCol, size: 2})}
               ><img src={require('./../../assets/diagonal-line.svg')} alt='line'/></button>
               <button
-                style={tool == TOOL_ELLIPSE ? {fontWeight:'bold'} : undefined}
-                className={tool == TOOL_ELLIPSE  ? 'item-active' : 'item'}
+                style={tool === TOOL_ELLIPSE ? {fontWeight:'bold'} : undefined}
+                className={tool === TOOL_ELLIPSE  ? 'item-active' : 'item'}
                 onClick={() => this.setState({tool:TOOL_ELLIPSE,color:previousCol, size: 2})}
               ><img src={require('./../../assets/oval.svg')} alt='oval'/></button>
               <button
-                style={tool == TOOL_RECTANGLE ? {fontWeight:'bold'} : undefined}
-                className={tool == TOOL_RECTANGLE  ? 'item-active' : 'item'}
+                style={tool === TOOL_RECTANGLE ? {fontWeight:'bold'} : undefined}
+                className={tool === TOOL_RECTANGLE  ? 'item-active' : 'item'}
                 onClick={() => this.setState({tool:TOOL_RECTANGLE})}
               ><img src={require('./../../assets/square.svg')} alt='rectangle'/></button>
               <button onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>          
@@ -198,7 +242,7 @@ render() {
               </div>
           </div>
         </div>
-        <div className="Sketchpad">
+        <div className="Sketchpad" >  
           <SketchPad 
             width={width}
             height={height}
@@ -206,10 +250,11 @@ render() {
             size={size}
             color={color}
             fillColor={fill ? fillColor : ''}
-            items={items}
+            items={this.props.items}
             tool={tool}
-            autoSave={this.autoSave}
-            //onCompleteItem={(i) => wsClient.emit('addItem', i)}
+            //autoSave={this.autoSave}
+            onCompleteItem={(i) => this.onComplete('addItem', i)}
+            //addItem={this.addItem}
           />
         </div>
         
@@ -218,7 +263,14 @@ render() {
   }
 }
 
-export default Whiteboard;
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    items: state.imageData.currentImage
+  }
+}
+
+export default connect(mapStateToProps,{setImageData, undo})(Whiteboard);
 
 //<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 //<img onClick={()=>this.showImg(this.state.URL)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>
