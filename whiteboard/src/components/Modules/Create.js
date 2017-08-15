@@ -4,12 +4,15 @@ import axios from 'axios';
 
 import { fetchGroups, fetchProjects } from './../../ducks/actions/index';
 
+import Loader from './../Loader/Loader';
+
 import './commonModule.css';
 
 class Create extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loader: true,
       flag: true,
       name: '',
       member: '',
@@ -100,12 +103,18 @@ class Create extends Component {
     if (this.state.groupID) {
       console.log('hi')
       axios.get(`/api/group/members/${this.state.groupID}`).then(res => {
-        this.setState({users: res.data})
+        this.setState({
+          loader: false,
+          users: res.data
+        })
       })
     }
      else {
       axios.get('/api/allusers').then(res => {
-        this.setState({users: res.data})
+        this.setState({
+          loader: false,
+          users: res.data
+        })
       })
     }
   }
@@ -113,6 +122,20 @@ class Create extends Component {
     return (
       <div id='Create'>
         <div className='module_mask'>
+          {this.state.loader 
+          ?
+            <div className='module_box'>
+              <div className='module_exitButton' onClick={() => {
+                this.props.editFlag();
+                this.unlock();
+                }}>
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 42 42" xmlSpace="preserve">
+                  <polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22 "/>
+                </svg>
+              </div>
+              <Loader small={true}/>
+            </div>
+          :
           <div className='module_box'>
             <div className='module_exitButton' onClick={() => {
               this.props.createFlag();
@@ -167,6 +190,7 @@ class Create extends Component {
             </div>
             <button onClick={this.save}>Create {this.state.purpose}</button>
           </div>
+        }
         </div>
       </div>
     )

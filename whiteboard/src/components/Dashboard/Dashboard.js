@@ -4,21 +4,34 @@ import { connect } from 'react-redux';
 
 import { fetchGroups, fetchProjects, fetchBoards } from './../../ducks/actions/index';
 
+import Loader from './../Loader/Loader.js';
 import SideNav from './SideNav/SideNav';
 import BoardGrid from './BoardGrid/BoardGrid';
 
 import './Dashboard.css';
 
 class Dashboard extends Component {
-  componentDidUpdate() {
-    let id = this.props.userInfo.id;
-    this.props.fetchGroups(id);
-    this.props.fetchProjects(id);
-    this.props.fetchBoards(id);
+  componentWillReceiveProps(newProps) {
+    let id = newProps.userInfo.id;
+    if (this.props.userInfo.id !== newProps.userInfo.id) {
+      console.log('hiya')
+    
+      this.props.fetchGroups(id);
+      this.props.fetchProjects(id);
+      this.props.fetchBoards(id);
+
+    
+    }
   }
   render() {
     return (
       <div id='Dashboard'>
+         {this.props.groupsLoad && this.props.projectsLoad && this.props.boardsLoad
+        ?
+          <Loader small={false}/>
+        :
+          null
+        } 
         <SideNav />
         <Switch>
           <Route path='/dashboard' exact render={() => {
@@ -35,7 +48,10 @@ class Dashboard extends Component {
 }
 function mapStateToProps(state) {
   return {
-    userInfo: state.userInfo
+    userInfo: state.userInfo,
+    groupsLoad: state.userData.groupsLoad,
+    projectsLoad: state.userData.projectsLoad,
+    boardsLoad: state.userData.boardsLoad
   }
 }
 export default connect(mapStateToProps, { fetchGroups, fetchProjects, fetchBoards })(Dashboard);

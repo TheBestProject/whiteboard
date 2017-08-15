@@ -4,6 +4,8 @@ import axios from 'axios';
 
 import { fetchGroups, fetchProjects } from './../../ducks/actions/index';
 
+import Loader from './../Loader/Loader';
+
 import './commonModule.css';
 import './Edit.css';
 
@@ -11,6 +13,7 @@ class Edit extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loader: true,
       name: this.props.name,
       member: '',
       members: [],
@@ -102,6 +105,7 @@ class Edit extends Component {
       axios.get(`/api/group/members/${this.state.groupID}`).then(res => {
         axios.get(`/api/project/members/${this.state.projectID}`).then(res2 => {
           this.setState({
+            loader: false,
             users: res.data,
             members: res2.data
           })
@@ -111,6 +115,7 @@ class Edit extends Component {
       axios.get('/api/allusers').then(res => {
         axios.get(`/api/group/members/${this.state.groupID}`).then(res2 => {
           this.setState({
+            loader: false,
             users: res.data,
             members: res2.data
           })
@@ -122,6 +127,20 @@ class Edit extends Component {
     return (
       <div id='Edit'>
         <div className='module_mask'>
+          {this.state.loader
+          ?
+            <div className='module_box'>
+              <div className='module_exitButton' onClick={() => {
+                this.props.editFlag();
+                this.unlock();
+                }}>
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 42 42" xmlSpace="preserve">
+                  <polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22 "/>
+                </svg>
+              </div>
+              <Loader small={true}/>
+            </div>
+          :
           <div className='module_box'>
             <div className='module_exitButton' onClick={() => {
               this.props.editFlag();
@@ -178,6 +197,7 @@ class Edit extends Component {
             <button className='edit_delete' onClick={this.delete}>Delete {this.state.purpose}</button>
             <button onClick={this.save}>Save {this.state.purpose}</button>
           </div>
+          }
         </div>
       </div>
     )
