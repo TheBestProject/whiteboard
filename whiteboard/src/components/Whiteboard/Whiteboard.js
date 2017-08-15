@@ -63,7 +63,7 @@ class Whiteboard extends Component {
   }
 
   setImage(URL){
-    console.log('dataReceived',URL)
+    console.log('dataReceived',URL.length)
     this.setState({URL:URL})
     this.showImg(URL);
   }

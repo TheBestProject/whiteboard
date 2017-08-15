@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import { findDOMNode } from 'react-dom'
 import { Pencil, TOOL_PENCIL, Line, TOOL_LINE, Ellipse, TOOL_ELLIPSE, Rectangle, TOOL_RECTANGLE } from './tools'
+import testImg from './../test-img.js'
 
 export const toolsMap = {
   [TOOL_PENCIL]: Pencil,
@@ -53,12 +54,15 @@ export default class SketchPad extends Component {
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onDebouncedMove = this.onDebouncedMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
+    this.showImg = this.showImg.bind(this);
   }
 
   componentDidMount() {
-    this.canvas = findDOMNode(this.canvasRef);
+    //this.canvas = findDOMNode(this.canvasRef);
+    this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
     this.initTool(this.props.tool);
+    this.showImg();
   }
   
   componentWillReceiveProps({tool, items}) {
@@ -123,19 +127,31 @@ export default class SketchPad extends Component {
     ];
   }
 
+  showImg(){ 
+      console.log('triggered');
+      const {width, height} = this.props;
+      var img = new Image();
+      //console.log('URL',URL);
+      img.src = testImg;
+      this.ctx.drawImage(img,0,0,width,height,0,0,width,height)
+  }
+
   render() {
     const {width, height, canvasClassName} = this.props;
     return (
-      <canvas id='canvas'
-        ref={(canvas) => { this.canvasRef = canvas; }}
-        className={canvasClassName}
-        onMouseDown={this.onMouseDown}
-        onMouseMove={this.onMouseMove}
-        //onMouseOut={this.onMouseUp}
-        onMouseUp={this.onMouseUp}
-        width={width}
-        height={height}
-      />
+      <div>
+        <button onClick={()=>this.showImg()}>Show the damn image</button>
+        <canvas id='canvas'
+          ref={(canvas) => { this.canvasRef = canvas; }}
+          className={canvasClassName}
+          onMouseDown={this.onMouseDown}
+          onMouseMove={this.onMouseMove}
+          //onMouseOut={this.onMouseUp}
+          onMouseUp={this.onMouseUp}
+          width={width}
+          height={height}
+        />
+      </div>
     )
   }
 }
