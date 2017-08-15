@@ -1,0 +1,21 @@
+1. User connects to socket
+
+2. receives data from database of last saved state (how often do we save?)
+
+    i. based on how often we save the data for the socket to the database, some sort of check needs to happen to
+        update the user's data with the data that is currently on the screen of all other users
+    ii. alternatively, we can check whether other users are connected and then load the data directly from the socket
+        instead of loading it from the data base
+
+3. based on the data received from the socket set redux state (setting list of objects to be rendered)
+
+4. setting state will render the canvas
+
+5. 'undo' and 'redo', as well as 'clear', will modify the state (list of objects to be rendered), this will cause
+    a re-render in the local component and will also have to emit the whole new list of image data objects 
+
+6. once other user's receive the new list, their state needs to be set to re-render the canvas
+
+7. Items that are added to the canvas change the state in the current component causing a re-render but that single
+   item will also be emited through the socket and causes other user's components redux state to change and
+   therefore re-render's the component. This is the part that is currently working.

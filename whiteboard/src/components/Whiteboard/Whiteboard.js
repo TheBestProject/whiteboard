@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { SketchPad, TOOL_PENCIL, TOOL_LINE, TOOL_RECTANGLE, TOOL_ELLIPSE } from './sketch'; 
 import './Whiteboard.css';
 import './range.css';
-import io from 'socket.io-client';
+//import io from 'socket.io-client';
 import testImg from './test-img';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import {setImageData, undo} from './../../ducks/reducers/reducer_imageData';
 
-const socket = io();
+//const socket = io();
 const height = window.innerHeight-60;
 const width = window.innerWidth;
 
@@ -34,7 +34,7 @@ class Whiteboard extends Component {
       color: '#444444',
       fill: false,
       fillColor: '#444444',
-      //items: []
+      items: []
     }
 
       //this.setImage = this.setImage.bind(this);  
@@ -50,27 +50,27 @@ class Whiteboard extends Component {
       this.handleUndo = this.handleUndo.bind(this);
   }
 
-  componentDidMount() {
-    //this.showImg(testImg);
-    // axios.get(`/api/board/${this.props.match.params.boardid}`)
-    //     .then((data)=>{
-    //       //console.log('data api incoming', data.data[0].canvas.length)
-    //       this.showImg(data.data[0].canvas)
-    //     })
-    socket.on('addItem', item => {
-      //console.log('item', item);
-      //console.log('items length',this.state.items)
-      this.props.setImageData(item);
-    });
+  // componentDidMount() {
+  //   //this.showImg(testImg);
+  //   // axios.get(`/api/board/${this.props.match.params.boardid}`)
+  //   //     .then((data)=>{
+  //   //       //console.log('data api incoming', data.data[0].canvas.length)
+  //   //       this.showImg(data.data[0].canvas)
+  //   //     })
+  //   socket.on('addItem', item => {
+  //     //console.log('item', item);
+  //     //console.log('items length',this.state.items)
+  //     this.props.setImageData(item);
+  //   });
 
-    // socket.emit(`join`, {boardId: this.props.match.params.boardid});
-    // console.log('component did mount', this.state.URL.length)
-    // this.showImg(this.state.URL);
-  }
+  //   // socket.emit(`join`, {boardId: this.props.match.params.boardid});
+  //   // console.log('component did mount', this.state.URL.length)
+  //   // this.showImg(this.state.URL);
+  // }
 
-  componentWillUnmount() {
-    socket.emit('leave', {boardId: this.props.match.params.boardid})
-  }
+  // componentWillUnmount() {
+  //   socket.emit('leave', {boardId: this.props.match.params.boardid})
+  // }
 
   // componentWillReceiveProps(){
 
@@ -82,7 +82,7 @@ class Whiteboard extends Component {
   // }
 
   onComplete(addItem, item){
-    socket.emit(addItem, item);
+    console.log(addItem, item);
   }
 
   handleUndo(){
@@ -90,12 +90,13 @@ class Whiteboard extends Component {
     //this.forceUpdate();
   }
 
-  // componentWillReceiveProps(nextProps){
-  //   if(this.props.items.length !== nextProps.items.length){
-  //   console.log('nextProps', nextProps);
-  //     this.setState(this.state)
-  //   }
-  // }
+  componentWillReceiveProps(nextProps){
+      console.log('nextProps', nextProps);
+    if(this.props.items.length !== nextProps.items.length){
+      this.setState({items:nextProps.items})
+    }
+      
+  }
 
   // addItem(item){
   //   console.log('state',this.state);
@@ -180,7 +181,7 @@ class Whiteboard extends Component {
   // }
 
 render() {
-  console.log('store', this.props.items);
+  console.log('component state', this.state.items);
   const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
       <div className='whiteboard'>
@@ -250,7 +251,7 @@ render() {
             size={size}
             color={color}
             fillColor={fill ? fillColor : ''}
-            items={this.props.items}
+            items={items}
             tool={tool}
             //autoSave={this.autoSave}
             onCompleteItem={(i) => this.onComplete('addItem', i)}
@@ -264,7 +265,7 @@ render() {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
+  console.log('store state', state.imageData.currentImage)
   return {
     items: state.imageData.currentImage
   }

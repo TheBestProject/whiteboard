@@ -65,6 +65,7 @@ class SketchPad extends Component {
   }
   
   componentWillReceiveProps({tool, items}) {
+    console.log('items',items);
     items
       .filter(item => this.props.items.indexOf(item) === -1)
       .forEach(item => {
@@ -112,7 +113,7 @@ class SketchPad extends Component {
   onMouseUp(e) {
     const data = this.tool.onMouseUp(...this.getCursorPosition(e));
     data && data[0] && this.props.onCompleteItem && this.props.onCompleteItem.apply(null, data);
-    this.props.setImageData(data);
+    //this.props.setImageData(data);
     //console.log('data on mouse up', data);
     if (this.props.onDebouncedItemChange) {
       clearInterval(this.interval);
@@ -142,6 +143,13 @@ class SketchPad extends Component {
         height={height}
       />
     )
+  }
+}
+
+const mapStateToProps = (state) => {
+  console.log('store state', state.imageData.currentImage)
+  return {
+    items: state.imageData.currentImage
   }
 }
 

@@ -1,0 +1,1 @@
+select image_data from whiteboards where id = $1;

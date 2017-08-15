@@ -43,8 +43,7 @@ export default function changeImageData(state=initialState,action){
                 //console.log('new after', newImageData);
                 //console.log('pop',pop);
                 //console.log('type Undo',action.type)
-                //return Object.assign({},state,{currentImage:newImageData, redoList:[...state.redoList, pop]})
-                return Object.assign({},state,{currentImage:newImageData})
+                return Object.assign({},state,{currentImage:newImageData, redoList:[...state.redoList, pop]})
             }
         default:
          return state;
