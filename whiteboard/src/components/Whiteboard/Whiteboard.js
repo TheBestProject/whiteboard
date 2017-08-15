@@ -14,14 +14,6 @@ class Whiteboard extends Component {
 
   constructor(props){
     super(props);
-
-    // socket.on('receiveCanvas', (data) =>{
-    //   //console.log('data',data);
-    //   //var URL = data.URL.canvas ? data.URL.canvas : data.URL;
-    //   var URL;
-    //   if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
-    //   this.setImage(URL);
-    // })
     
     this.state = {
       tool:TOOL_PENCIL,
@@ -48,7 +40,14 @@ class Whiteboard extends Component {
 
   componentDidMount() {
     // wsClient.on('addItem', item => this.setState({items: this.state.items.concat([item])}));
-    //socket.emit(`join`, {boardId: this.props.match.params.boardid});
+    socket.emit(`join`, {boardId: this.props.match.params.boardid});
+    socket.on('receiveCanvas', (data) =>{
+      console.log('data',data);
+      //var URL = data.URL.canvas ? data.URL.canvas : data.URL;
+      var URL;
+      if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
+      //this.setImage(URL);
+    });
     socket.on('addItem', item => {
       //console.log('item', item);
       //console.log('items length',this.state.items)
@@ -64,7 +63,7 @@ class Whiteboard extends Component {
   }
 
   setImage(URL){
-    //console.log('dataReceived',URL)
+    console.log('dataReceived',URL)
     this.setState({URL:URL})
     this.showImg(URL);
   }
