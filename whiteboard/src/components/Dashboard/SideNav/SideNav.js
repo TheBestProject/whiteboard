@@ -26,7 +26,7 @@ class SideNav extends Component {
     this.projectEdit = this.projectEdit.bind(this);
     this.createFlag = this.createFlag.bind(this);
     this.editFlag = this.editFlag.bind(this);
-    this.prfileFlag = this.profileFlag.bind(this);
+    this.profileFlag = this.profileFlag.bind(this);
   }
   groupCreate() {
     this.setState({
