@@ -1,1 +1,1 @@
-select canvas from whiteboards where id = $1;
+select thumbnail from whiteboards where id = $1;

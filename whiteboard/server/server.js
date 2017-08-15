@@ -118,6 +118,9 @@ io.on('connection', socket => {
   socket.on('new canvas data', data => {
     io.to(data.boardId).emit('receiveCanvas', {URL: data.URL})
   })
+  socket.on('addItem', (data)=>{
+    socket.broadcast.emit('addItem',{data});
+  })
   socket.on('leave', data => {
     socket.leave(data.boardId);
   })

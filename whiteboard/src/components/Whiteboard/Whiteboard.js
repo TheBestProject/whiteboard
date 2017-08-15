@@ -15,13 +15,13 @@ class Whiteboard extends Component {
   constructor(props){
     super(props);
 
-    socket.on('receiveCanvas', (data) =>{
-      //console.log('data',data);
-      //var URL = data.URL.canvas ? data.URL.canvas : data.URL;
-      var URL;
-      if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
-      this.setImage(URL);
-    })
+    // socket.on('receiveCanvas', (data) =>{
+    //   //console.log('data',data);
+    //   //var URL = data.URL.canvas ? data.URL.canvas : data.URL;
+    //   var URL;
+    //   if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
+    //   this.setImage(URL);
+    // })
     
     this.state = {
       tool:TOOL_PENCIL,
@@ -41,22 +41,27 @@ class Whiteboard extends Component {
       this.clear = this.clear.bind(this);
       this.showImg = this.showImg.bind(this);
       this.erase = this.erase.bind(this);
-      this.autoSave = this.autoSave.bind(this);
+      //this.autoSave = this.autoSave.bind(this);
       //this.undo = this.undo.bind(this);
       this.redo = this.redo.bind(this);
   }
 
   componentDidMount() {
     // wsClient.on('addItem', item => this.setState({items: this.state.items.concat([item])}));
-    socket.emit(`join`, {boardId: this.props.match.params.boardid});
+    //socket.emit(`join`, {boardId: this.props.match.params.boardid});
+    socket.on('addItem', item => {
+      //console.log('item', item);
+      //console.log('items length',this.state.items)
+      this.setState({items:[...this.state.items, item]});
+    });
   }
   componentWillUnmount() {
     socket.emit('leave', {boardId: this.props.match.params.boardid})
   }
 
-  // componentDidUpdate(){
-  //   this.showImg(this.state.URL);
-  // }
+  componentDidUpdate(){
+    this.showImg(this.state.URL);
+  }
 
   setImage(URL){
     //console.log('dataReceived',URL)
@@ -206,8 +211,8 @@ render() {
             fillColor={fill ? fillColor : ''}
             items={items}
             tool={tool}
-            autoSave={this.autoSave}
-            //onCompleteItem={(i) => wsClient.emit('addItem', i)}
+            //autoSave={this.autoSave}
+            onCompleteItem={(i) => socket.emit('addItem', i)}
           />
         </div>
         
