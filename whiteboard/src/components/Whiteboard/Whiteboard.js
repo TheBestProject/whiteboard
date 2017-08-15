@@ -72,10 +72,7 @@ class Whiteboard extends Component {
   //   socket.emit('leave', {boardId: this.props.match.params.boardid})
   // }
 
-  // componentWillReceiveProps(){
-
-  // }
-
+  
   // componentDidUpdate(){
   //   this.showImg(this.state.URL);
   //   console.log('component did update', this.state.URL.length)
@@ -93,6 +90,7 @@ class Whiteboard extends Component {
   componentWillReceiveProps(nextProps){
       console.log('nextProps', nextProps);
     if(this.props.items.length !== nextProps.items.length){
+      this.clear();
       this.setState({items:nextProps.items})
     }
       
@@ -133,12 +131,12 @@ class Whiteboard extends Component {
   clear() {
       let canvas = document.getElementById('canvas');
       let ctx = canvas.getContext("2d");
-      var m = window.confirm("Clear the Board?");
+      // var m = window.confirm("Clear the Board?");
       var w = canvas.width;
       var h = canvas.height;
-      if (m) {
+      // if (m) {
           ctx.clearRect(0, 0, w, h);
-      }
+      // }
         
   }
 

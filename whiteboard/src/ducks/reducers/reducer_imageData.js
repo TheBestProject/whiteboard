@@ -36,7 +36,7 @@ export default function changeImageData(state=initialState,action){
                 return Object.assign({},state,{currentImage:[...state.currentImage,action.payload]})
             }
         case UNDO:
-            var newImageData = Object.assign(state.currentImage);
+            var newImageData = JSON.parse(JSON.stringify(state.currentImage));
             if(newImageData[0]){
                 console.log('new before', newImageData);
                 var pop = newImageData.pop();
