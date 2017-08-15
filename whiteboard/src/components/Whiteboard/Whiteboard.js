@@ -82,7 +82,7 @@ class Whiteboard extends Component {
   // }
 
   onComplete(addItem, item){
-    console.log(addItem, item);
+    this.props.setImageData(item);
   }
 
   handleUndo(){
@@ -254,7 +254,7 @@ render() {
             items={items}
             tool={tool}
             //autoSave={this.autoSave}
-            onCompleteItem={(i) => this.onComplete('addItem', i)}
+            //onCompleteItem={(i) => this.onComplete('addItem', i)}
             //addItem={this.addItem}
           />
         </div>

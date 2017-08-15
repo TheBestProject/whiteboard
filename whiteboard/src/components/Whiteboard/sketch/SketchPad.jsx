@@ -113,7 +113,7 @@ class SketchPad extends Component {
   onMouseUp(e) {
     const data = this.tool.onMouseUp(...this.getCursorPosition(e));
     data && data[0] && this.props.onCompleteItem && this.props.onCompleteItem.apply(null, data);
-    //this.props.setImageData(data);
+    this.props.setImageData(data);
     //console.log('data on mouse up', data);
     if (this.props.onDebouncedItemChange) {
       clearInterval(this.interval);
