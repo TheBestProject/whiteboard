@@ -7,7 +7,7 @@ import testImg from './test-img';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import {setImageData, undo} from './../../ducks/reducers/reducer_imageData';
+import {setImageData, undo, redo, clear} from './../../ducks/reducers/reducer_imageData';
 import dummy from './sketch/dummy';
 import { findDOMNode } from 'react-dom';
 
@@ -46,7 +46,7 @@ class Whiteboard extends Component {
       this.erase = this.erase.bind(this);
      // this.autoSave = this.autoSave.bind(this);
       this.onComplete = this.onComplete.bind('this');
-      this.handleLoad = this.handleLoad.bind('this');
+      //this.handleLoad = this.handleLoad.bind('this');
   }
 
   // componentDidMount() {
@@ -80,27 +80,26 @@ class Whiteboard extends Component {
     setImageData(dummy);
   }
 
-  componentDidMount() {
-    window.addEventListener('load', this.handleLoad);
- }
+//   componentDidMount() {
+//     window.addEventListener('load', this.handleLoad);
+//  }
 
-  handleLoad() {
-      let canvas = document.getElementById("canvas");
-      let ctx = canvas.getContext('2d');
-      var img = new Image();
-      //console.log('show Image',URL.length);
-      img.src = testImg;
-      ctx.drawImage(img,0,0,width,height,0,0,width,height)
-      //setImageData(dummy);    
-      //this.setState({items:dummy});  
-  }  
+//   handleLoad() {
+//       let canvas = document.getElementById("canvas");
+//       let ctx = canvas.getContext('2d');
+//       var img = new Image();
+//       //console.log('show Image',URL.length);
+//       img.src = testImg;
+//       ctx.drawImage(img,0,0,width,height,0,0,width,height)
+//       //setImageData(dummy);    
+//       //this.setState({items:dummy});  
+//   }  
 
   onComplete(addItem, item){
     this.props.setImageData(item);
   }
 
   componentWillReceiveProps(nextProps){
-      console.log('nextProps', nextProps);
     if(this.props.items.length >= nextProps.items.length){
       this.clear();
       this.setState({items:nextProps.items})
@@ -161,7 +160,7 @@ class Whiteboard extends Component {
 
 
 render() {
-  console.log('component state', this.state.items);
+  //console.log('component state', this.state.items);
   const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
       <div className='whiteboard'>
@@ -175,9 +174,9 @@ render() {
         <div className='all-tools'>
           <div className="main-tools">
               <button onClick={()=>this.save()}><img src={require('./../../assets/diskette.svg')} alt='save'/></button>
-              <button onClick={()=>this.clear()}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
+              <button onClick={()=>this.props.clear()}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
               <button onClick={()=>this.props.undo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
-              <button onClick={()=>this.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
+              <button onClick={()=>this.props.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
           </div>
           <div className='tools'>
             <div style={{marginBottom:20}}>
@@ -245,13 +244,12 @@ render() {
 }
 
 const mapStateToProps = (state) => {
-  console.log('store state', state.imageData.currentImage)
   return {
     items: state.imageData.currentImage
   }
 }
 
-export default connect(mapStateToProps,{setImageData, undo})(Whiteboard);
+export default connect(mapStateToProps,{setImageData, undo, redo, clear})(Whiteboard);
 
 //<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 //<img onClick={()=>this.showImg(this.state.URL)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>

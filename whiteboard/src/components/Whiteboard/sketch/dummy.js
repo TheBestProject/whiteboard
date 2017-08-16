@@ -6,6 +6,12 @@ const dummy = [[{
     size: 2,
     start:{x:44,y:77.6399993864844},
     tool: 'ellipse'
-}]]
+}],[{color: "#444444",
+    end:{x:647, y:364},
+    fill: "#800080",
+    id: "410cd1bb-44fb-4d21-bfbc-667096241ccc",
+    size: 2,
+    start:{x:187,y:146},
+    tool: 'ellipse'}]]
 
 export default dummy;

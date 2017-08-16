@@ -63,10 +63,11 @@ class SketchPad extends Component {
     this.canvas = findDOMNode(this.canvasRef);
     this.ctx = this.canvas.getContext('2d');
     this.initTool(this.props.tool);
-    console.log('sketch did mount')
-    this.initTool('ellipse');
-    console.log('dummy',dummy)
-    this.tool.draw(dummy[0][0]);
+    this.props.items.forEach(item=>{
+      item = item[0];
+      this.initTool(item.tool);
+      this.tool.draw(item);
+    })
   }
   
   componentWillReceiveProps({tool, items}) {
@@ -75,7 +76,7 @@ class SketchPad extends Component {
       .filter(item => this.props.items.indexOf(item) === -1)
       .forEach(item => {
         if(item){
-        console.log('props', this.props.items);
+        //console.log('props', this.props.items);
         //console.log('props tool',tool)
         if(item[0]){
           item = item[0]
@@ -83,7 +84,6 @@ class SketchPad extends Component {
           item = item.data
         }
         this.initTool(item.tool);
-        //console.log('item',item);
         this.tool.draw(item, this.props.animate);
         }
       });
@@ -91,8 +91,6 @@ class SketchPad extends Component {
   }
 
   initTool(tool) {
-    //console.log('tool',tool)
-    //console.log('props', this.props.toolsMap['pencil']);
     this.tool = this.props.toolsMap[tool](this.ctx);
   }
 
@@ -119,7 +117,6 @@ class SketchPad extends Component {
     const data = this.tool.onMouseUp(...this.getCursorPosition(e));
     data && data[0] && this.props.onCompleteItem && this.props.onCompleteItem.apply(null, data);
     this.props.setImageData(data);
-    //console.log('data on mouse up', data);
     if (this.props.onDebouncedItemChange) {
       clearInterval(this.interval);
       this.interval = null;
