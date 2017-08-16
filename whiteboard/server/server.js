@@ -77,7 +77,7 @@ app.get('/api/group/:id', mainCtrl.getGroup) //working id param targets group id
 app.get('/api/project/:id', mainCtrl.getProject) //working id param targets project id
 app.get('/api/group/members/:id', mainCtrl.getGroupMembers) //working id param targets group id
 app.get('/api/project/members/:id', mainCtrl.getProjectMembers) //working id param targets project id
-
+app.get('/api/board/:id', mainCtrl.getBoard)
 
 app.post('/api/new/groupmember/:groupid', mainCtrl.baddGroupMember);
 app.post('/api/new/projectmember/:projectid', mainCtrl.baddProjectMember);
@@ -103,25 +103,28 @@ app.delete('/api/delete/whiteboard/:id', mainCtrl.deleteWhiteboard) //working, i
 // LISTEN
 const io = socket(app.listen(config.port, () => console.log(`Server listening on port ${config.port}`)))
 
-// SOCKETS
-io.on('connection', socket => {
-  console.log('a user connected');
-  socket.on('join', data => {
-    socket.join(data.boardId);
-    console.log('joined a room', data.boardId);
-    const db = app.get('db');
-    db.getBoard([data.boardId]).then(dbData => {
-      io.to(data.boardId).emit('receiveCanvas', {URL: dbData[0]});
-    })
+// // SOCKETS
+// io.on('connection', socket => {
+//   console.log('a user connected');
+//   socket.on('join', data => {
+//     socket.join(data.boardId);
+//     console.log('joined a room', data.boardId);
+//     const db = app.get('db');
+//     db.getBoard([data.boardId]).then(dbData => {
+//       io.to(data.boardId).emit('receiveCanvas', {URL: dbData[0]});
+//     })
     
-  })
-  socket.on('new canvas data', data => {
-    io.to(data.boardId).emit('receiveCanvas', {URL: data.URL})
-  })
-  socket.on('leave', data => {
-    socket.leave(data.boardId);
-  })
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
+//   })
+//   socket.on('new canvas data', data => {
+//     io.to(data.boardId).emit('receiveCanvas', {URL: data.URL})
+//   })
+//   socket.on('leave', data => {
+//     socket.leave(data.boardId);
+//   })
+//   socket.on('addItem', (data)=>{
+//     socket.broadcast.emit('addItem',{data});
+//   })
+//   socket.on('disconnect', () => {
+//     console.log('user disconnected');
+//   });
+// });

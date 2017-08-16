@@ -1,6 +1,10 @@
-import React, {Component, PropTypes} from 'react';
-import { findDOMNode } from 'react-dom'
-import { Pencil, TOOL_PENCIL, Line, TOOL_LINE, Ellipse, TOOL_ELLIPSE, Rectangle, TOOL_RECTANGLE } from './tools'
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import { findDOMNode } from 'react-dom';
+import { Pencil, TOOL_PENCIL, Line, TOOL_LINE, Ellipse, TOOL_ELLIPSE, Rectangle, TOOL_RECTANGLE } from './tools';
+import { connect } from 'react-redux';
+import {setImageData} from './../../../ducks/reducers/reducer_imageData.js';
+import dummy from './dummy.js';
 
 export const toolsMap = {
   [TOOL_PENCIL]: Pencil,
@@ -9,7 +13,7 @@ export const toolsMap = {
   [TOOL_ELLIPSE]: Ellipse
 };
 
-export default class SketchPad extends Component {
+class SketchPad extends Component {
 
   tool = null;
   interval = null;
@@ -59,15 +63,29 @@ export default class SketchPad extends Component {
     this.canvas = findDOMNode(this.canvasRef);
     this.ctx = this.canvas.getContext('2d');
     this.initTool(this.props.tool);
+    this.props.items.forEach(item=>{
+      item = item[0];
+      this.initTool(item.tool);
+      this.tool.draw(item);
+    })
   }
   
   componentWillReceiveProps({tool, items}) {
+    console.log('items',items);
     items
       .filter(item => this.props.items.indexOf(item) === -1)
       .forEach(item => {
-        console.log(item);
+        if(item){
+        //console.log('props', this.props.items);
+        //console.log('props tool',tool)
+        if(item[0]){
+          item = item[0]
+        } else{
+          item = item.data
+        }
         this.initTool(item.tool);
         this.tool.draw(item, this.props.animate);
+        }
       });
     this.initTool(tool);
   }
@@ -98,8 +116,7 @@ export default class SketchPad extends Component {
   onMouseUp(e) {
     const data = this.tool.onMouseUp(...this.getCursorPosition(e));
     data && data[0] && this.props.onCompleteItem && this.props.onCompleteItem.apply(null, data);
-    this.props.autoSave();
-    console.log('triggered');
+    this.props.setImageData(data);
     if (this.props.onDebouncedItemChange) {
       clearInterval(this.interval);
       this.interval = null;
@@ -122,7 +139,7 @@ export default class SketchPad extends Component {
         className={canvasClassName}
         onMouseDown={this.onMouseDown}
         onMouseMove={this.onMouseMove}
-        onMouseOut={this.onMouseUp}
+        //onMouseOut={this.onMouseUp}
         onMouseUp={this.onMouseUp}
         width={width}
         height={height}
@@ -130,3 +147,13 @@ export default class SketchPad extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  console.log('store state', state.imageData.currentImage)
+  return {
+    items: state.imageData.currentImage
+  }
+}
+
+
+export default connect(null,{setImageData})(SketchPad);
