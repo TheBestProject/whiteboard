@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { Pencil, TOOL_PENCIL, Line, TOOL_LINE, Ellipse, TOOL_ELLIPSE, Rectangle, TOOL_RECTANGLE } from './tools';
 import { connect } from 'react-redux';
-import {setImageData} from './../../../ducks/reducers/reducer_imageData.js';
-import dummy from './dummy.js';
+import {addImageData} from './../../../ducks/reducers/reducer_imageData.js';
+// import dummy from './dummy.js';
 
 export const toolsMap = {
   [TOOL_PENCIL]: Pencil,
@@ -63,6 +63,7 @@ class SketchPad extends Component {
     this.canvas = findDOMNode(this.canvasRef);
     this.ctx = this.canvas.getContext('2d');
     this.initTool(this.props.tool);
+    console.log("componentDidMount ITEMS", this.props.items)
     this.props.items.forEach(item=>{
       item = item[0];
       this.initTool(item.tool);
@@ -71,7 +72,7 @@ class SketchPad extends Component {
   }
   
   componentWillReceiveProps({tool, items}) {
-    console.log('items',items);
+    console.log('component will receive Props ITEMS',items);
     items
       .filter(item => this.props.items.indexOf(item) === -1)
       .forEach(item => {
@@ -116,7 +117,7 @@ class SketchPad extends Component {
   onMouseUp(e) {
     const data = this.tool.onMouseUp(...this.getCursorPosition(e));
     data && data[0] && this.props.onCompleteItem && this.props.onCompleteItem.apply(null, data);
-    this.props.setImageData(data);
+    this.props.addImageData(data);
     if (this.props.onDebouncedItemChange) {
       clearInterval(this.interval);
       this.interval = null;
@@ -149,11 +150,10 @@ class SketchPad extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('store state', state.imageData.currentImage)
   return {
     items: state.imageData.currentImage
   }
 }
 
 
-export default connect(null,{setImageData})(SketchPad);
+export default connect(null,{addImageData})(SketchPad);
