@@ -57,7 +57,7 @@ class Whiteboard extends Component {
   }
 
   componentWillUnmount() {
-    socket.emit('leave', {boardId: this.props.match.params.boardid, items: this.props.items})
+    socket.emit('leave', {boardId: this.props.match.params.boardid})
   }
 
   componentWillMount() {
