@@ -15,11 +15,12 @@ const REDO = 'REDO';
 const CLEAR = 'CLEAR';
 
 
-export function addImageData(boardId, item){
-    socket.emit('new canvas data', {boardId, item});
+export function addImageData(payload){
+    // socket.emit('new canvas data', {boardId, item});
+    console.log(payload);
     return {
         type: ADD_IMAGE_DATA,
-        payload: item
+        payload: payload
     }
 }
 

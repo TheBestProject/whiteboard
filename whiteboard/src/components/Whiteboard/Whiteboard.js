@@ -25,9 +25,12 @@ class Whiteboard extends Component {
       this.props.setImageData(dummy);
     })
     socket.on('receiveCanvas', data => {
-      console.log(data.item[0]);
-      if (data.item[0].id !== this.state.items[this.state.items.length - 1].id) {
-        this.props.addImageData(this.props.match.params.boardid, data.item[0])
+      console.log('received data from server', data.item);
+      console.log(data.item.id);
+      console.log(this.props.items[this.props.items.length - 1][0].id);
+      if (data.item.id !== this.props.items[this.props.items.length - 1][0].id) {
+        console.log('I passed the test')
+        this.props.addImageData(this.props.match.params.boardid, data.item)
       }
     })
     this.state = {
@@ -45,7 +48,7 @@ class Whiteboard extends Component {
       //this.showImg = this.showImg.bind(this);
       this.erase = this.erase.bind(this);
      // this.autoSave = this.autoSave.bind(this);
-      this.onComplete = this.onComplete.bind('this');
+      this.onComplete = this.onComplete.bind(this);
       //this.handleLoad = this.handleLoad.bind('this');
   }
 
@@ -61,8 +64,9 @@ class Whiteboard extends Component {
     addImageData(dummy);
   }
 
-  onComplete(addItem, item){
-    
+  onComplete(item){
+    console.log('oncomplete item', item);
+    socket.emit('new canvas data', {boardId: this.props.match.params.boardid, item})
     // this.props.addImageData(item);
   }
 
@@ -203,7 +207,7 @@ render() {
             items={items}
             tool={tool}
             //autoSave={this.autoSave}
-            //onCompleteItem={(i) => this.onComplete('addItem', i)}
+            onCompleteItem={(i) => this.onComplete(i)} 
             //addItem={this.addItem}
           />
         </div>
