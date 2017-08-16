@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import {setImageData, addImageData, undo, redo, clear} from './../../ducks/reducers/reducer_imageData';
-import dummy from './sketch/dummy';
+// import dummy from './sketch/dummy';
 import { findDOMNode } from 'react-dom';
 
 
@@ -22,7 +22,7 @@ class Whiteboard extends Component {
     super(props);
 
     socket.on('receiveInitialCanvas', data =>{
-      this.props.setImageData(dummy);
+      this.props.setImageData(data.items);
     })
     socket.on('receiveCanvas', data => {
       // console.log('received data from server', data.item);
@@ -40,7 +40,7 @@ class Whiteboard extends Component {
       color: '#444444',
       fill: false,
       fillColor: '#444444',
-      items: dummy
+      items: []
     }
 
       this.save = this.save.bind(this);
@@ -57,11 +57,11 @@ class Whiteboard extends Component {
   }
 
   componentWillUnmount() {
-    socket.emit('leave', {boardId: this.props.match.params.boardid})
+    socket.emit('leave', {boardId: this.props.match.params.boardid, items: this.props.items})
   }
 
   componentWillMount() {
-    addImageData(dummy);
+    // addImageData(dummy);
   }
 
   onComplete(item){

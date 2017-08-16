@@ -4,7 +4,7 @@ import { findDOMNode } from 'react-dom';
 import { Pencil, TOOL_PENCIL, Line, TOOL_LINE, Ellipse, TOOL_ELLIPSE, Rectangle, TOOL_RECTANGLE } from './tools';
 import { connect } from 'react-redux';
 import {addImageData} from './../../../ducks/reducers/reducer_imageData.js';
-import dummy from './dummy.js';
+// import dummy from './dummy.js';
 
 export const toolsMap = {
   [TOOL_PENCIL]: Pencil,

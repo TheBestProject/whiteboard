@@ -1,4 +1,4 @@
-import dummy from './../../components/Whiteboard/sketch/dummy';
+// import dummy from './../../components/Whiteboard/sketch/dummy';
 import io from 'socket.io-client';
 const socket = io();
 

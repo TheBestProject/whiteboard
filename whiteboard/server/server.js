@@ -7,6 +7,21 @@ const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const socket = require('socket.io');
 const path = require('path');
+const dummy = [[{
+    color: "#444444",
+    end:{x:70, y:207.63999938964844},
+    fill: "",
+    id: "26d1131a-67e5-47bb-8842-0b97316ff269",
+    size: 2,
+    start:{x:44,y:77.6399993864844},
+    tool: 'ellipse'
+}],[{color: "#444444",
+    end:{x:647, y:364},
+    fill: "#800080",
+    id: "410cd1bb-44fb-4d21-bfbc-667096241ccc",
+    size: 2,
+    start:{x:187,y:146},
+    tool: 'ellipse'}]]
 
 // REQUIRE LOCAL FILES
 const config = require('./../config');
@@ -111,7 +126,9 @@ io.on('connection', socket => {
     console.log('joined a room', data.boardId);
     const db = app.get('db');
     db.getBoardData([data.boardId]).then(dbData => {
-      io.to(data.boardId).emit('receiveInitialCanvas', {items: dbData[0]});
+      // let temp = JSON.parse(dbData[0].image_data)
+      console.log(dbData[0].image_data);
+      io.to(data.boardId).emit('receiveInitialCanvas', {items: dbData[0].image_data});
     })
   })
   socket.on('new canvas data', data => {
@@ -119,7 +136,12 @@ io.on('connection', socket => {
     io.to(data.boardId).emit('receiveCanvas', {item: data.item})
   })
   socket.on('leave', data => {
-    socket.leave(data.boardId);
+    const db = app.get('db');
+    let temp = JSON.stringify(data.items);
+    db.updateWhiteboardData([temp, data.boardId]).then(dbData => {
+      console.log('leaving room', data.boardId);
+      socket.leave(data.boardId);
+    })
   })
   socket.on('disconnect', () => {
     console.log('user disconnected');
