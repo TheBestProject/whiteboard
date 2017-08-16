@@ -14,7 +14,14 @@ class BoardGrid extends Component {
     this.deleteBoard = this.deleteBoard.bind(this);
   }
   addBoard() {
-    axios.post(`/api/new/whiteboard/${this.props.match.params.projectid}`, {name: 'Untitled Board'}).then(res => {
+    let pixel = [[{
+      color: "#444444 ",
+      id: "26d1131a-67e5-47bb-8842-0b97316ff269",
+      points: [{x:0,y:0}],
+      size: 2,
+      tool: 'pencil'
+    }]];
+    axios.post(`/api/new/whiteboard/${this.props.match.params.projectid}`, {name: 'Untitled Board', pixel}).then(res => {
       this.props.fetchBoards(this.props.userInfo.id);
     })
   }

@@ -145,11 +145,11 @@ module.exports = {
 
     addWhiteboard: ( req, res, next ) => {
         const db = req.app.get('db')
-        const whiteboardData = [
-            req.body.name,
-            req.params.id,
-        ]
-        db.addNewWhiteboard(whiteboardData).then((response) => {
+        let name = req.body.name;
+        let id = req.params.id;
+        let pixel = req.body.pixel
+        pixel = JSON.stringify(pixel);
+        db.addNewWhiteboard([name, id, pixel]).then((response) => {
             res.status(200).send(response)
         })
     },

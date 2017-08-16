@@ -132,16 +132,29 @@ io.on('connection', socket => {
     })
   })
   socket.on('new canvas data', data => {
-    console.log('new canvas data reached the server', data.item);
-    io.to(data.boardId).emit('receiveCanvas', {item: data.item})
+    const db = app.get('db');
+    db.getBoardData([data.boardId]).then(dbData => {
+      let oldImage = dbData[0].image_data;
+      // console.log('oldimage', oldImage.length); 
+      let tempArr = [];
+      tempArr.push(data.item)
+      // console.log('temparr', tempArr);
+      oldImage.push(tempArr);
+      // console.log('newimage', oldImage);
+      let temp = JSON.stringify(oldImage);
+      db.updateWhiteboardData([temp, data.boardId]).then(dbData2 => {
+        io.to(data.boardId).emit('receiveCanvas', {item: data.item})
+      })
+    })
+    // console.log('new canvas data reached the server', data.item);
   })
   socket.on('leave', data => {
-    const db = app.get('db');
-    let temp = JSON.stringify(data.items);
-    db.updateWhiteboardData([temp, data.boardId]).then(dbData => {
-      console.log('leaving room', data.boardId);
-      socket.leave(data.boardId);
-    })
+    // const db = app.get('db');
+    // let temp = JSON.stringify(data.items);
+    // db.updateWhiteboardData([temp, data.boardId]).then(dbData => {
+    //   console.log('leaving room', data.boardId);
+    // })
+    socket.leave(data.boardId);
   })
   socket.on('disconnect', () => {
     console.log('user disconnected');
