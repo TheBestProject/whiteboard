@@ -25,12 +25,12 @@ class Whiteboard extends Component {
       this.props.setImageData(dummy);
     })
     socket.on('receiveCanvas', data => {
-      console.log('received data from server', data.item);
-      console.log(data.item.id);
-      console.log(this.props.items[this.props.items.length - 1][0].id);
+      // console.log('received data from server', data.item);
+      // console.log(data.item.id);
+      // console.log(this.props.items[this.props.items.length - 1][0].id);
       if (data.item.id !== this.props.items[this.props.items.length - 1][0].id) {
-        console.log('I passed the test')
-        this.props.addImageData(this.props.match.params.boardid, data.item)
+        console.log('I passed the test', data.item)
+        this.props.addImageData([data.item])
       }
     })
     this.state = {

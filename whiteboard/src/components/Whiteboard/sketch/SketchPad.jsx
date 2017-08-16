@@ -63,6 +63,7 @@ class SketchPad extends Component {
     this.canvas = findDOMNode(this.canvasRef);
     this.ctx = this.canvas.getContext('2d');
     this.initTool(this.props.tool);
+    console.log("componentDidMount ITEMS", this.props.items)
     this.props.items.forEach(item=>{
       item = item[0];
       this.initTool(item.tool);
@@ -71,13 +72,13 @@ class SketchPad extends Component {
   }
   
   componentWillReceiveProps({tool, items}) {
-    // console.log('items',items);
+    console.log('component will receive Props ITEMS',items);
     items
       .filter(item => this.props.items.indexOf(item) === -1)
       .forEach(item => {
         if(item){
-        console.log('props', this.props.items);
-        console.log('props tool',tool)
+        //console.log('props', this.props.items);
+        //console.log('props tool',tool)
         if(item[0]){
           item = item[0]
         } else{
@@ -149,7 +150,6 @@ class SketchPad extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('store state', state.imageData.currentImage)
   return {
     items: state.imageData.currentImage
   }
