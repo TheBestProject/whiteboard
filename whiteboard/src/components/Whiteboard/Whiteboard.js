@@ -227,7 +227,7 @@ render() {
           <SketchPad 
             width={width}
             height={height}
-            animate={true}
+            animate={false}
             size={size}
             color={color}
             fillColor={fill ? fillColor : ''}
