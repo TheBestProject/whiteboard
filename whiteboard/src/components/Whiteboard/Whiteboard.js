@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { SketchPad, TOOL_PENCIL, TOOL_LINE, TOOL_RECTANGLE, TOOL_ELLIPSE } from './sketch'; 
 import './Whiteboard.css';
 import './range.css';
-//import io from 'socket.io-client';
+import io from 'socket.io-client';
 import testImg from './test-img';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import {setImageData, undo, redo, clear} from './../../ducks/reducers/reducer_imageData';
+import {setImageData, addImageData, undo, redo, clear} from './../../ducks/reducers/reducer_imageData';
 import dummy from './sketch/dummy';
 import { findDOMNode } from 'react-dom';
 
 
-//const socket = io();
+const socket = io();
 const height = window.innerHeight-60;
 const width = window.innerWidth;
 
@@ -21,15 +21,15 @@ class Whiteboard extends Component {
   constructor(props){
     super(props);
 
-    // socket.on('receiveCanvas', (data) =>{
-    //   var URL = data.URL.canvas ? data.URL.canvas : data.URL;
-    //   //console.log(data);
-    //   var URL;
-    //   console.log("URL coming in", URL.length)
-    //   //if(data.URL.canvas){URL=data.URL.canvas}else{URL=data.URL}
-    //   //this.setImage(URL);
-    // })
-    
+    socket.on('receiveInitialCanvas', data =>{
+      this.props.setImageData(dummy);
+    })
+    socket.on('receiveCanvas', data => {
+      console.log(data.item[0]);
+      if (data.item[0].id !== this.state.items[this.state.items.length - 1].id) {
+        this.props.addImageData(this.props.match.params.boardid, data.item[0])
+      }
+    })
     this.state = {
       tool:TOOL_PENCIL,
       size: 2,
@@ -49,61 +49,30 @@ class Whiteboard extends Component {
       //this.handleLoad = this.handleLoad.bind('this');
   }
 
-  // componentDidMount() {
-  //   //this.showImg(testImg);
-  //   // axios.get(`/api/board/${this.props.match.params.boardid}`)
-  //   //     .then((data)=>{
-  //   //       //console.log('data api incoming', data.data[0].canvas.length)
-  //   //       this.showImg(data.data[0].canvas)
-  //   //     })
-  //   socket.on('addItem', item => {
-  //     //console.log('item', item);
-  //     //console.log('items length',this.state.items)
-  //     this.props.setImageData(item);
-  //   });
-
-  //   // socket.emit(`join`, {boardId: this.props.match.params.boardid});
-  //   // console.log('component did mount', this.state.URL.length)
-  //   // this.showImg(this.state.URL);
-  // }
-
-  // componentWillUnmount() {
-  //   socket.emit('leave', {boardId: this.props.match.params.boardid})
-  // }
-  
-  // componentDidUpdate(){
-  //   this.showImg(this.state.URL);
-  //   console.log('component did update', this.state.URL.length)
-  // }
-
-  componentWillMount() {
-    setImageData(dummy);
+  componentDidMount() {
+    socket.emit('join', {boardId: this.props.match.params.boardid})
   }
 
-//   componentDidMount() {
-//     window.addEventListener('load', this.handleLoad);
-//  }
+  componentWillUnmount() {
+    socket.emit('leave', {boardId: this.props.match.params.boardid})
+  }
 
-//   handleLoad() {
-//       let canvas = document.getElementById("canvas");
-//       let ctx = canvas.getContext('2d');
-//       var img = new Image();
-//       //console.log('show Image',URL.length);
-//       img.src = testImg;
-//       ctx.drawImage(img,0,0,width,height,0,0,width,height)
-//       //setImageData(dummy);    
-//       //this.setState({items:dummy});  
-//   }  
+  componentWillMount() {
+    addImageData(dummy);
+  }
 
   onComplete(addItem, item){
-    this.props.setImageData(item);
+    
+    // this.props.addImageData(item);
   }
 
   componentWillReceiveProps(nextProps){
     if(this.props.items.length >= nextProps.items.length){
       this.clear();
+      // socket.emit('new canvas data', {boardId: this.props.match.params.boardid, items: nextProps.items});
       this.setState({items:nextProps.items})
     } else{      
+      // socket.emit('new canvas data', {boardId: this.props.match.params.boardid, items: nextProps.items});
       this.setState({items:nextProps.items})
     }      
   }
@@ -224,6 +193,7 @@ render() {
         </div>
         <div className="Sketchpad" >  
           <SketchPad 
+            boardId={this.props.match.params.boardid}
             width={width}
             height={height}
             animate={false}
@@ -249,7 +219,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps,{setImageData, undo, redo, clear})(Whiteboard);
+export default connect(mapStateToProps,{setImageData, addImageData, undo, redo, clear})(Whiteboard);
 
 //<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 //<img onClick={()=>this.showImg(this.state.URL)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>

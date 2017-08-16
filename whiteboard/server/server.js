@@ -104,27 +104,24 @@ app.delete('/api/delete/whiteboard/:id', mainCtrl.deleteWhiteboard) //working, i
 const io = socket(app.listen(config.port, () => console.log(`Server listening on port ${config.port}`)))
 
 // // SOCKETS
-// io.on('connection', socket => {
-//   console.log('a user connected');
-//   socket.on('join', data => {
-//     socket.join(data.boardId);
-//     console.log('joined a room', data.boardId);
-//     const db = app.get('db');
-//     db.getBoard([data.boardId]).then(dbData => {
-//       io.to(data.boardId).emit('receiveCanvas', {URL: dbData[0]});
-//     })
-    
-//   })
-//   socket.on('new canvas data', data => {
-//     io.to(data.boardId).emit('receiveCanvas', {URL: data.URL})
-//   })
-//   socket.on('leave', data => {
-//     socket.leave(data.boardId);
-//   })
-//   socket.on('addItem', (data)=>{
-//     socket.broadcast.emit('addItem',{data});
-//   })
-//   socket.on('disconnect', () => {
-//     console.log('user disconnected');
-//   });
-// });
+io.on('connection', socket => {
+  console.log('a user connected');
+  socket.on('join', data => {
+    socket.join(data.boardId);
+    console.log('joined a room', data.boardId);
+    const db = app.get('db');
+    db.getBoardData([data.boardId]).then(dbData => {
+      io.to(data.boardId).emit('receiveInitialCanvas', {items: dbData[0]});
+    })
+  })
+  socket.on('new canvas data', data => {
+    console.log('new canvas data reached the server', data.item);
+    io.to(data.boardId).emit('receiveCanvas', {item: data.item})
+  })
+  socket.on('leave', data => {
+    socket.leave(data.boardId);
+  })
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
