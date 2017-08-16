@@ -1,5 +1,7 @@
+import dummy from './../../components/Whiteboard/sketch/dummy';
+
 const initialState = {
-    currentImage : [],
+    currentImage : dummy,
     redoList: []
 };
 

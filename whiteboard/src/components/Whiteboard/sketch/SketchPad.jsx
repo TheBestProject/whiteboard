@@ -4,6 +4,7 @@ import { findDOMNode } from 'react-dom';
 import { Pencil, TOOL_PENCIL, Line, TOOL_LINE, Ellipse, TOOL_ELLIPSE, Rectangle, TOOL_RECTANGLE } from './tools';
 import { connect } from 'react-redux';
 import {setImageData} from './../../../ducks/reducers/reducer_imageData.js';
+import dummy from './dummy.js';
 
 export const toolsMap = {
   [TOOL_PENCIL]: Pencil,
@@ -62,6 +63,10 @@ class SketchPad extends Component {
     this.canvas = findDOMNode(this.canvasRef);
     this.ctx = this.canvas.getContext('2d');
     this.initTool(this.props.tool);
+    console.log('sketch did mount')
+    this.initTool('ellipse');
+    console.log('dummy',dummy)
+    this.tool.draw(dummy[0][0]);
   }
   
   componentWillReceiveProps({tool, items}) {
@@ -70,7 +75,7 @@ class SketchPad extends Component {
       .filter(item => this.props.items.indexOf(item) === -1)
       .forEach(item => {
         if(item){
-        //console.log('props', this.props.items);
+        console.log('props', this.props.items);
         //console.log('props tool',tool)
         if(item[0]){
           item = item[0]

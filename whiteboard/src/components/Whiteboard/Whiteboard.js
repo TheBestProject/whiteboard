@@ -8,6 +8,9 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import {setImageData, undo} from './../../ducks/reducers/reducer_imageData';
+import dummy from './sketch/dummy';
+import { findDOMNode } from 'react-dom';
+
 
 //const socket = io();
 const height = window.innerHeight-60;
@@ -34,20 +37,16 @@ class Whiteboard extends Component {
       color: '#444444',
       fill: false,
       fillColor: '#444444',
-      items: []
+      items: dummy
     }
 
-      //this.setImage = this.setImage.bind(this);  
       this.save = this.save.bind(this);
       this.clear = this.clear.bind(this);
       //this.showImg = this.showImg.bind(this);
       this.erase = this.erase.bind(this);
      // this.autoSave = this.autoSave.bind(this);
-      //this.undo = this.undo.bind(this);
-     // this.redo = this.redo.bind(this);
       this.onComplete = this.onComplete.bind('this');
-      //this.addItem = this.addItem.bind('this');
-      this.handleUndo = this.handleUndo.bind(this);
+      this.handleLoad = this.handleLoad.bind('this');
   }
 
   // componentDidMount() {
@@ -71,35 +70,44 @@ class Whiteboard extends Component {
   // componentWillUnmount() {
   //   socket.emit('leave', {boardId: this.props.match.params.boardid})
   // }
-
   
   // componentDidUpdate(){
   //   this.showImg(this.state.URL);
   //   console.log('component did update', this.state.URL.length)
   // }
 
+  componentWillMount() {
+    setImageData(dummy);
+  }
+
+  componentDidMount() {
+    window.addEventListener('load', this.handleLoad);
+ }
+
+  handleLoad() {
+      let canvas = document.getElementById("canvas");
+      let ctx = canvas.getContext('2d');
+      var img = new Image();
+      //console.log('show Image',URL.length);
+      img.src = testImg;
+      ctx.drawImage(img,0,0,width,height,0,0,width,height)
+      //setImageData(dummy);    
+      //this.setState({items:dummy});  
+  }  
+
   onComplete(addItem, item){
     this.props.setImageData(item);
   }
 
-  handleUndo(){
-    this.props.undo();
-    //this.forceUpdate();
-  }
-
   componentWillReceiveProps(nextProps){
       console.log('nextProps', nextProps);
-    if(this.props.items.length !== nextProps.items.length){
+    if(this.props.items.length >= nextProps.items.length){
       this.clear();
       this.setState({items:nextProps.items})
-    }
-      
+    } else{      
+      this.setState({items:nextProps.items})
+    }      
   }
-
-  // addItem(item){
-  //   console.log('state',this.state);
-  //   this.setState({items: this.state.items.concat([item])})
-  // }
 
   // setImage(URL){
   //   console.log('set Image',URL.length)
@@ -108,12 +116,12 @@ class Whiteboard extends Component {
   // }
 
   // showImg(URL){
-  //     let canvas = document.getElementById('canvas');
-  //     let ctx = canvas.getContext("2d"); 
+  //     // let canvas = document.getElementById('canvas');
+  //     // let ctx = canvas.getContext("2d"); 
   //     var img = new Image();
-  //     console.log('show Image',URL.length);
-  //     img.src = URL;
-  //     ctx.drawImage(img,0,0,width,height,0,0,width,height)
+  //     //console.log('show Image',URL.length);
+  //     img.src = testImg;
+  //     this.ctx.drawImage(img,0,0,width,height,0,0,width,height)
   // }
 
   // displayThumb(){
@@ -131,13 +139,9 @@ class Whiteboard extends Component {
   clear() {
       let canvas = document.getElementById('canvas');
       let ctx = canvas.getContext("2d");
-      // var m = window.confirm("Clear the Board?");
       var w = canvas.width;
       var h = canvas.height;
-      // if (m) {
-          ctx.clearRect(0, 0, w, h);
-      // }
-        
+      ctx.clearRect(0, 0, w, h);       
   }
 
   erase(){
@@ -155,28 +159,6 @@ class Whiteboard extends Component {
   //   console.log('autoSave', URL.length)
   // }
 
-  // undo(){
-  //   if (this.state.undo[0]){
-  //     //push current URL into redo
-  //     //pop last undo URL and make it new current URL
-  //     let undoList = Object.assign(this.state.undo);
-  //     console.log('length undo list', undoList.length);
-  //     let lastEl = undoList.pop();
-  //     console.log('data Send', lastEl.length);
-  //     socket.emit('new canvas data', {boardId: this.props.match.params.boardid, URL:lastEl});
-  //     this.setState({redo:[...this.state.redo, this.state.URL], URL:lastEl, undo:undoList});
-  //     //show new currentURL
-  //   }
-  // }
-
-  // redo(){
-  //   if (this.state.redo[0]){ 
-  //     let redoList = Object.assign(this.state.redo);
-  //     let lastEl = redoList.pop();
-  //     //console.log('last',lastEl)
-  //     this.setState({undo:[...this.state.undo,this.state.URL], URL: lastEl, redo:redoList});
-  //   }
-  // }
 
 render() {
   console.log('component state', this.state.items);
@@ -194,7 +176,7 @@ render() {
           <div className="main-tools">
               <button onClick={()=>this.save()}><img src={require('./../../assets/diskette.svg')} alt='save'/></button>
               <button onClick={()=>this.clear()}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
-              <button onClick={()=>this.handleUndo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
+              <button onClick={()=>this.props.undo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
               <button onClick={()=>this.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
           </div>
           <div className='tools'>
