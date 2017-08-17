@@ -1,7 +1,7 @@
 select 
-auth0_id,
+id,
 name as username,
 email,
 profilepic from users
-where auth0_id = $1
+where id = $1
 

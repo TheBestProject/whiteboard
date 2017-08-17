@@ -8,12 +8,14 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import {setImageData, addImageData, undo, redo, clear} from './../../ducks/reducers/reducer_imageData';
+import { fetchBoards } from './../../ducks/actions/index';
 // import dummy from './sketch/dummy';
 import { findDOMNode } from 'react-dom';
+import Loader from './../Loader/Loader';
 
 
 const socket = io();
-const height = window.innerHeight-60;
+const height = window.innerHeight;
 const width = window.innerWidth;
 
 class Whiteboard extends Component {
@@ -23,6 +25,7 @@ class Whiteboard extends Component {
 
     socket.on('receive image array', data =>{
       this.props.setImageData(data.items);
+      this.setState({loading: false})
     })
     socket.on('receive image item', data => {
       // console.log('received data from server', data.item);
@@ -34,6 +37,7 @@ class Whiteboard extends Component {
       }
     })
     this.state = {
+      loading: true,
       hide: true,
       tool:TOOL_PENCIL,
       size: 2,
@@ -58,7 +62,13 @@ class Whiteboard extends Component {
   }
 
   componentWillUnmount() {
-    socket.emit('leave', {boardId: this.props.match.params.boardid})
+    let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext("2d");
+    let URL = canvas.toDataURL();
+    axios.put(`/api/update/boardthumbnail/${this.props.match.params.boardid}`, {thumbnail: URL}).then(res => {
+      this.props.fetchBoards(this.props.userInfo.id);
+      socket.emit('leave', {boardId: this.props.match.params.boardid})
+    })
   }
 
   componentWillMount() {
@@ -138,6 +148,11 @@ render() {
   const { hide, tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
       <div className='whiteboard'>
+        {this.state.loading
+        ?
+          <Loader small={false} />
+        :
+          <div>
         <div className="Nav">
           <Link className="link" to={'/dashboard'}>
               <img src={require('./../../assets/ic_keyboard_arrow_left_black_24px.svg')} alt='left'/>
@@ -188,7 +203,7 @@ render() {
               </div>
         </div>
         <div className="Sketchpad" >  
-          <SketchPad 
+          <SketchPad
             boardId={this.props.match.params.boardid}
             width={width}
             height={height}
@@ -203,6 +218,8 @@ render() {
             //addItem={this.addItem}
           />
         </div>
+          </div>
+        }
         
       </div>
     );
@@ -211,11 +228,12 @@ render() {
 
 const mapStateToProps = (state) => {
   return {
+    userInfo: state.userInfo,
     items: state.imageData.currentImage
   }
 }
 
-export default connect(mapStateToProps,{setImageData, addImageData, undo, redo, clear})(Whiteboard);
+export default connect(mapStateToProps,{setImageData, addImageData, undo, redo, clear, fetchBoards})(Whiteboard);
 
 //<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 //<img onClick={()=>this.showImg(this.state.URL)} id='thumb' style={{display: 'none', height: '150px', width:'150px'}}></img>

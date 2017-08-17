@@ -37,7 +37,7 @@ module.exports = {
 
     getUser: ( req, res, next ) => {
         const db = req.app.get('db')
-        db.getUserInfo( req.params.id ).then(( response )=>{
+        db.getUserInfo( req.user.id ).then(( response )=>{
             res.status( 200 ).send( response[0] )
         })
     },
@@ -255,6 +255,7 @@ module.exports = {
         })
     },
     bupdateBoardThumbnail: (req, res) => {
+        console.log('this is the url in the server', req.body.thumbnail)
         const db = req.app.get('db')
         db.bupdateBoardThumbnail([req.body.thumbnail, req.params.boardid]).then(data => {
             res.status(200).send('success');
