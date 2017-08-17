@@ -34,6 +34,7 @@ class Whiteboard extends Component {
       }
     })
     this.state = {
+      hide: true,
       tool:TOOL_PENCIL,
       size: 2,
       previousCol: '#444444',
@@ -134,66 +135,57 @@ class Whiteboard extends Component {
 
 render() {
   //console.log('component state', this.state.items);
-  const { tool, size, color, fill, fillColor, items, previousCol } = this.state;
+  const { hide, tool, size, color, fill, fillColor, items, previousCol } = this.state;
     return (
       <div className='whiteboard'>
         <div className="Nav">
           <Link className="link" to={'/dashboard'}>
               <img src={require('./../../assets/ic_keyboard_arrow_left_black_24px.svg')} alt='left'/>
               <h1>Back to Dashboard</h1>
-            </Link>
-          <p>Our First Project</p>
+          </Link>
         </div>
-        <div className='all-tools'>
-          <div className="main-tools">
-              <button onClick={()=>this.save()}><img src={require('./../../assets/diskette.svg')} alt='save'/></button>
-              <button onClick={()=>this.props.clear()}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
-              <button onClick={()=>this.props.undo()}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
-              <button onClick={()=>this.props.redo()}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
-          </div>
-          <div className='tools'>
-            <div style={{marginBottom:20}}>
-              <button
+        <div className={`${hide ? 'all-tools-hide': null} all-tools`}>
+              <button id='clear' onClick={()=>this.props.clear(this.props.match.params.boardid)}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
+              <button id='undo' onClick={()=>this.props.undo(this.props.match.params.boardid)}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
+              <button id='redo' onClick={()=>this.props.redo(this.props.match.params.boardid)}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
+              <button id='eraser' onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>      
+              <img src={require('./../../assets/toggleLines.svg')} alt='toggle' id='toggle' onClick={() => this.setState({hide: !hide})}/>
+              <button id='marker'
                 style={tool === TOOL_PENCIL ? {fontWeight:'bold'} : undefined}
                 className={tool === TOOL_PENCIL  ? 'item-active' : 'item'}
                 onClick={() => this.setState({tool:TOOL_PENCIL, color:previousCol, size: 2})}
               ><img src={require('./../../assets/pen.svg')} alt='pen'/></button>
-              <button
+              <button id='line'
                 style={tool === TOOL_LINE ? {fontWeight:'bold'} : undefined}
                 className={tool === TOOL_LINE  ? 'item-active' : 'item'}
                 onClick={() => this.setState({tool:TOOL_LINE, color:previousCol, size: 2})}
               ><img src={require('./../../assets/diagonal-line.svg')} alt='line'/></button>
-              <button
+              <button id='circle'
                 style={tool === TOOL_ELLIPSE ? {fontWeight:'bold'} : undefined}
                 className={tool === TOOL_ELLIPSE  ? 'item-active' : 'item'}
                 onClick={() => this.setState({tool:TOOL_ELLIPSE,color:previousCol, size: 2})}
               ><img src={require('./../../assets/oval.svg')} alt='oval'/></button>
-              <button
+              <button id='square'
                 style={tool === TOOL_RECTANGLE ? {fontWeight:'bold'} : undefined}
                 className={tool === TOOL_RECTANGLE  ? 'item-active' : 'item'}
                 onClick={() => this.setState({tool:TOOL_RECTANGLE})}
               ><img src={require('./../../assets/square.svg')} alt='rectangle'/></button>
-              <button onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>          
-            </div>
-            <div className="options" style={{marginBottom:20}}>
-              <label htmlFor="">size: </label>
-              <input min="1" max="20" type="range" value={size} onChange={(e) => this.setState({size: parseInt(e.target.value)})} />
-            </div>
-            <div className="options" style={{marginBottom:20}}>
-              <label htmlFor="">color: </label>
-              <input type="color" value={color} onChange={(e) => this.setState({color: e.target.value})} />
-            </div>
-              
-              <div>
-                <label htmlFor="">fill in:</label>
-                <input type="checkbox" value={fill} style={{margin:'0 8'}}
-                       onChange={(e) => this.setState({fill: e.target.checked})} />
-                <span>
-                    <label htmlFor="">with color:</label>
-                    <input id='color2' type="color" value={fillColor} onChange={(e) => this.setState({fillColor: e.target.value})} />
-                </span> 
+              <div id='size' className="options">
+                {/* <label htmlFor="">size: </label> */}
+                <input min="1" max="20" type="range" value={size} onChange={(e) => this.setState({size: parseInt(e.target.value)})} />
               </div>
-          </div>
+              <div id='fillcolor'>
+                <p>Fill Color</p>
+                <input id='color2' type="color" value={fillColor} onChange={(e) => this.setState({fillColor: e.target.value})} />
+              </div>
+              <div id='color' className="options" style={{marginBottom:20}}>
+                <p>Line Color</p>
+                <input type="color" value={color} onChange={(e) => this.setState({color: e.target.value})} />
+              </div>
+              <div className={`${fill ? 'active' : null} fillbucketBox`}>
+                <img src={require('./../../assets/paint-bucket.svg')} alt='bucket'/>
+                <input id='fillbucket' type="checkbox" value={fill} style={{margin:'0 8'}} onChange={(e) => this.setState({fill: e.target.checked})} />
+              </div>
         </div>
         <div className="Sketchpad" >  
           <SketchPad 
