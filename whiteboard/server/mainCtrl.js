@@ -254,6 +254,12 @@ module.exports = {
               res.status(200).send(response)
         })
     },
+    bupdateBoardThumbnail: (req, res) => {
+        const db = req.app.get('db')
+        db.bupdateBoardThumbnail([req.body.thumbnail, req.params.boardid]).then(data => {
+            res.status(200).send('success');
+        })
+    },
 
         //##D       DELETES
      

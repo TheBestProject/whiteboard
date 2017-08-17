@@ -104,12 +104,13 @@ app.post('/api/new/whiteboard/:id', mainCtrl.addWhiteboard) //working id params 
 
 app.put('/api/update/group/:groupid', mainCtrl.bupdateGroup);
 app.put('/api/update/project/:projectid', mainCtrl.bupdateProject);
+app.put('/api/update/boardthumbnail/:boardid', mainCtrl.bupdateBoardThumbnail);
 
 // app.put('/api/update/user/:id', mainCtrl.updateUser) //PLACEHOLDER
 // app.put('/api/update/group/:id', mainCtrl.updateGroup) //working id param targets group id to update -- provide "name"
 // app.put('/api/update/project/:id', mainCtrl.updateProject) //working id param targets project id to update provide "name"
-app.put('/api/update/whiteboard/:id', mainCtrl.updateWhiteboard) //working id param target whiteboard id to provide update to "name"
-app.put('/api/update/canvas/:id', mainCtrl.updateWhiteboardData) //working id param tagets whiteboard id to provide update to "canvas"
+app.put('/api/update/boardname/:id', mainCtrl.updateWhiteboard) //working id param target whiteboard id to provide update to "name"
+app.put('/api/update/boarddata/:id', mainCtrl.updateWhiteboardData) //working id param tagets whiteboard id to provide update to "canvas"
 
 app.delete('/api/delete/group/:id', mainCtrl.deleteGroup) // working id param targets group id to delete and cascade
 app.delete('/api/delete/project/:id', mainCtrl.deleteProject) //working id param targets project id to delete and cascade
@@ -128,10 +129,10 @@ io.on('connection', socket => {
     db.getBoardData([data.boardId]).then(dbData => {
       // let temp = JSON.parse(dbData[0].image_data)
       console.log(dbData[0].image_data);
-      io.to(data.boardId).emit('receiveInitialCanvas', {items: dbData[0].image_data});
+      io.to(data.boardId).emit('receive image array', {items: dbData[0].image_data});
     })
   })
-  socket.on('new canvas data', data => {
+  socket.on('new canvas item', data => {
     const db = app.get('db');
     db.getBoardData([data.boardId]).then(dbData => {
       let oldImage = dbData[0].image_data;
@@ -143,17 +144,19 @@ io.on('connection', socket => {
       // console.log('newimage', oldImage);
       let temp = JSON.stringify(oldImage);
       db.updateWhiteboardData([temp, data.boardId]).then(dbData2 => {
-        io.to(data.boardId).emit('receiveCanvas', {item: data.item})
+        io.to(data.boardId).emit('receive image item', {item: data.item})
       })
     })
     // console.log('new canvas data reached the server', data.item);
   })
+  socket.on('new canvas array', data => {
+    const db = app.get('db');
+    let temp = JSON.stringify(data.items);
+    db.updateWhiteboardData([temp, data.boardId]).then(dbData => {
+      io.to(data.boardId).emit('receive image array', {items: dbData[0].image_data});
+    })
+  })
   socket.on('leave', data => {
-    // const db = app.get('db');
-    // let temp = JSON.stringify(data.items);
-    // db.updateWhiteboardData([temp, data.boardId]).then(dbData => {
-    //   console.log('leaving room', data.boardId);
-    // })
     socket.leave(data.boardId);
   })
   socket.on('disconnect', () => {
