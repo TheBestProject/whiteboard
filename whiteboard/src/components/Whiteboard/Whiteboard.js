@@ -21,10 +21,10 @@ class Whiteboard extends Component {
   constructor(props){
     super(props);
 
-    socket.on('receiveInitialCanvas', data =>{
+    socket.on('receive image array', data =>{
       this.props.setImageData(data.items);
     })
-    socket.on('receiveCanvas', data => {
+    socket.on('receive image item', data => {
       // console.log('received data from server', data.item);
       // console.log(data.item.id);
       // console.log(this.props.items[this.props.items.length - 1][0].id);
@@ -66,7 +66,7 @@ class Whiteboard extends Component {
 
   onComplete(item){
     console.log('oncomplete item', item);
-    socket.emit('new canvas data', {boardId: this.props.match.params.boardid, item})
+    socket.emit('new canvas item', {boardId: this.props.match.params.boardid, item})
     // this.props.addImageData(item);
   }
 

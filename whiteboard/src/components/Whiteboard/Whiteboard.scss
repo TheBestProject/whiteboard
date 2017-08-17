@@ -4,8 +4,10 @@
 
     display: flex;
     flex-direction: column;
+    padding-top: 50px;
 
     .Nav{
+    position: fixed;
         height: 50px;
         width: 100vw;
         display: flex;
