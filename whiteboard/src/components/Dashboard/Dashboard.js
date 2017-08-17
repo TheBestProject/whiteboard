@@ -13,7 +13,7 @@ import './Dashboard.css';
 class Dashboard extends Component {
   componentWillReceiveProps(newProps) {
     let id = newProps.userInfo.id;
-    if (this.props.userInfo.id !== newProps.userInfo.id) {
+    if (this.props.userInfo.id !== newProps.userInfo.id ) {
       console.log('hiya')
     
       this.props.fetchGroups(id);

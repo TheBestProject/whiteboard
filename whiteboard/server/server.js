@@ -54,7 +54,7 @@ massive(config.connectionString)
           //calls to database
           const auth0_id = profile.identities[0].user_id;
           
-          db.getUserInfo([auth0_id]).then((user)=>{
+          db.checkUser([auth0_id]).then((user)=>{
             if (user[0]){
               done(null,user[0])
             } else {
@@ -99,7 +99,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(user, done) {
-  console.log('serializing', user); //this is the user that's passed through from done  
+  //console.log('serializing', user); //this is the user that's passed through from done  
   done(null, user);
 });
 
@@ -120,7 +120,7 @@ app.get('/api/projects/:userId', mainCtrl.bgetProjects);
 app.get('/api/boards/:userId', mainCtrl.bgetBoards);
 app.get('/api/allusers', mainCtrl.bgetAllUsers);
 
-app.get('/api/user/:id', mainCtrl.getUser) // working id param targets user id
+app.get('/api/user', mainCtrl.getUser) // working id param targets user id
 app.get('/api/inituser/:id', mainCtrl.getAllUser) //working id param targets user id
 app.get('/api/initdata/:id', mainCtrl.getInitialData) //working id param targets users.id
 app.get('/api/group/:id', mainCtrl.getGroup) //working id param targets group id
@@ -163,7 +163,7 @@ io.on('connection', socket => {
     const db = app.get('db');
     db.getBoardData([data.boardId]).then(dbData => {
       // let temp = JSON.parse(dbData[0].image_data)
-      console.log(dbData[0].image_data);
+      // console.log(dbData[0].image_data);
       io.to(data.boardId).emit('receive image array', {items: dbData[0].image_data});
     })
   })
@@ -171,12 +171,12 @@ io.on('connection', socket => {
     const db = app.get('db');
     db.getBoardData([data.boardId]).then(dbData => {
       let oldImage = dbData[0].image_data;
-      console.log('oldimage', oldImage); 
+      // console.log('oldimage', oldImage); 
       let tempArr = [];
       tempArr.push(data.item)
-      console.log('new Item', data.item);
+      // console.log('new Item', data.item);
       oldImage.push(tempArr);
-      console.log('newimage', oldImage);
+      // console.log('newimage', oldImage);
       let temp = JSON.stringify(oldImage);
       db.updateWhiteboardData([temp, data.boardId]).then(dbData2 => {
         io.to(data.boardId).emit('receive image item', {item: data.item})
@@ -193,6 +193,7 @@ io.on('connection', socket => {
     })
   })
   socket.on('leave', data => {
+    console.log('now leaving', data.boardId);
     socket.leave(data.boardId);
   })
   socket.on('disconnect', () => {

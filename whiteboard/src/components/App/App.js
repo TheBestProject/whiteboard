@@ -14,7 +14,7 @@ import './base.css';
 class App extends Component {
 
   componentDidMount(){
-    this.props.fetchUser(1)
+    this.props.fetchUser();
 
   }
   render() {

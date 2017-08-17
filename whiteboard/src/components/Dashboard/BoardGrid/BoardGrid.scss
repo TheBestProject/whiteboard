@@ -25,7 +25,8 @@
       height: 27vh;
       background-color: white;
       background-position: center;
-      background-size: cover;
+      background-size: contain;
+      background-repeat: no-repeat;
     }
     .grid_picTransparent {
       width: 16vw;

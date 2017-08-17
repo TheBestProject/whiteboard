@@ -5,7 +5,7 @@ import axios from 'axios'
 export const FETCH_USER = 'FETCH_USER'
 export function fetchUser(userid){
 
-    const URL = `/api/user/${userid}`
+    const URL = `/api/user`
     const request = axios.get(URL)
 
     console.log('requestuser:', request)
