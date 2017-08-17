@@ -38,8 +38,39 @@ massive(config.connectionString)
 .then( db => {
     app.set('db', db);
     console.log('successful db hookup')
-  })
-.catch( err => console.log(err));
+
+    passport.use(new Auth0Strategy({
+      domain: config.auth0.domain,
+      clientID: config.auth0.clientID,
+      clientSecret: config.auth0.clientSecret,
+      callbackURL: config.auth0.callbackURL
+      },
+  
+        function(accessToken,refreshToken,extraParams,profile,done){
+        // accessToken is the token to call Auth0 API (not needed in the most cases)
+        // extraParams.id_token has the JSON Web Token
+        // profile has all the information from the user
+          const {name,email,picture} = profile._json;
+          //calls to database
+          const auth0_id = profile.identities[0].user_id;
+          
+          db.getUserInfo([auth0_id]).then((user)=>{
+            if (user[0]){
+              done(null,user[0])
+            } else {
+              console.log(auth0_id,name,email,picture)
+              db.addNewUser([auth0_id,name,email,picture])
+              .then((user)=>{
+              console.log('user',user[0]);				
+              done(null,user[0])
+              })
+            }
+          })
+        }
+      )
+    );
+  
+  }).catch( err => console.log(err));
 
 // SESSIONS & AUTH0 & PASSPORT
 app.use(session({
@@ -62,20 +93,24 @@ passport.use(new Auth0Strategy({
     return done(null, profile);
 }));
 
-app.get('/auth0', passport.authenticate('auth0'));
-app.get(config.auth0.callbackURL, passport.authenticate('auth0', {successRedirect: 'http://localhost:3000/dashboard'}));
-
 passport.serializeUser(function(user, done) {
+  console.log('serializing', user);  
   done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(user, done) {
+  console.log('serializing', user); //this is the user that's passed through from done  
+  done(null, user);
 });
+
+app.get('/auth0', passport.authenticate('auth0'));
+
+app.get(config.auth0.callbackURL, passport.authenticate('auth0', {successRedirect: 'http://localhost:3000/dashboard'}));
+
 app.get('/auth0/logout', function(req, res) {
   req.logout();
   res.redirect('http://localhost:3000/');
-})
+})  
 
 
 // ENDPOINTS
@@ -136,12 +171,12 @@ io.on('connection', socket => {
     const db = app.get('db');
     db.getBoardData([data.boardId]).then(dbData => {
       let oldImage = dbData[0].image_data;
-      // console.log('oldimage', oldImage.length); 
+      console.log('oldimage', oldImage); 
       let tempArr = [];
       tempArr.push(data.item)
-      // console.log('temparr', tempArr);
+      console.log('new Item', data.item);
       oldImage.push(tempArr);
-      // console.log('newimage', oldImage);
+      console.log('newimage', oldImage);
       let temp = JSON.stringify(oldImage);
       db.updateWhiteboardData([temp, data.boardId]).then(dbData2 => {
         io.to(data.boardId).emit('receive image item', {item: data.item})
@@ -151,6 +186,7 @@ io.on('connection', socket => {
   })
   socket.on('new canvas array', data => {
     const db = app.get('db');
+    // console.log('new canvas received')
     let temp = JSON.stringify(data.items);
     db.updateWhiteboardData([temp, data.boardId]).then(dbData => {
       io.to(data.boardId).emit('receive image array', {items: dbData[0].image_data});
