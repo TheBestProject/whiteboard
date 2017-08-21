@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class Welcome extends Component {
+  componentWillReceiveProps(newProps) {
+    if (newProps.userInfo.loggedIn) {
+      this.props.history.push('/dashboard')
+    }
+  }
   render() {
     return (
       <div id='Welcome'>
@@ -10,4 +16,9 @@ class Welcome extends Component {
     )
   }
 }
-export default Welcome;
+function mapStateToProps(state) {
+  return {
+    userInfo: state.userInfo
+  }
+}
+export default connect(mapStateToProps)(Welcome);

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
+import { fetchUser } from './../../../ducks/actions/index';
+
 import Loader from './../../Loader/Loader';
 
 import './../commonModule.css';
@@ -57,9 +59,12 @@ class Profile extends Component {
     fileReader.readAsDataURL(file);
   }
   save() {
-    console.log(this.state.username, this.state.profilepic);
-    this.unlock();
-    this.props.profileFlag();
+    axios.put(`/api/update/user/${this.props.userInfo.id}`, {username: this.state.username, profilepic: this.state.profilepic}).then(res => {
+      this.props.fetchUser();
+      this.unlock();
+      this.props.profileFlag();
+    })
+    // console.log(this.state.username, this.state.profilepic);
   }
   componentDidMount() {
     this.lock();
@@ -122,4 +127,4 @@ function mapStateToProps(state) {
     userInfo: state.userInfo
   }
 }
-export default withRouter(connect(mapStateToProps)(Profile));
+export default withRouter(connect(mapStateToProps, { fetchUser })(Profile));

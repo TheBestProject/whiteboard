@@ -1,5 +1,13 @@
-import { FETCH_USER } from '../actions/index'
+import { FETCH_USER, CHECK_USER } from '../actions/index'
 
+const intitialState = {
+    loggedIn: false,
+    loggedLoading: true,
+    id: null,
+    username: '',
+    email: '',
+    profilepic: ''
+}
 const dummyState = {
     // id: 2,
     username: 'Billy Bob Joe',
@@ -8,11 +16,16 @@ const dummyState = {
   }
 
 
-export default function(state = dummyState, action) {
+export default function(state = intitialState, action) {
     switch(action.type){
-        
-        case `${FETCH_USER}_FULFILLED`:
-        return action.payload.data; 
+      case `${CHECK_USER}_PENDING`:
+        return Object.assign({}, state, {loggedIn: false, loggedLoading: true})
+      case `${CHECK_USER}_FULFILLED`:
+        return Object.assign({}, state, {loggedIn: action.payload, loggedLoading: false})
+      case `${FETCH_USER}_FULFILLED`:
+        return Object.assign({}, state, action.payload.data); 
+      default:
+        return state
     }
 
   return state

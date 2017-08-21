@@ -12,6 +12,7 @@ import { fetchBoards } from './../../ducks/actions/index';
 // import dummy from './sketch/dummy';
 import { findDOMNode } from 'react-dom';
 import Loader from './../Loader/Loader';
+import NotFound from './../NotFound/NotFound';
 
 
 const socket = io();
@@ -72,6 +73,9 @@ class Whiteboard extends Component {
   }
 
   componentWillMount() {
+    // if (!this.props.userInfo.id) {
+    //   this.props.history.push('/');
+    // }
     // addImageData(dummy);
   }
 
@@ -82,6 +86,9 @@ class Whiteboard extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+    // if (!nextProps.userInfo.loggedIn && !nextProps.userInfo.loggedLoading) {
+    //   this.props.history.push('/')
+    // }
     if(this.props.items.length >= nextProps.items.length){
       this.clear();
       // socket.emit('new canvas data', {boardId: this.props.match.params.boardid, items: nextProps.items});
@@ -146,80 +153,90 @@ class Whiteboard extends Component {
 render() {
   //console.log('component state', this.state.items);
   const { hide, tool, size, color, fill, fillColor, items, previousCol } = this.state;
+  let permission = false;
+  console.log(this.props.boards);
+  this.props.boards.map(board => {
+    if (board.id == this.props.match.params.boardid) {
+      permission = true;
+    }
+  })
+  // console.log(permission);
     return (
       <div className='whiteboard'>
-        {this.state.loading
-        ?
-          <Loader small={false} />
-        :
-          <div>
-        <div className="Nav">
-          <Link className="link" to={'/dashboard'}>
-              <img src={require('./../../assets/ic_keyboard_arrow_left_black_24px.svg')} alt='left'/>
-              <h1>Back to Dashboard</h1>
-          </Link>
-        </div>
-        <div className={`${hide ? 'all-tools-hide': null} all-tools`}>
-              <button id='clear' onClick={()=>this.props.clear(this.props.match.params.boardid)}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
-              <button id='undo' onClick={()=>this.props.undo(this.props.match.params.boardid)}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
-              <button id='redo' onClick={()=>this.props.redo(this.props.match.params.boardid)}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
-              <button id='eraser' onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>      
-              <img src={require('./../../assets/toggleLines.svg')} alt='toggle' id='toggle' onClick={() => this.setState({hide: !hide})}/>
-              <button id='marker'
-                style={tool === TOOL_PENCIL ? {fontWeight:'bold'} : undefined}
-                className={tool === TOOL_PENCIL  ? 'item-active' : 'item'}
-                onClick={() => this.setState({tool:TOOL_PENCIL, color:previousCol, size: 2})}
-              ><img src={require('./../../assets/pen.svg')} alt='pen'/></button>
-              <button id='line'
-                style={tool === TOOL_LINE ? {fontWeight:'bold'} : undefined}
-                className={tool === TOOL_LINE  ? 'item-active' : 'item'}
-                onClick={() => this.setState({tool:TOOL_LINE, color:previousCol, size: 2})}
-              ><img src={require('./../../assets/diagonal-line.svg')} alt='line'/></button>
-              <button id='circle'
-                style={tool === TOOL_ELLIPSE ? {fontWeight:'bold'} : undefined}
-                className={tool === TOOL_ELLIPSE  ? 'item-active' : 'item'}
-                onClick={() => this.setState({tool:TOOL_ELLIPSE,color:previousCol, size: 2})}
-              ><img src={require('./../../assets/oval.svg')} alt='oval'/></button>
-              <button id='square'
-                style={tool === TOOL_RECTANGLE ? {fontWeight:'bold'} : undefined}
-                className={tool === TOOL_RECTANGLE  ? 'item-active' : 'item'}
-                onClick={() => this.setState({tool:TOOL_RECTANGLE})}
-              ><img src={require('./../../assets/square.svg')} alt='rectangle'/></button>
-              <div id='size' className="options">
-                {/* <label htmlFor="">size: </label> */}
-                <input min="1" max="20" type="range" value={size} onChange={(e) => this.setState({size: parseInt(e.target.value)})} />
+      
+          {this.state.loading
+          ?
+            <Loader small={false} />
+          :
+            <div>
+              <div className="Nav">
+                <Link className="link" to={'/dashboard'}>
+                    <img src={require('./../../assets/ic_keyboard_arrow_left_black_24px.svg')} alt='left'/>
+                    <h1>Back to Dashboard</h1>
+                </Link>
               </div>
-              <div id='fillcolor'>
-                <p>Fill Color</p>
-                <input id='color2' type="color" value={fillColor} onChange={(e) => this.setState({fillColor: e.target.value})} />
+              <div className={`${hide ? 'all-tools-hide': null} all-tools`}>
+                    <button id='clear' onClick={()=>this.props.clear(this.props.match.params.boardid)}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
+                    <button id='undo' onClick={()=>this.props.undo(this.props.match.params.boardid)}><img src={require('./../../assets/ic_undo_black_18px.svg')} alt='undo'/></button>
+                    <button id='redo' onClick={()=>this.props.redo(this.props.match.params.boardid)}><img src={require('./../../assets/ic_redo_black_18px.svg')} alt='todo'/></button>
+                    <button id='eraser' onClick={() => this.erase()}><img src={require('./../../assets/eraser.svg')} alt='eraser'/></button>      
+                    <img src={require('./../../assets/toggleLines.svg')} alt='toggle' id='toggle' onClick={() => this.setState({hide: !hide})}/>
+                    <button id='marker'
+                      style={tool === TOOL_PENCIL ? {fontWeight:'bold'} : undefined}
+                      className={tool === TOOL_PENCIL  ? 'item-active' : 'item'}
+                      onClick={() => this.setState({tool:TOOL_PENCIL, color:previousCol, size: 2})}
+                    ><img src={require('./../../assets/pen.svg')} alt='pen'/></button>
+                    <button id='line'
+                      style={tool === TOOL_LINE ? {fontWeight:'bold'} : undefined}
+                      className={tool === TOOL_LINE  ? 'item-active' : 'item'}
+                      onClick={() => this.setState({tool:TOOL_LINE, color:previousCol, size: 2})}
+                    ><img src={require('./../../assets/diagonal-line.svg')} alt='line'/></button>
+                    <button id='circle'
+                      style={tool === TOOL_ELLIPSE ? {fontWeight:'bold'} : undefined}
+                      className={tool === TOOL_ELLIPSE  ? 'item-active' : 'item'}
+                      onClick={() => this.setState({tool:TOOL_ELLIPSE,color:previousCol, size: 2})}
+                    ><img src={require('./../../assets/oval.svg')} alt='oval'/></button>
+                    <button id='square'
+                      style={tool === TOOL_RECTANGLE ? {fontWeight:'bold'} : undefined}
+                      className={tool === TOOL_RECTANGLE  ? 'item-active' : 'item'}
+                      onClick={() => this.setState({tool:TOOL_RECTANGLE})}
+                    ><img src={require('./../../assets/square.svg')} alt='rectangle'/></button>
+                    <div id='size' className="options">
+                      {/* <label htmlFor="">size: </label> */}
+                      <input min="1" max="20" type="range" value={size} onChange={(e) => this.setState({size: parseInt(e.target.value)})} />
+                    </div>
+                    <div id='fillcolor'>
+                      <p>Fill Color</p>
+                      <input id='color2' type="color" value={fillColor} onChange={(e) => this.setState({fillColor: e.target.value})} />
+                    </div>
+                    <div id='color' className="options" style={{marginBottom:20}}>
+                      <p>Line Color</p>
+                      <input type="color" value={color} onChange={(e) => this.setState({color: e.target.value})} />
+                    </div>
+                    <div className={`${fill ? 'active' : null} fillbucketBox`}>
+                      <img src={require('./../../assets/paint-bucket.svg')} alt='bucket'/>
+                      <input id='fillbucket' type="checkbox" value={fill} style={{margin:'0 8'}} onChange={(e) => this.setState({fill: e.target.checked})} />
+                    </div>
               </div>
-              <div id='color' className="options" style={{marginBottom:20}}>
-                <p>Line Color</p>
-                <input type="color" value={color} onChange={(e) => this.setState({color: e.target.value})} />
+              <div className="Sketchpad" >  
+                <SketchPad
+                  boardId={this.props.match.params.boardid}
+                  width={width}
+                  height={height}
+                  animate={false}
+                  size={size}
+                  color={color}
+                  fillColor={fill ? fillColor : ''}
+                  items={items}
+                  tool={tool}
+                  //autoSave={this.autoSave}
+                  onCompleteItem={(i) => this.onComplete(i)} 
+                  //addItem={this.addItem}
+                />
               </div>
-              <div className={`${fill ? 'active' : null} fillbucketBox`}>
-                <img src={require('./../../assets/paint-bucket.svg')} alt='bucket'/>
-                <input id='fillbucket' type="checkbox" value={fill} style={{margin:'0 8'}} onChange={(e) => this.setState({fill: e.target.checked})} />
-              </div>
-        </div>
-        <div className="Sketchpad" >  
-          <SketchPad
-            boardId={this.props.match.params.boardid}
-            width={width}
-            height={height}
-            animate={false}
-            size={size}
-            color={color}
-            fillColor={fill ? fillColor : ''}
-            items={items}
-            tool={tool}
-            //autoSave={this.autoSave}
-            onCompleteItem={(i) => this.onComplete(i)} 
-            //addItem={this.addItem}
-          />
-        </div>
-          </div>
-        }
+            </div>
+          }
+        
         
       </div>
     );
@@ -229,7 +246,8 @@ render() {
 const mapStateToProps = (state) => {
   return {
     userInfo: state.userInfo,
-    items: state.imageData.currentImage
+    items: state.imageData.currentImage,
+    boards: state.userData.boards
   }
 }
 
