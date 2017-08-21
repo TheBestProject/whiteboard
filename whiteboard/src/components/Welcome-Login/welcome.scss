@@ -1,0 +1,51 @@
+@import './../../sassVars.scss';
+
+
+
+#Welcome{
+    background-color:$lightColor;
+    height:100vh;
+    width:100vw;
+    display:flex;
+    flex-direction:column;
+    outline: 5px solid $dullColor;
+    outline-offset: -20px;
+    
+}
+
+#Hey{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:40%;
+    width:auto;
+    font-size:26px;
+    u{
+        font-family: $displayFontFamily;
+    }
+    
+}
+
+
+#Log{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:50%;
+    width:auto;
+    font-size:24px;
+    
+}
+.Login {
+    font-size:30px;
+    color:$mediumColor;
+    text-decoration:none;
+    margin:8px;
+    u{
+        font-family: $displayFontFamily;
+    }
+    u:hover{
+        cursor:pointer;
+        color:black;
+    }
+}
