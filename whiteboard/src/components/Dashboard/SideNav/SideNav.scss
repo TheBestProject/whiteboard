@@ -37,8 +37,18 @@
       h2 {
         font-size: 1.5rem;
       }
-      p:hover {
-        cursor: pointer;
+      .sideNav_logoutEdit {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        a {
+          text-decoration: none;
+          color: $brightColor;
+          margin: 0 10px;
+        }
+        p:hover {
+          cursor: pointer;
+        }
       }
     }
     .sideNav_profilePic {

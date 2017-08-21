@@ -95,7 +95,10 @@ class SideNav extends Component {
         <div className='sideNav_userDisplay'>
           <div className='sideNav_username'>
             <h2>{username}</h2>
-            <p onClick={() => this.setState({profileFlag: true})}>edit</p>
+            <div className='sideNav_logoutEdit'>
+              <a href='http://localhost:4000/auth0/logout'>logout</a>
+              <p onClick={() => this.setState({profileFlag: true})}>edit</p>
+            </div>
           </div>
           <div className='sideNav_profilePic' style={picStyle}></div>
         </div>
