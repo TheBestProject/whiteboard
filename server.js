@@ -154,7 +154,7 @@ app.delete('/api/delete/whiteboard/:id', mainCtrl.deleteWhiteboard) //working, i
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, './build/index.html')));
 
 // LISTEN
-const io = socket(app.listen(process.env.port, () => console.log(`Server listening on port ${process.env.port}`)))
+const io = socket(app.listen(process.env.PORT, () => console.log(`Server listening on port ${process.env.PORT}`)))
 
 // // SOCKETS
 io.on('connection', socket => {
