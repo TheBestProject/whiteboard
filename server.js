@@ -35,7 +35,7 @@ app.use(express.static(__dirname + './../build'));
 
 
 // DATABASE CONNECTION
-massive(process.env.connectionString)
+massive(process.env.DATABASE_URL)
 .then( db => {
     app.set('db', db);
     console.log('successful db hookup')
