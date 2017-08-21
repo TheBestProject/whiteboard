@@ -31,7 +31,7 @@ const mainCtrl = require('./server/mainCtrl');
 // INVOKE EXPRESS AND SET UP MIDDLEWARE
 const app = express();
 app.use(bodyParser.json());
-app.use(express.static(__dirname + './build'));
+app.use(express.static(__dirname + '/build'));
 
 
 // DATABASE CONNECTION
