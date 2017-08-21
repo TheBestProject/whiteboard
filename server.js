@@ -152,7 +152,7 @@ app.delete('/api/delete/group/:id', mainCtrl.deleteGroup) // working id param ta
 app.delete('/api/delete/project/:id', mainCtrl.deleteProject) //working id param targets project id to delete and cascade
 app.delete('/api/delete/whiteboard/:id', mainCtrl.deleteWhiteboard) //working, id param targets whiteboard id
 
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, './build/index.html')));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/build/index.html')));
 
 // LISTEN
 const io = socket(app.listen(port, () => console.log(`Server listening on port ${port}`)))
