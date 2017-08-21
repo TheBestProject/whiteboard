@@ -12,27 +12,32 @@
     z-index: 2;
         height: 50px;
         width: 100vw;
-        display: flex;
+        // display: flex;
         // justify-content: space-between;
         background-color: $darkColor;
         font-family: $displayFontFamily;
         color: $brightColor;
         align-items: center;
 
-        p{
-            margin-right: 50px;
+        // p{
+        //     margin-right: 50px;
+        // }
+        a {
+            color: $brightColor;
+            text-decoration: none;
+            margin: 14px 0 0 0;
         }
-        
-        .link{
+        .link {
             display: flex;
             align-items: center;
+            float: left;
+        }
+        .logout {
+            float: right;
+            margin-right: 30px;
         }
     }
 
-    a{
-        color: $brightColor;
-        text-decoration: none;
-    }
 
     button{
         position: absolute;

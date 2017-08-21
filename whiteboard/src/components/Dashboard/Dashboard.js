@@ -34,10 +34,16 @@ class Dashboard extends Component {
         <SideNav />
         <Switch>
           <Route path='/dashboard' exact render={() => {
-            return <div>this will be the landing page before the user creates/joins a group</div>
+            return <div className='Dashboard_selected'>
+              <h1>Select a group to get started</h1>
+              <h2>If you don't have any groups yet, click the '+' button next to 'Your Groups' to add one</h2>
+            </div>
           }} />
           <Route path='/dashboard/:groupid' exact render={() => {
-            return <div>this will be the view when a group has no projects</div>
+            return <div className='Dashboard_selected'>
+              <h1>Select a project to see all of its whiteboards</h1>
+              <h2>If you don't have any projects yet, hover over the group name and select 'Add Project' from the dropdown menu</h2>
+            </div>
           }} />
           <Route path='/dashboard/:groupid/:projectid' component={BoardGrid} />
         </Switch>

@@ -9,4 +9,16 @@
   display: flex;
   // overflow-y: hidden;
   background-color: $lightColor;
+  .Dashboard_selected {
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h1 {
+      font-family: $displayFontFamily;
+      font-size: 3rem;
+      margin: 0 0 40px 0;
+    }
+  }
 }
