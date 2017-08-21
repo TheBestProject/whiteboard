@@ -25,7 +25,7 @@ const dummy = [[{
 
 // REQUIRE LOCAL FILES
 // const config = require('./../config');
-const mainCtrl = require('./mainCtrl');
+const mainCtrl = require('./server/mainCtrl');
 
 // INVOKE EXPRESS AND SET UP MIDDLEWARE
 const app = express();
