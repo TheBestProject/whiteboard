@@ -2,6 +2,15 @@ import axios from 'axios'
 
 // const ROOT_URL = 'http://localhost:4000/api'
 
+export const CHECK_USER = 'CHECK_USER';
+export function checkUser() {
+    return {
+        type: CHECK_USER,
+        payload: axios.get('/api/checkuser').then(res => res.data)
+    }
+}
+
+
 export const FETCH_USER = 'FETCH_USER'
 export function fetchUser(userid){
 

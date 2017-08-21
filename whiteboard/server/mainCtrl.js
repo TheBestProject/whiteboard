@@ -8,6 +8,9 @@ module.exports = {
 
 
     //##A       GETS
+    bcheckUser: (req, res) => {
+        req.user ? res.status(200).send(true) : res.status(200).send(false);
+    },
     bgetGroups: (req, res) => {
         const db = req.app.get('db');
         console.log('userid groups', req.params.userId);
@@ -153,19 +156,13 @@ module.exports = {
             res.status(200).send(response)
         })
     },
-    // PLACEHOLDER
-    // updateUser: ( req, res, next ) => {
-    //     const userData = [
-    //         auth0,
-    //         name,
-    //         email,
-    //         profilepic,
-    //     ]
-    //     const db = req.app.get('db')
-    //     db.addNewUser(userData).then((response) => {
-    //         res.status(200).send(response)
-    //     })
-    // },
+    updateUser: ( req, res ) => {
+        const {username, profilepic} = req.body;
+        const db = req.app.get('db')
+        db.updateUserInfo([username, profilepic, req.params.id]).then((response) => {
+            res.status(200).send(response)
+        })
+    },
     
     //##C      PUTS
     // bupdateUser: (req, res) => {

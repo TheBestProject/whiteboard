@@ -12,16 +12,15 @@ import './Dashboard.css';
 
 class Dashboard extends Component {
   componentWillReceiveProps(newProps) {
-    let id = newProps.userInfo.id;
-    if (this.props.userInfo.id !== newProps.userInfo.id ) {
-      console.log('hiya')
-    
-      this.props.fetchGroups(id);
-      this.props.fetchProjects(id);
-      this.props.fetchBoards(id);
-
-    
+    if (!newProps.userInfo.loggedIn && !newProps.userInfo.loggedLoading) {
+      this.props.history.push('/')
     }
+    // let id = newProps.userInfo.id;
+    // if (this.props.userInfo.id !== newProps.userInfo.id ) {
+    //   this.props.fetchGroups(id);
+    //   this.props.fetchProjects(id);
+    //   this.props.fetchBoards(id);
+    // }
   }
   render() {
     return (

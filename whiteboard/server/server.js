@@ -114,15 +114,15 @@ app.get('/auth0/logout', function(req, res) {
 
 
 // ENDPOINTS
-// app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/api/checkuser', mainCtrl.bcheckUser);
 app.get('/api/groups/:userId', mainCtrl.bgetGroups);
 app.get('/api/projects/:userId', mainCtrl.bgetProjects);
 app.get('/api/boards/:userId', mainCtrl.bgetBoards);
 app.get('/api/allusers', mainCtrl.bgetAllUsers);
 
 app.get('/api/user', mainCtrl.getUser) // working id param targets user id
-app.get('/api/inituser/:id', mainCtrl.getAllUser) //working id param targets user id
-app.get('/api/initdata/:id', mainCtrl.getInitialData) //working id param targets users.id
+// app.get('/api/inituser/:id', mainCtrl.getAllUser) //working id param targets user id
+// app.get('/api/initdata/:id', mainCtrl.getInitialData) //working id param targets users.id
 app.get('/api/group/:id', mainCtrl.getGroup) //working id param targets group id
 app.get('/api/project/:id', mainCtrl.getProject) //working id param targets project id
 app.get('/api/group/members/:id', mainCtrl.getGroupMembers) //working id param targets group id
@@ -141,7 +141,7 @@ app.put('/api/update/group/:groupid', mainCtrl.bupdateGroup);
 app.put('/api/update/project/:projectid', mainCtrl.bupdateProject);
 app.put('/api/update/boardthumbnail/:boardid', mainCtrl.bupdateBoardThumbnail);
 
-// app.put('/api/update/user/:id', mainCtrl.updateUser) //PLACEHOLDER
+app.put('/api/update/user/:id', mainCtrl.updateUser)
 // app.put('/api/update/group/:id', mainCtrl.updateGroup) //working id param targets group id to update -- provide "name"
 // app.put('/api/update/project/:id', mainCtrl.updateProject) //working id param targets project id to update provide "name"
 app.put('/api/update/boardname/:id', mainCtrl.updateWhiteboard) //working id param target whiteboard id to provide update to "name"
@@ -150,6 +150,8 @@ app.put('/api/update/boarddata/:id', mainCtrl.updateWhiteboardData) //working id
 app.delete('/api/delete/group/:id', mainCtrl.deleteGroup) // working id param targets group id to delete and cascade
 app.delete('/api/delete/project/:id', mainCtrl.deleteProject) //working id param targets project id to delete and cascade
 app.delete('/api/delete/whiteboard/:id', mainCtrl.deleteWhiteboard) //working, id param targets whiteboard id
+
+// app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 // LISTEN
 const io = socket(app.listen(config.port, () => console.log(`Server listening on port ${config.port}`)))
