@@ -24,26 +24,26 @@ const dummy = [[{
     tool: 'ellipse'}]]
 
 // REQUIRE LOCAL FILES
-const config = require('./../config');
+// const config = require('./../config');
 const mainCtrl = require('./mainCtrl');
 
 // INVOKE EXPRESS AND SET UP MIDDLEWARE
 const app = express();
 app.use(bodyParser.json());
-// app.use(express.static(__dirname + './../build'));
+app.use(express.static(__dirname + './../build'));
 
 
 // DATABASE CONNECTION
-massive(config.connectionString)
+massive(process.env.connectionString)
 .then( db => {
     app.set('db', db);
     console.log('successful db hookup')
 
     passport.use(new Auth0Strategy({
-      domain: config.auth0.domain,
-      clientID: config.auth0.clientID,
-      clientSecret: config.auth0.clientSecret,
-      callbackURL: config.auth0.callbackURL
+      domain: process.env.authdomain,
+      clientID: process.env.authclientID,
+      clientSecret: process.env.authclientSecret,
+      callbackURL: process.env.authcallbackURL
       },
   
         function(accessToken,refreshToken,extraParams,profile,done){
@@ -74,7 +74,7 @@ massive(config.connectionString)
 
 // SESSIONS & AUTH0 & PASSPORT
 app.use(session({
-    secret: config.sessionSecret,
+    secret: process.env.sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {maxAge: 1000 * 60 * 60 * 24 * 14}
@@ -83,10 +83,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new Auth0Strategy({
-  domain: config.auth0.domain,
-  clientID: config.auth0.clientID,
-  clientSecret: config.auth0.clientSecret,
-  callbackURL: config.auth0.callbackURL
+  domain: process.env.authdomain,
+  clientID: process.env.authclientID,
+  clientSecret: process.env.authclientSecret,
+  callbackURL: process.env.authcallbackURL
 }, function(accessToken, refreshToken, extraParams, profile, done) {
     const db = app.get('db');
     console.log(`logged in: ${profile}`);
@@ -105,11 +105,11 @@ passport.deserializeUser(function(user, done) {
 
 app.get('/auth0', passport.authenticate('auth0'));
 
-app.get(config.auth0.callbackURL, passport.authenticate('auth0', {successRedirect: 'http://localhost:3000/dashboard'}));
+app.get(process.env.authcallbackURL, passport.authenticate('auth0', {successRedirect: '/dashboard'}));
 
 app.get('/auth0/logout', function(req, res) {
   req.logout();
-  res.redirect('http://localhost:3000/');
+  res.redirect('/');
 })  
 
 
@@ -151,10 +151,10 @@ app.delete('/api/delete/group/:id', mainCtrl.deleteGroup) // working id param ta
 app.delete('/api/delete/project/:id', mainCtrl.deleteProject) //working id param targets project id to delete and cascade
 app.delete('/api/delete/whiteboard/:id', mainCtrl.deleteWhiteboard) //working, id param targets whiteboard id
 
-// app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, './build/index.html')));
 
 // LISTEN
-const io = socket(app.listen(config.port, () => console.log(`Server listening on port ${config.port}`)))
+const io = socket(app.listen(process.env.port, () => console.log(`Server listening on port ${process.env.port}`)))
 
 // // SOCKETS
 io.on('connection', socket => {

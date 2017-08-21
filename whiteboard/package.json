@@ -1,5 +1,4 @@
 {
-  "proxy": "http://localhost:4000/",
   "name": "whiteboard",
   "version": "0.1.0",
   "private": true,
@@ -29,7 +28,7 @@
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
+    "start": "node server/server.js",
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

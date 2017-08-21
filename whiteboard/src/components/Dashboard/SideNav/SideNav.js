@@ -96,7 +96,7 @@ class SideNav extends Component {
           <div className='sideNav_username'>
             <h2>{username}</h2>
             <div className='sideNav_logoutEdit'>
-              <a href='http://localhost:4000/auth0/logout'>logout</a>
+              <a href='http://nytbrowser.herokuapp.com/auth0/logout'>logout</a>
               <p onClick={() => this.setState({profileFlag: true})}>edit</p>
             </div>
           </div>

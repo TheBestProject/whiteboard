@@ -17,7 +17,7 @@ class Welcome extends Component {
           </div>
         </div>
         <div id='Log'>
-          <div>Click<a className="Login" href="http://localhost:4000/auth0"><u>Here</u></a>To Login.</div>
+          <div>Click<a className="Login" href="/auth0"><u>Here</u></a>To Login.</div>
         </div>
         
       </div>
