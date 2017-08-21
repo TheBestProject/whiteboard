@@ -7,6 +7,7 @@ const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const socket = require('socket.io');
 const path = require('path');
+const port = process.env.PORT || '80';
 const dummy = [[{
     color: "#444444",
     end:{x:70, y:207.63999938964844},
@@ -154,7 +155,7 @@ app.delete('/api/delete/whiteboard/:id', mainCtrl.deleteWhiteboard) //working, i
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, './build/index.html')));
 
 // LISTEN
-const io = socket(app.listen(process.env.PORT, () => console.log(`Server listening on port ${process.env.PORT}`)))
+const io = socket(app.listen(port, () => console.log(`Server listening on port ${port}`)))
 
 // // SOCKETS
 io.on('connection', socket => {
