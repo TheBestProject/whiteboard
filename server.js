@@ -7,7 +7,7 @@ const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const socket = require('socket.io');
 const path = require('path');
-const port = process.env.PORT || '80';
+const port = process.env.PORT || 80;
 const dummy = [[{
     color: "#444444",
     end:{x:70, y:207.63999938964844},
