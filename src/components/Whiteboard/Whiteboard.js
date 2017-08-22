@@ -174,7 +174,7 @@ render() {
                     <img src={require('./../../assets/ic_keyboard_arrow_left_black_24px.svg')} alt='left'/>
                     <h1>Back to Dashboard</h1>
                 </Link>
-                <a className='logout' href='https://whiteboarders.herokuapp.com/auth0/logout'>logout</a>
+                <a className='logout' href='https://theboardroom.herokuapp.com/auth0/logout'>logout</a>
               </div>
               <div className={`${hide ? 'all-tools-hide': null} all-tools`}>
                     <button id='clear' onClick={()=>this.props.clear(this.props.match.params.boardid)}><img src={require('./../../assets/file-rounded-empty-sheet.svg')} alt='clear'/></button>
